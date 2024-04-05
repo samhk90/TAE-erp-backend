@@ -1,0 +1,121 @@
+{%load static%}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
+    <title>Class Master</title>
+</head>
+
+<body id="body-pd">
+    <header class="header" id="header">
+        <div class="header_toggle"> <i class='fas fa-bars' id="header-toggle"></i> </div>
+        <div class="header_img"> <img src="" alt=""> </div>
+    </header>
+    <div class="l-navbar" id="nav-bar">
+        <nav class="nav">
+            <div>
+                <a href="main" class="nav_logo"><span class="nav_logo-name">TAE</span> </a>
+
+                <div class="nav_list">
+                    <!-- <a href="#" class="nav_link active"> <i class='bx bx-grid-alt nav_icon'></i> <span class="nav_name">Dashboard</span> </a>  -->
+                    <a href="info" class="nav_link"> <i class='fa fa-address-book nav_icon'></i> <span
+                            class="nav_name">Teachers</span> </a>
+                    <a href="info_2" class="nav_link"> <i class='fa fa-users nav_icon'></i> <span
+                            class="nav_name">Students</span> </a>
+                    <a href="syllabus" class="nav_link"> <i class='fa fa-book nav_icon'></i> <span
+                            class="nav_name">Bookmark</span> </a>
+                    <a href="notice" class="nav_link"> <i class='fa fa-paperclip nav_icon'></i> <span
+                            class="nav_name">Notice</span> </a>
+                    <a href="academic_cal" class="nav_link"> <i class='fa fa-calendar nav_icon'></i> <span
+                            class="nav_name">Academic Calendar</span> </a>
+                    <a href="papers" class="nav_link"> <i class='fa fa-file nav_icon'></i> <span
+                            class="nav_name">Papers</span> </a>
+                </div>
+            </div>
+            <a href="#" class="nav_link"> <i class='bx bx-log-out nav_icon'></i> <span class="nav_name">SignOut</span>
+            </a>
+        </nav>
+    </div>
+
+    <div class="container-fluid main">
+        <div class="row">
+            <div class="col-sm-12 d-flex flex-column">
+                <div class="container sbanner d-flex flex-row align-items-center">
+                    <i class="fa fa-user fa-5x me-3"></i>
+                    <div class="container-fluid">
+                      <h4 class="mb-2">Name: <span class="text-dark">{{student_info.first_name}} {{student_info.last_name}}</span></h4>
+                      <h4 class="mb-2">PRN No: <span class="text-dark">{{student_info.PRN}}</span></h4>
+                      <h4 class="mb-2">Department <span class="text-dark">{{student_info.department}}</span></h4>
+                      <h4 class="mb-2">Class: <span class="text-dark"></span>{{student_info.class_name}}</h4>
+                    </div>
+                  </div>
+
+
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <div class="card mb-3">
+                            <div class="card-header">
+                                Student Information
+                            </div>
+                            <div class="card-body">
+                                <p><strong>First Name:</strong> {{student_info.first_name}}</p>
+                                <p><strong>Last Name:</strong> {{student_info.last_name}}</p>
+                                <p><strong>Contact Number:</strong> {{student_info.mobile_number}}</p>
+                                <p><strong>Email:</strong> {{student_info.email_id}}</p>
+                                <p><strong>Result:</strong> Result</p>
+                                <p><strong>Attendance:</strong> Attendance</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <!-- Parent Information -->
+                        <div class="card">
+                            <div class="card-header">
+                                Parent Information
+                            </div>
+                            <div class="card-body">
+                                <p><strong>First Name:</strong> {{student_info.father_name}} </p>
+                                <p><strong>Last Name:</strong> {{student_info.last_name}}</p>
+                                <p><strong>Contact Number:</strong> {{student_info.father_contact}}</p>
+                                <p><strong>Address:</strong> Address</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col-sm-12">
+                        <!-- Parent Information -->
+                        <div class="card">
+                            <div class="card-header">
+                                Admision Information
+                            </div>
+                            <div class="card-body">
+                                <p><strong>Admision Quota:</strong> {{student_info.admission_quota}} </p>
+                                <p><strong>Category:</strong> {{student_info.category}}</p>
+                                <p><strong>Fees:</strong> Fees</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="{% static './app.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+</body>
+
+</html>
