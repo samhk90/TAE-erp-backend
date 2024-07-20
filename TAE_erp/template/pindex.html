@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/assets/style/progress_bar.css">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="assets/style/style.css">
+	<link rel="stylesheet" href="assets/style/mac.css">
+	<!-- <link rel="stylesheet" href="assets/style/progressbar.css"> -->
+	<title>TAE</title>
+</head>
+
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="pindex.html">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="pacademics.html">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Academics</span>
+				</a>
+			</li>
+			<li>
+				<a href="logs.html">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices.html">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
+				</a>
+			</li>
+			<li>
+				<a href="timetable.html">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Time Table</span>
+				</a>
+			</li>
+			<li>
+				<a href="leaves.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Leaves</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="students.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Student Info</span>
+				</a>
+			</li>
+			<li>
+				<a href="feedback.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Feedback</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<div class="intro">
+				<h2>Trinity Academy of Engineering</h2>
+			</div>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell'></i>
+				<span class="num">8</span>
+			</a>
+
+			<a href="#" class="profile" >
+				<p>Dr. N.J.Uke</p>	<img src="/assets/img/principal.jpeg">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Dashboard</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Dashboard</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="#">Home</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+	
+			<ul class="box-info">
+
+				<li>
+					<p class="title">Attendance
+
+						<hr>
+					</p>
+					<div style="display: grid; grid-template-columns: repeat(2,1fr);">
+						<div>
+							<p class="total" style="font-size: 12px; font-weight: 600;">Total Student: 3000</p>
+
+						</div>
+						
+					</div>
+
+
+
+
+					<div class="progress">
+						<div class="container">
+							<div class="outer-circle">
+							  <div class="inner-circle">
+								<div id="num"></div>
+							  </div>
+							</div>
+							<svg>
+							  <circle id="circle" cx="80" cy="80" r="70" />
+							  
+							  <defs>
+								<linearGradient id="circleGradient">
+								  <stop offset="0%" stop-color="#42c2ff" />
+								  <stop offset="100%" stop-color="#00b0ff" />
+								</linearGradient>
+							  </defs>
+							</svg>
+						  </div>
+					</div>
+
+					<div class="icons">
+						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green ;">
+							<h3>8 <br> Present</h3>
+						</div>
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4) ;">
+							<h3>8 <br> Absent
+							</h3>
+						</div>
+						<div class="count" style="background-color: rgba(0, 191, 255, 0.596);color: blue;">
+							<h3>12 <br> Total
+							</h3>
+						</div>
+					</div>
+
+
+				</li>
+				<li>
+					<p class="title">Employees on Leave
+						<hr>
+					</p>
+					<div class="details">
+						<div class="info">
+							<div class="user"><img src="/assets/img/user.png" alt=""> Sikha Sharma</div>
+
+							<div class="date">10 <sup>th</sup>April 2024 </div>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/user.png" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/user.png" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/user.png" alt=""> Abhijeet Cholke</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/user.png" alt=""> Bharat Devhare</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+
+					</div>
+				</li>
+				<li>
+					<div style="display: flex; justify-content: space-between;">
+					<p class="title">Announcements <i class="fa-solid  fa-triangle-exclamation fa-fade"></i>
+					
+					</p>
+					<p>
+						Add
+					</p></div>
+					<hr>
+
+					<div class="announce">
+
+						<div class="info">
+							<div class="user"> <i class='fas fa-bell'></i> Staff Meeting</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> Seminar in seminar hall </div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> Internship review </div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> New joining</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+
+					</div>
+
+				</li>
+				<li>
+					<p class="title">Holidays
+						<hr>
+					</p>
+					<div class="details">
+						<div class="info">
+							<div class="user"><img src="/assets/img/makar.png" alt="">Makar Sankranti</div>
+
+							<div class="date">10 <sup>th</sup>April 2024 </div>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/holi.png" alt=""> Holi</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/rak.png" alt=""> Rakshabandhan</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/diwali.png" alt=""> Diwali</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/santa.png" alt=""> Christmas</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="/assets/img/newyear.png" alt=""> New Year</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+
+					</div>
+				</li>
+				<li>
+					<p class="title">Upcoming Events
+						<hr>
+					</p>
+					<div class="details">
+						<div class="info">
+							<div class="user">Youth Fest</div>
+
+							<div class="date">10 <sup>th</sup>April 2024 </div>
+						</div>
+						<div class="info">
+							<div class="user">xyz</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user">xyz</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user">xyz</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user">xyz</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<!-- <div class="info">
+							<div class="user"><img src="/assets/img/newyear.png" alt=""> New Year</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div> -->
+
+					</div>
+				</li>
+				
+				
+				<li>
+					<p class="title">NewsLetter
+						<hr>
+					</p>
+					<div class="info">
+						<div class="user"> <a href="http://"> April(2023-2024)</a> </div>
+
+						
+						<p class="date">10 <sup>th</sup>April 2024 </p>
+					</div>
+					
+
+
+				</li>
+
+			</ul>
+		</main>
+		<!-- MAIN -->
+
+	</section>
+	<!-- CONTENT -->
+
+
+	<script src="assets/script/script.js"></script>
+	<script src="script.js"></script>
+	<script>
+		const numb = document.querySelector(".numb");
+		let counter = 0;
+		setInterval(() => {
+			if (counter == 100) {
+				clearInterval();
+			} else {
+				counter += 1;
+				numb.textContent = counter + "%";
+			}
+		}, 80);
+	</script>
+</body>
+
+</html>

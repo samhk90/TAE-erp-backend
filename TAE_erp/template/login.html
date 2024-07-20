@@ -1,91 +1,140 @@
+{% load static%}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- <link rel="stylesheet" href="style1.css">
-  <link rel="stylesheet" href="style.css"> -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"></script>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/boxicons@latest/css/boxicons.min.css" rel="stylesheet">
-  <title>Class Master</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{% static 'style_css.css'%}" />
+  <title>Login Page</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+  />
+  <link
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+    rel="stylesheet"
+    integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+    crossorigin="anonymous"
+  />
   <style>
+    .from-col{
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1003%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(78%2c 37%2c 153%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c474.418C94.337%2c461.211%2c187.047%2c463.022%2c276.469%2c430.194C385.998%2c389.985%2c528.242%2c369.503%2c575.892%2c263.001C623.591%2c156.39%2c525.244%2c42.231%2c501.184%2c-72.059C479.082%2c-177.045%2c518.189%2c-307.755%2c440.221%2c-381.454C361.574%2c-455.794%2c228.206%2c-393.285%2c125.444%2c-427.224C17.106%2c-463.004%2c-57.563%2c-592.338%2c-171.308%2c-583.421C-285.524%2c-574.467%2c-369.373%2c-471.586%2c-441.731%2c-382.762C-512.514%2c-295.871%2c-556.216%2c-192.994%2c-578.785%2c-83.217C-602.459%2c31.936%2c-619.296%2c153.667%2c-574.346%2c262.295C-528.696%2c372.613%2c-443.133%2c473.896%2c-331.137%2c515.259C-224.653%2c554.587%2c-112.418%2c490.156%2c0%2c474.418' fill='%233e1e7a'%3e%3c/path%3e%3cpath d='M1440 1165.517C1550.817 1153.442 1637.704 1072.016 1722.703 999.895 1798.266 935.781 1858.324 859.8489999999999 1903.937 771.873 1951.579 679.984 1994.171 584.127 1991.92 480.646 1989.498 369.318 1959.443 257.057 1890.8310000000001 169.353 1820.472 79.416 1719.35 12.628000000000043 1607.562-10.663000000000011 1499.734-33.12900000000002 1385.648-7.9529999999999745 1288.443 43.84400000000005 1201.115 90.37799999999999 1168.556 194.635 1096.007 261.928 1010.89 340.879 857.372 359.812 826.995 471.863 797.17 581.88 905.502 678.816 955.175 781.412 1003.565 881.358 1027.682 997.1859999999999 1114.721 1066.143 1205.422 1138.002 1324.964 1178.0520000000001 1440 1165.517' fill='%235e2cb8'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1003'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-size: cover;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+  }
+  
+  .from-container {
+    width: 350px;
+    height: 400px;
+    background: rgba(141, 83, 241, 0.18); /* Glass effect with #622ebf color and 50% opacity */
+    backdrop-filter: blur(2px);
+    position: relative;
+    padding: 20px;
+    overflow: hidden;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+     @media screen and (max-width: 768px) {
+    body {
+      overflow: scroll;
+    } 
+  
+    .from-container {
+      width: 90%;
+    }
+    }
+  
+  .mainform {
+    width: 100%;
+    transition: -5s;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .input {
+    width: 85%;
+    padding: 10px 0;
+    margin: 10px 0;
+    border-right: 0;
+    border-top: 0;
+    border-left: 0;
+    border-bottom: 1px solid white;
+    outline: 0;
+    background: transparent;
+    text-decoration: none;
+    color: white;
+    font-weight: bolder;
+  }
+  
+  .submitbtn {
+    width: 85%;
+    padding: 15px 10px;
+    cursor: pointer;
+    display: block;
+    background: whitesmoke;
+    margin: 30px auto;
+    border: 0;
+    outline: none;
+    border-radius: 30px;
+  }
 
-    body, html {
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background-color: #333333;
-        height: 100vh;
-    }
-    .main-content{
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        text-align: center;
-        background:transparent;
-        height: 60%;
-        width: 60%;
-        backdrop-filter: blur(28px); 
-        background-color: rgba(255, 255, 255, 0.085); 
-        padding: 20px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
-        border-radius: 20px;
-    }
+  img{
     
-    .center-form {
-        
-        width: 600px; 
-        padding: 15px;
-    }
-    .cinput{
-        width: 350px;
-        margin: 25px 25px;
-        background: transparent;
-        border: 0;
-        outline: 0;
-        font-size: 1.2rem;
-        color: white;
-        padding: 5px;
-    }
-    .cinput::after{
-        background: transparent;
-    }
-    #login{
-        width: 350px;
-        margin: 15px 25px;
-        margin-top: 40px;
-        background: transparent;
-        border: 0;
-        outline: 0;
-        font-size: 1.2rem;
-        color: white;
-        padding: 5px; 
-        height: 50px;
-        border-radius: 20px;
-    }
-    #login:hover{
-        background-color: #555;
-        cursor: pointer;
-    }
-    
+    margin-left: 115px ;
+    width: 50%;
+  }
+
+
+  
   </style>
 </head>
 <body>
-    <div class="main-content">
-        <div id="banner">
-            <form class="center-form" id="login-form" method="POST">
-                {% csrf_token%}
-                <span style="text-align: center;color:white;"><h2>Login</h2></span>
-                <input class="cinput" type="text" id="username" name="email" placeholder="Email" required><br>
-                <input class="cinput" type="password" id="password" name="password" placeholder="Password" required><br>
-                <button class="cinput" id="login" type="submit">Login</button>
-            </form>
-        </div>
+  <div class="row ">
+    <div class="col-sm-6 p-5 d-flex justify-content-center flex-column">
+        
+        <img src="{% static 'assets/img/logo.jpg'%}"  alt="">
     </div>
+    <div class="col-sm-6 from-col">
+        <div class="from-container">
+            <h3 style="color: white;">Login</h3>
+            <form class="mainform" id="loginf" method="POST">
+              {% csrf_token %}
+              <input
+                type="text"
+                name="username1"
+                class="input"
+                id="username1"
+                placeholder="Email"
+                required
+              />
+              <input
+                type="password"
+                name="password"
+                class="input"
+                id="password"
+                placeholder="Password"
+                required
+              />
+              <div class="form-check form-switch my-3 justify-content-start">
+              
+              </div>
+              <button type="submit" class="submitbtn">Login</button>
+            
+            </form>
+          </div>
+    </div>
+  </div>
 </body>
 </html>

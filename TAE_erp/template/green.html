@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	
+	<link rel="stylesheet" href="/assets/style/style.css">
+	<link rel="stylesheet" href="/assets/style/formstyle.css">
+	<title>TAE</title>
+	<style>
+		
+		.table {
+		 text-align: center;
+		}
+		
+		td{
+		 text-align: left;
+		}
+   
+		td:nth-child(3), th:nth-child(3) , :nth-child(5), th:nth-child(5) , :nth-child(7) , th:nth-child(7) ,:nth-child(9), th:nth-child(9) , :nth-child(11) , th:nth-child(11) , :nth-child(12) , th:nth-child(12)
+		{
+		   text-align: center;
+		}
+		
+		th{
+			background-color: #3c91e6c2;
+			text-align: center;
+		}
+		 
+	   </style>
+</head>
+
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="index.html">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="academics.html">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Academics</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices.html">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
+				</a>
+			</li>
+			<li>
+				<a href="">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Time Table</span>
+				</a>
+			</li>
+			<li>
+				<a href="">
+					<i class='bx bxs-group'></i>
+					<span class="text">Leaves</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="">
+					<i class='bx bxs-group'></i>
+					<span class="text">Student Info</span>
+				</a>
+			</li>
+			<li>
+				<a href="">
+					<i class='bx bxs-group'></i>
+					<span class="text">Feedback</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<div class="intro">
+				<h2>Trinity Academy of Engineering</h2>
+			</div>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell'></i>
+				<span class="num">8</span>
+			</a>
+
+			<a href="#" class="profile" >
+				<p>Prof. Nilufer Zaman</p>	<img src="/assets/img/nilufermam.jpg">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Academics</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Academics</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="attendance_form.html">Attendance</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="#">GreenBook</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="history.html">History</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<section id="mySection">
+				<div class="container">
+				  <table class="table table-bordered" >
+					 <thead >
+					  <tr>
+						<th  rowspan="2">Roll.No</th>
+						<th scope = "col" >Name of Subject</th>
+						  <th scope = "col" colspan="2" >DBMS</th>
+						<th scope = "col" colspan="2" >CNSL</th>
+						<th scope = "col" colspan="2">LP-I</th>
+						<th scope = "col" colspan="2">Seminar</th>
+						<th scope = "col" colspan="2">Total Practicals Conducted</th>
+						
+						<tr class="table-primary">
+						  <th> </th>
+						  <th>No. of lecture Conducted</th>
+						  <th colspan="2" >6</th>
+						  <th colspan="2">4</th>
+						  <th colspan="2">7</th>
+						  <th colspan="2">8</th>
+						  <th colspan="2">25</th>
+						</tr>
+		  
+					   
+		  
+					   
+						<tr class="table-primary">
+						   <th> </th>
+						  <th>Name of Student</th>
+						  <th  >Attended  </th>
+						  <th>% </th>
+						  <th>Attended </th>
+						  <th>% </th>
+						  <th >Attended </th>
+						  <th>% </th>
+						  <th>Attended </th>
+						  <th>% </th>
+						  <th>Total Practical Attended</th>
+						  <th>Average % </th>
+						  
+		  
+						</tr>
+					   
+				  
+					  
+					  </tr>
+					 </thead>
+					 <tbody>
+					  <tr>
+						<th scope="row">1</th>
+						<td>James Clarke</td>
+						<td>6/10</td>
+						<td>75</td>
+						<td>4/10</td>
+						<td>66</td>
+						<td>7/10</td>
+						<td>82</td>
+						<td>4/10</td>
+						<td>60</td>
+						<td >15</td>
+						<td>60</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">2</th>
+						<td>Smith</td>
+						<td>5/10</td>
+						<td>50</td>
+						<td>8/10</td>
+						<td>80</td>
+						<td>3/10</td>
+						<td>30</td>
+						<td>6/10</td>
+						<td>60</td>
+						<td>20</td>
+						<td>75</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">3</th>
+						<td >Robinson</td>
+						<td>2/10</td>
+						<td>19</td>
+						<td>0/10</td>
+						<td>0</td>
+						<td>5/10</td>
+						<td>30</td>
+						<td>4/10</td>
+						<td>35</td>
+						<td>10</td>
+						<td class="table-danger">
+						  <abbr title="Defaulter" class="table-danger">39</abbr>
+						</td>
+						
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">4</th>
+						<td>Henry</td>
+						<td>1/10</td>
+						<td>5</td>
+						<td>5/10</td>
+						<td>50</td>
+						<td>2/10</td>
+						<td>10</td>
+						<td>0/10</td>
+						<td>0</td>
+						<td>5</td>
+						<td class="table-danger">
+						  <abbr title="Defaulter">35</abbr>
+		  
+						</td>
+						
+						
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">5</th>
+						<td>Michael Tyson</td>
+						<td>4/10</td>
+						<td>35</td>
+						<td>5/10</td>
+						<td>45</td>
+						<td>6/10</td>
+						<td>55</td>
+						<td>8/10</td>
+						<td>80</td>
+						<td>18</td>
+						<td>75</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">6</th>
+						<td>David</td>
+						<td>3/10</td>
+						<td>28</td>
+						<td>8/10</td>
+						<td>75</td>
+						<td>5/10</td>
+						<td>48</td>
+						<td>2/10</td>
+						<td>20</td>
+						<td>15</td>
+						<td>68</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">7</th>
+						<td>Paul </td>
+						<td>10/10</td>
+						<td>100</td>
+						<td>10/10</td>
+						<td>100</td>
+						<td>10/10</td>
+						<td>100</td>
+						<td>10/10</td>
+						<td>100</td>
+						<td>24</td>
+						<td class="table-success">100</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">8</th>
+						<td>Randy</td>
+						<td>0/10</td>
+						<td>0</td>
+						<td>4/10</td>
+						<td>40</td>
+						<td>6/10</td>
+						<td>60</td>
+						<td>8/10</td>
+						<td>80</td>
+						<td>12</td>
+						<td>70</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">9</th>
+						<td>Sam</td>
+						<td>3/10</td>
+						<td>29</td>
+						<td>1/10</td>
+						<td>10</td>
+						<td>0/10</td>
+						<td>0</td>
+						<td>6/10</td>
+						<td>55</td>
+						<td>14</td>
+						<td>66</td>
+		  
+					  </tr>
+					  <tr>
+						<th scope="row">10</th>
+						<td>Tom</td>
+						<td>9/10</td>
+						<td>90</td>
+						<td>7/10</td>
+						<td>70</td>
+						<td>5/10</td>
+						<td>50</td>
+						<td>2/10</td>
+						<td>4/10</td>
+						<td>14</td>
+						<td>74</td>
+		  
+					  </tr>
+		  
+		  
+					 </tbody>
+					 
+					 
+				  </table>
+				</div>
+			   
+				
+			  </section>
+			</section>
+			
+		</main>	
+
+	</section>
+	<!-- CONTENT -->
+
+
+	<script src="assets/script/script.js"></script>
+
+</body>
+
+</html>

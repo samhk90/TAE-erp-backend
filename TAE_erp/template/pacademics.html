@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="/assets/style/style.css">
+	<link rel="stylesheet" href="assets/style/pacademics.css">
+	<title>TAE</title>
+</head>
+
+<body>
+
+
+	<!-- SIDEBAR -->
+	<section id="sidebar">
+		<a href="#" class="brand">
+			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="pindex.html">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="pacademics.html">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Academics</span>
+				</a>
+			</li>
+			
+			<li>
+				<a href="logs.html">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices.html">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
+				</a>
+			</li>
+			<li>
+				<a href="timetable.html">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Time Table</span>
+				</a>
+			</li>
+			<li>
+				<a href="leaves.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Leaves</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="students.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Student Info</span>
+				</a>
+			</li>
+			<li>
+				<a href="feedback.html">
+					<i class='bx bxs-group'></i>
+					<span class="text">Feedback</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="#" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
+	<!-- SIDEBAR -->
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<i class='bx bx-menu'></i>
+
+
+			<div class="intro">
+				<h2>Trinity Academy of Engineering</h2>
+			</div>
+			<form action="#">
+				<div class="form-input">
+					<input type="search" placeholder="Search...">
+					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+				</div>
+			</form>
+			<a href="#" class="notification">
+				<i class='bx bxs-bell'></i>
+				<span class="num">8</span>
+			</a>
+
+			<a href="#" class="profile" >
+				Dr. N.J.Uke<img src="/assets/img/principal.jpeg">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+			<div class="head-title">
+				<div class="left">
+					<h1>Academics</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Academics</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="#">Attendance</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="#">GreenBook</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<section class="main-course">
+				<div class="container">
+					<div class="card">
+						<h2>Attendance Search</h2>
+						<div class="container">
+							<form action="/submit_form" method="post">
+								
+								<div class="row" style="width: 100%; display: flex;">
+									<div class="column">
+										<label for="div">Department:</label>
+										<select id="division" name="division" required>
+											<option value=""> None</option>
+											<option value="comp">Computer Eng.</option>
+											<option value="itdept">IT Department</option>
+											<option value="me">Mechanical Department</option>
+											<option value="entc">EnTC Department</option>
+											<option value="civil">Civil Department</option>
+											<option value="all">All</option>
+										</select>
+									</div>
+									<div class="column">
+										<label for="div">Year:</label>
+										<input type="month" name="year"  placeholder="YYYY" min="1999" max="2050"  id="year">
+										
+									</div>
+									<div class="column">
+										<label for="div">Academic Year:</label>
+										<select id="division" name="division" required >
+											<option value=""> None</option>
+											<option value="fe">First year</option>
+											<option value="se">Second Year</option>
+											<option value="te">Third Year</option>
+											<option value="be">Final Year</option>
+											<option value="all">All</option>
+										</select>
+									</div>
+									<div class="column">
+										<label for="div">Division</label>
+										<select id="division" name="division" required >
+											<option value="A">A</option>
+											<option value="B">B</option>
+											<option value="C">C</option>
+											<option value="D">D</option>
+											<option value="E">E</option>
+											<option value="all">All</option>
+										</select>
+										
+									</div>
+									<button type="submit" class="attendance-button">Submit</button>
+									
+								</div>   
+								
+								
+								      
+							</form>
+				  
+					</div>
+					
+						<div class="card">
+						
+					
+							<table>
+								<tr>
+									<th>Roll No.</th>
+									<th>Name</th>
+									<th>Attendance</th>
+									<th id="view">  View</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+		
+								<!-- Add more rows as needed -->
+							</table>
+							
+						</div>
+						
+					</div>
+		  
+			</div>
+
+			</section>
+			<style>
+				/* Courses */
+.main-course{
+  margin-top:20px ;
+  text-transform: capitalize;
+}
+.course-box{
+  padding: 10px 10px 30px 10px;
+  margin-top: 10px;
+  background: #fff;
+  border-radius: 10px;
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+ 
+}
+a{
+	color: black;
+}
+.course-box ul{
+  list-style: none;
+  display: flex;
+  
+}
+.course-box ul li{
+  margin: 10px;
+  color: gray;
+  cursor: pointer;
+}
+.course-box ul .active{
+  color: #000;
+  border-bottom: 1px solid #000;
+}
+.course-box .course{
+	display: grid;
+   grid-template-columns: repeat(3,1fr);
+}
+.box{
+  /* width: 33%; */
+  padding: 10px;
+  margin: 15px;
+  border-radius: 10px;
+  background: rgb(235, 233, 233);
+  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+}
+.sec{
+	padding-left: 50px;
+	display: flex;
+	margin: auto;
+	justify-content: center;
+	align-items: center;
+}
+.box{
+	display: flex;
+	grid-template-columns: repeat(2,1fr);
+}
+.box p{
+  font-size: 12px;
+  margin-top: 5px;
+}
+.box button{
+  background: #044aec;
+  border: none;
+  color: #fff;
+  padding: 7px 10px;
+  border-radius: 10px;
+  margin-top: 1rem;
+  cursor: pointer;
+}
+.box button:hover{
+  background: rgba(4, 61, 207, 0.842);
+  transition: all 0.3s ease;
+}
+.box img{
+  font-size: 7rem;
+  float: right;
+  margin: -20px 20px 20px 0;
+}
+
+			</style>
+	</section>
+
+
+	</main>
+
+	</section>
+	<!-- CONTENT -->
+	
+
+
+	<script src="assets/script/script.js"></script>
+
+</body>
+
+</html>
