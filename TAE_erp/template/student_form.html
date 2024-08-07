@@ -1,15 +1,16 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/assets/style/progress_bar.css">
+	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
 	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<link rel="stylesheet" href="./assets/style/style.css">
-	<link rel="stylesheet" href="./assets/style/students.css">
+	<link rel="stylesheet" href="{% static './assets/style/style.css' %}">
+	<link rel="stylesheet" href="{% static './assets/style/students.css' %}">
 
 	<title>TAE</title>
 </head>
@@ -20,23 +21,23 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="index.html">
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
-				<a href="academics.html">
+				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
 				</a>
 			</li>
 			<li>
-				<a href="notices.html">
+				<a href="notices">
 					<i class='bx bxs-doughnut-chart'></i>
 					<span class="text">Notices</span>
 				</a>
@@ -55,7 +56,7 @@
 			</li>
 
 			<li>
-				<a href="">
+				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
@@ -114,14 +115,14 @@
 		<main>
 			<div class="head-title">
 				<div class="left">
-					<h1>Dashboard</h1>
+					<h1>Students</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Dashboard</a>
+							<a href="#">Students</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
-							<a class="active" href="#">Home</a>
+							<a class="active" href="student">Registration</a>
 						</li>
 					</ul>
 				</div>
@@ -130,74 +131,78 @@
 			<div class="card">
 				<header>Registration</header>
 
-				<form action="#">
+				<form method="POST" >
+					{% csrf_token %}
 					<div class="form first">
 						<div class="details personal">
 							<span class="title">Personal Details</span>
 
 							<div class="fields">
 								<div class="input-field">
-									<label>Student ID</label>
+									<label style="font-weight: bold;">Student ID</label>
 									<input type="number" placeholder="Enter Student ID" min="0" required>
 								</div>
 
-								<div class="input-field">
+								{% comment %} <div class="input-field">
 									<label>PRN</label>
 									<input type="text" placeholder="Enter PRN ">
-								</div>
+								</div> {% endcomment %}
 
 								<div class="input-field">
 									<label>First Name</label>
-									<input type="text" placeholder="Enter your first name" required>
+									<input type="text" name='firstname' placeholder="Enter your first name" required>
 								</div>
 								<div class="input-field">
 									<label>Last Name</label>
-									<input type="text" placeholder="Enter your mother name" required>
+									<input type="text" name='lastname' placeholder="Enter your mother name" required>
 								</div>
 								<div class="input-field">
 									<label>Father Name</label>
-									<input type="text" placeholder="Enter your father name" required>
+									<input type="text" name='fathersname' placeholder="Enter your father name" required>
 								</div>
 								
 
 								<div class="input-field">
 									<label>Mother's Name</label>
-									<input type="text" placeholder="Enter your last name" required>
+									<input type="text" name='mothersname' placeholder="Enter your last name" required>
 								</div>
 								<div class="input-field">
 									<label>Gender</label>
-									<select required>
+									<select name='gender' required>
 										<option disabled selected>Select gender</option>
 										<option>Male</option>
 										<option>Female</option>
 										<option>Others</option>
 									</select>
 								</div>
-
+								<div class="input-field">
+									<label>Date of birth</label>
+									<input type="date" name='date_of_birth' placeholder="Enter your DOB" required>
+								</div>
 								<div class="input-field">
 									<label>Student Contact</label>
-									<input type="number" placeholder="Student contact number" required>
+									<input type="number" name='mobile_number' placeholder="Student contact number" required>
 								</div>
 								<div class="input-field">
 									<label>Father's Contact No.</label>
-									<input type="number" placeholder="Parent contact number" required>
+									<input type="number" name='father_number' placeholder="Parent contact number" required>
 								</div>
 								<div class="input-field">
 									<label>Mother's Contact No.</label>
-									<input type="number" placeholder="Parent contact number" required>
+									<input type="number" name='mother_number' placeholder="Parent contact number" required>
 								</div>
 								<div class="input-field">
 									<label>E-mail ID</label>
-									<input type="email" placeholder="Enter your E-mail ID" required>
+									<input type="email" name='email' placeholder="Enter your E-mail ID" required>
 								</div>
 								<div class="input-field">
 									<label>Adharcard Number</label>
-									<input type="number" placeholder="Enter your Adhar UID" min="0" required>
+									<input type="number" name='Adharcardnumber' placeholder="Enter your Adhar UID" min="0" required>
 								</div>
 
 								<div class="input-field">
 									<label>Category</label>
-									<select required>
+									<select name='category' required>
 										<option disabled selected>Select Category</option>
 										<option>Open/General</option>
 										<option>SC</option>
@@ -208,7 +213,7 @@
 								</div>
 								<div class="input-field">
 									<label>Blood Group</label>
-									<select required>
+									<select name='bloodgrp' required>
 										<option disabled selected>Select Blood group</option>
 										<option>A+</option>
 										<option>A-</option>
@@ -222,7 +227,7 @@
 								</div>
 								<div class="input-field">
 									<label>Course</label>
-									<select required>
+									<select name='course' required>
 										<option disabled selected>Select Course</option>
 										<option>Mechanical Eng.</option>
 										<option>Computer eng.</option>
@@ -234,13 +239,13 @@
 								</div>
 								<div class="input-field">
 									<label>Temporary Address</label>
-									<textarea name="teamp_address" id="teamp_address"
+									<textarea name="tempaddress" id="teamp_address"
 										placeholder="Enter your temporary address"></textarea>
 
 								</div>
 								<div class="input-field">
 									<label>Permanent Address</label>
-									<textarea name="per_address" id="per_address"
+									<textarea name="permanetaddress" id="per_address"
 										placeholder="Enter your permanent address"></textarea>
 
 								</div>
@@ -250,7 +255,7 @@
 
 								<div class="input-field">
 									<label>State</label>
-									<select required>
+									<select name='state' required>
 										<option disabled selected>Select State</option>
 										<option value="andhra_pradesh">Andhra Pradesh</option>
 										<option value="arunachal_pradesh">Arunachal Pradesh</option>
@@ -285,7 +290,7 @@
 
 								<div class="input-field">
 									<label>City</label>
-									<select required>
+									<select name='city' required>
 										<option disabled selected>Select City</option>
 										 <!-- Andhra Pradesh -->
 										<option value="visakhapatnam">Visakhapatnam</option>
@@ -542,11 +547,11 @@
 
 								<div class="input-field">
 									<label>Admission Date</label>
-									<input type="date" placeholder="Enter your issued date" required>
+									<input type="date" name='admission_date' placeholder="Enter your issued date" required>
 								</div>
 								<div class="input-field">
 									<label>Admission Type</label>
-									<select required>
+									<select name='admission_type' required>
 										<option disabled selected>Select Course</option>
 										<option>Cap Round 1</option>
 										<option>Cap Round 2</option>

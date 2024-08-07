@@ -18,15 +18,83 @@
 
 <body>
 
-
-	<!-- SIDEBAR -->
+	{% if teacher %}
+		<!-- SIDEBAR -->
+		<section id="sidebar">
+			<a href="#" class="brand">
+				<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
+			</a>
+			<ul class="side-menu top">
+				<li class="active">
+					<a href="/">
+						<i class='bx bxs-dashboard'></i>
+						<span class="text">Dashboard</span>
+					</a>
+				</li>
+				<li>
+					<a href="academics">
+						<i class='bx bxs-calendar-star'></i>
+						<span class="text">Academics</span>
+					</a>
+				</li>
+				<li>
+					<a href="notices.html">
+						<i class='bx bxs-doughnut-chart'></i>
+						<span class="text">Notices</span>
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<i class='bx bxs-message-dots'></i>
+						<span class="text">Time Table</span>
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<i class='bx bxs-group'></i>
+						<span class="text">Leaves</span>
+					</a>
+				</li>
+	
+				<li>
+					<a href="students">
+						<i class='bx bxs-group'></i>
+						<span class="text">Student Info</span>
+					</a>
+				</li>
+				<li>
+					<a href="">
+						<i class='bx bxs-group'></i>
+						<span class="text">Feedback</span>
+					</a>
+				</li>
+			</ul>
+			<ul class="side-menu">
+				<li>
+					<a href="#">
+						<i class='bx bxs-cog'></i>
+						<span class="text">Settings</span>
+					</a>
+				</li>
+				<li>
+					<a href="logout" class="logout">
+						<i class='bx bxs-log-out-circle'></i>
+						<span class="text">Logout</span>
+					</a>
+				</li>
+			</ul>
+		</section>
+		<!-- SIDEBAR -->
+	{% endif %}
+	{% if Principal %}
+			<!-- SIDEBAR -->
 	<section id="sidebar">
-		<a href="#" class="brand">
-			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
+		<a href="/" class="brand">
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="index">
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
@@ -38,32 +106,38 @@
 				</a>
 			</li>
 			<li>
-				<a href="notices.html">
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices">
 					<i class='bx bxs-doughnut-chart'></i>
 					<span class="text">Notices</span>
 				</a>
 			</li>
 			<li>
-				<a href="">
+				<a href="timetable">
 					<i class='bx bxs-message-dots'></i>
 					<span class="text">Time Table</span>
 				</a>
 			</li>
 			<li>
-				<a href="">
+				<a href="leaves">
 					<i class='bx bxs-group'></i>
 					<span class="text">Leaves</span>
 				</a>
 			</li>
 
 			<li>
-				<a href="">
+				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
 			</li>
 			<li>
-				<a href="">
+				<a href="feedback">
 					<i class='bx bxs-group'></i>
 					<span class="text">Feedback</span>
 				</a>
@@ -77,7 +151,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
 					<span class="text">Logout</span>
 				</a>
@@ -85,6 +159,7 @@
 		</ul>
 	</section>
 	<!-- SIDEBAR -->
+	{% endif %}
 
 
 
@@ -158,36 +233,34 @@
 					<div class="progress">
 						<div class="container">
 							<div class="outer-circle">
-							  <div class="inner-circle">
-								<div id="num"></div>
-							  </div>
+								<div class="inner-circle">
+									<div id="num">{{ attendance_percentage|floatformat:0 }}%</div>
+								</div>
 							</div>
 							<svg>
-							  <circle id="circle" cx="80" cy="80" r="70" />
-							  
-							  <defs>
-								<linearGradient id="circleGradient">
-								  <stop offset="0%" stop-color="#42c2ff" />
-								  <stop offset="100%" stop-color="#00b0ff" />
-								</linearGradient>
-							  </defs>
+								<circle id="circle" cx="80" cy="80" r="70" />
+								<defs>
+									<linearGradient id="circleGradient">
+										<stop offset="0%" stop-color="#42c2ff" />
+										<stop offset="100%" stop-color="#00b0ff" />
+									</linearGradient>
+								</defs>
 							</svg>
-						  </div>
-					</div>
-
-					<div class="icons">
-						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green ;">
-							<h3>8 <br> Present</h3>
 						</div>
-						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4) ;">
-							<h3>8 <br> Absent
-							</h3>
+					</div>
+					
+					<div class="icons">
+						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green;">
+							<h3>{{ present }} <br> Present</h3>
+						</div>
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4);">
+							<h3>{{ absent }} <br> Absent</h3>
 						</div>
 						<div class="count" style="background-color: rgba(0, 191, 255, 0.596);color: blue;">
-							<h3>12 <br> Total
-							</h3>
+							<h3>{{ total }} <br> Total</h3>
 						</div>
 					</div>
+					
 
 
 				</li>
@@ -392,20 +465,38 @@
 	<!-- CONTENT -->
 
 
-	<script src="assets/script/script.js"></script>
-	<script src="script.js"></script>
-	<script>
-		const numb = document.querySelector(".numb");
-		let counter = 0;
-		setInterval(() => {
-			if (counter == 100) {
-				clearInterval();
-			} else {
-				counter += 1;
-				numb.textContent = counter + "%";
-			}
-		}, 80);
-	</script>
+	<!-- <script src="{% static 'assets/script/script.js'%}"></script> -->
+	<!-- <script src="{% static 'script.js'%}"></script> -->
+	<!-- <script>
+		const number = document.getElementById("num");
+const circle = document.getElementById("circle"); // Assuming this is the circle element
+const circumference = 2 * Math.PI * 70; // For a circle with radius 70
+
+let counter = 0;
+const time = 2000 / randomNum;
+
+const updateStrokeOffset = (percentage) => {
+    const offset = circumference - (circumference * (percentage / 100));
+    circle.style.strokeDashoffset = offset;
+};
+
+const interval = setInterval(() => {
+    if (counter >= randomNum) {
+        clearInterval(interval);
+        number.innerHTML = randomNum + "%";
+        updateStrokeOffset(randomNum);
+    } else {
+        counter += 1;
+        number.innerHTML = counter + "%";
+        updateStrokeOffset(counter);
+    }
+}, time);
+
+// Initial setup for the circle stroke
+circle.style.strokeDasharray = circumference;
+circle.style.strokeDashoffset = circumference;
+
+	</script> -->
 </body>
 
 </html>

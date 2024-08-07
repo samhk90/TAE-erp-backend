@@ -1,17 +1,18 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="/assets/style/progress_bar.css">
-	<!-- Boxicons -->
+	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
+
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<link rel="stylesheet" href="./assets/style/style.css">
-	<link rel="stylesheet" href="./assets/style/history.css">
+	<link rel="stylesheet" href="{% static './assets/style/style.css' %}">
+	<link rel="stylesheet" href="{% static './assets/style/history.css' %}">
 
-	<link rel="stylesheet" href="./assets/style/students.css">
+	<link rel="stylesheet" href="{% static './assets/style/students.css' %}">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 	<title>TAE</title>
@@ -20,26 +21,25 @@
 <body>
 
 
-	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+			<span class="text"><img src="{%static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="index.html">
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
-				<a href="academics.html">
+				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
 				</a>
 			</li>
 			<li>
-				<a href="notices.html">
+				<a href="notices">
 					<i class='bx bxs-doughnut-chart'></i>
 					<span class="text">Notices</span>
 				</a>
@@ -124,7 +124,7 @@
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
-							<a class="active" href="#">Registration</a>
+							<a class="active" href="student">Registration</a>
 						</li>
 					</ul>
 				</div>
@@ -132,17 +132,19 @@
 
 			<div class="card2">
 
-				<form action="#">
-					<input type="text" placeholder="Enter PRN No. " required>
-					<input type="text" placeholder="Enter Name " required>
-					<select required>
+				<form method="POST">
+					{% csrf_token %}
+					<select required name="department">
 						<option disabled selected>Select Department</option>
-						<option>Mechanical Eng.</option>
-						<option>Computer eng.</option>
-						<option>IT Eng.</option>
-						<option>Civil Eng.</option>
-						<option>E&TC Eng.</option>
-						<option>Chemical Eng.</option>
+						{% for department in department %}
+						<option value="{{department.DepartmentID}}">{{department.DepartmentName}}</option>
+						{% endfor %}
+					</select>
+					<select required name="year">
+						<option disabled selected>Select Year</option>
+						{% for year in year %}
+						<option value="{{year.YearID}}">{{year.YearName}}</option>
+						{% endfor %}
 					</select>
 					<button type="submit" id="search">Search</button>
 					
@@ -166,97 +168,20 @@
                             </tr>
                         </thead>
                         <tbody>
+							{% if students%}
+							{% for student in students%}
 							<tr>
-								<td>1</td>
+								<td>{{ forloop.counter }}</td>
 								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
+								<td>{{student.FirstName}} {{student.LastName}}</td>
+								<td>{{student.Email}}</td>
+								<td>{{student.MobileNumber}}</td>
+								<td>{{student.CurrentClassID.DepartmentID.DepartmentName}}</td>
+								<td>{{student.CurrentClassID.YearID.YearName}}</td>
 								<td>89%</td>
 							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-							<tr>
-								<td>1</td>
-								<td>3345656776</td>
-								<td>AMIT KUMAR</td>
-								<td>amitkumarr9168@gmail.com</td>
-								<td>916887877676</td>
-								<td>Computer</td>
-								<td>BE</td>
-								<td>89%</td>
-							</tr>
-
+							{% endfor%}
+							{% endif %}
                         </tbody>
                     </table>
                    

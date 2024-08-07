@@ -24,7 +24,7 @@
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="index">
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
@@ -117,17 +117,18 @@
 					<h1>Academics</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Academics</a>
+							<a  href="#">Academics</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						<li>
-							<a class="active" href="#">Attendance</a>
+							<a class="active" href="academics">Attendance</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
+						{% if classteacher %}
 						<li>
-							<a class="active" href="green.html">GreenBook</a>
+							<a class="active" href="greenbook">GreenBook</a>
 						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
+						<li><i class='bx bx-chevron-right'></i></li>{% endif %}
 						<li>
 							<a class="active" href="history.html">History</a>
 						</li>
@@ -297,7 +298,21 @@
 			});
 		});
 	</script>
-	
+	<script>
+
+			const divisionSelect = document.getElementById('division');
+			const batchSelect = document.getElementById('batch');
+			const form = document.getElementById('myForm');
+		
+			divisionSelect.addEventListener('change', function() {
+				form.submit();
+			});
+		
+			batchSelect.addEventListener('change', function() {
+				form.submit();
+			});
+		
+	</script>
 
 </body>
 

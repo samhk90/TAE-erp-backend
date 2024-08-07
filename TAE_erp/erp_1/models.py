@@ -60,13 +60,13 @@ class Student(models.Model):
     FatherContact = models.CharField(max_length=255, blank=True, null=True)
     MotherName = models.CharField(max_length=255, blank=True, null=True)
     MotherContact = models.CharField(max_length=255, blank=True, null=True)
-    CurrentClassID = models.ForeignKey('Classes', on_delete=models.CASCADE,default='none')
+    CurrentClassID = models.ForeignKey('Classes', on_delete=models.CASCADE,default=3)
     Email = models.CharField(max_length=255, unique=True)
     MobileNumber = models.CharField(max_length=255, unique=True)
     RollNumber = models.IntegerField()
     CreatedAt = models.DateTimeField(auto_now_add=True)
     AdmissionQuota = models.CharField(max_length=255,default='none')
-    RoleID = models.ForeignKey('Roles', on_delete=models.CASCADE,default='none')
+    RoleID = models.ForeignKey('Roles', on_delete=models.CASCADE,default=2)
     YearDownStatus = models.BooleanField(default=False)
 
 class Backlog(models.Model):
@@ -163,7 +163,7 @@ class HOD(models.Model):
     def __str__(self):
         return f"{self.FirstName} {self.LastName} - {self.DepartmentID}"
 
-class Teacher_Subject_Assignment(models.Model):
+class TeacherSubjectAssignment(models.Model):
     AssignmentID = models.AutoField(primary_key=True)
     TeacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     SubjectID = models.ForeignKey(Subject, on_delete=models.CASCADE)
@@ -175,9 +175,8 @@ from datetime import date
 
 class ClassTeacherAssignment(models.Model):
     AssignmentID = models.AutoField(primary_key=True)
-    AssignmentDate = models.DateField()
     ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
-    TeacherID = models.ForeignKey('Teacher', on_delete=models.CASCADE)
+    TeacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
     RoleID = models.ForeignKey('Roles', on_delete=models.CASCADE)
 
     def __str__(self):

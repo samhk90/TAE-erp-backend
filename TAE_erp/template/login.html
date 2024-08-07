@@ -109,6 +109,11 @@
     <div class="col-sm-6 from-col">
         <div class="from-container">
             <h3 style="color: white;">Login</h3>
+            {% if error_message %}
+            <div class="error-message" style="color: red;">
+                {{ error_message }}
+            </div>
+        {% endif %}
             <form class="mainform" id="loginf" method="POST">
               {% csrf_token %}
               <input

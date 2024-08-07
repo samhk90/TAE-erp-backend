@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -8,8 +9,8 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<!-- My CSS -->
-	<link rel="stylesheet" href="/assets/style/style.css">
-	<link rel="stylesheet" href="dailylog.css">
+	<link rel="stylesheet" href="{% static '/assets/style/style.css' %}">
+	<link rel="stylesheet" href="{% static 'dailylog.css' %}">
 	<title>TAE</title>
 </head>
 
@@ -19,54 +20,54 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="/assets/img/tae-logo.png" height="100px" alt=""></span>
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
 			<li class="active">
-				<a href="pindex.html">
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
 			<li>
-				<a href="pacademics.html">
+				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
 				</a>
 			</li>
 			<li>
-				<a href="logs.html">
+				<a href="logs">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Daily Logs</span>
 				</a>
 			</li>
 			<li>
-				<a href="notices.html">
+				<a href="notices">
 					<i class='bx bxs-doughnut-chart'></i>
 					<span class="text">Notices</span>
 				</a>
 			</li>
 			<li>
-				<a href="timetable.html">
+				<a href="timetable">
 					<i class='bx bxs-message-dots'></i>
 					<span class="text">Time Table</span>
 				</a>
 			</li>
 			<li>
-				<a href="leaves.html">
+				<a href="leaves">
 					<i class='bx bxs-group'></i>
 					<span class="text">Leaves</span>
 				</a>
 			</li>
 
 			<li>
-				<a href="students.html">
+				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
 			</li>
 			<li>
-				<a href="feedback.html">
+				<a href="feedback">
 					<i class='bx bxs-group'></i>
 					<span class="text">Feedback</span>
 				</a>
@@ -139,8 +140,9 @@
 					 <button id="seeall">See all</button>
 				  </div>
    
+
 				  <table>
-					 <thead>
+					<thead>
 						<th>
 						   <tr>
 							  <td>Slots</td>
@@ -164,93 +166,23 @@
 						   </tr>
 						</th>
 					 </thead>
-   
-					 <tbody>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						<tr>
-						   <td>9:15 am - 10:10 am</td>
-						   <td>Computer Department</td>
-						   <td>SE</td>
-						   <td>Prof. Rambhau Lagdive</td>
-						   <td>AI</td>
-						   <td>80</td>
-						   
-						</tr>
-						
-						
-					 </tbody>
-				  </table>
+					<tbody>
+						{% for record in attendance_records %}
+							<tr>
+								<td>{{ record.Timefrom }} - {{ record.Timeto }}</td>
+								<td>{{ record.SubjectID__SubjectDepartment }}</td>
+								<td>{{ record.SubjectID__SubjectYear }}</td>
+								<td>{{ record.SubjectID__teachersubjectassignment__TeacherID__FirstName }}</td>
+								<td>{{ record.SubjectID__SubjectName }}</td>
+								<td>{{ record.student_count }}</td>
+							</tr>
+						{% empty %}
+							<tr>
+								<td colspan="4">No records found for today.</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
 			   </div>
    
 			   
