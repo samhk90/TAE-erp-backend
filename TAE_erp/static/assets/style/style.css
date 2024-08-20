@@ -256,12 +256,16 @@ body {
 #content nav .profile{
 	font-weight: 600;
 	display: flex; 
+	width: 100%;
 	align-items: center; 
 	gap: 10px;
 }
 #content nav .profile{
-	/* width: 100%; */
+	width: 100%;
 	justify-content: end;
+}
+.profile{
+	width: 100%;
 }
 /* NAVBAR */
 

@@ -31,7 +31,25 @@
 			background-color: #3c91e6c2;
 			text-align: center;
 		}
-		 
+			.download-btn {
+				background-color: #4CAF50; /* Green background */
+				border: none;              /* Remove borders */
+				color: white;              /* White text */
+				padding: 12px 24px;        /* Some padding */
+				text-align: center;        /* Centered text */
+				text-decoration: none;     /* Remove underline */
+				display: inline-block;     /* Make the button inline */
+				font-size: 16px;           /* Increase font size */
+				margin: 10px 0;            /* Add some margin */
+				cursor: pointer;           /* Pointer cursor on hover */
+				border-radius: 5px;        /* Rounded corners */
+				transition: background-color 0.3s ease; /* Smooth transition for hover */
+			}
+		
+			.download-btn:hover {
+				background-color: #45a049; /* Darker green on hover */
+			}
+		
 	   </style>
 </head>
 
@@ -112,23 +130,23 @@
 		<!-- NAVBAR -->
 		<nav>
 			<div class="intro">
-				<h2>Trinity Academy of Engineering</h2>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					<h2>Trinity Academy of Engineering</h2>
 				</div>
-			</form>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell'></i>
-				<span class="num">8</span>
-			</a>
-
-			<a href="#" class="profile" >
-				<p>Prof. Nilufer Zaman</p>	<img src="/assets/img/nilufermam.jpg">
-			</a>
-		</nav>
+				<!-- <form action="#">
+					<div class="form-input">
+						<input type="search" placeholder="Search...">
+						<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					</div>
+				</form>
+				<a href="#" class="notification">
+					<i class='bx bxs-bell'></i>
+					<span class="num">8</span>
+				</a> -->
+	
+				<a href="#" class="profile" style="width: 100%;">
+					<p>Prof.{{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
+				</a>
+			</nav>
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
@@ -156,8 +174,8 @@
 				</div>
 			</div>
             <section id="mySection">
-                <div class="container">
-                    <table class="table table-bordered">
+                <div class="container"><button id="downloadBtn" class="btn btn-primary download-btn">Download as CSV</button>
+                    <table id="attendanceTable" class="table table-bordered">
                         <thead>
                             <tr>
                                 <th rowspan="2">Roll.No</th>
@@ -165,18 +183,11 @@
                                 {% for subject in subjects %}
                                     <th>{{ subject }}</th>
                                 {% endfor %}
-                                <th>Total Practicals Conducted</th>
-                                <th>Total Practical Attended</th>
+								
+                                <th>Total Lectures Conducted</th>
+                                <th>%</th>
                             </tr>
-                            <tr>
-                                <th></th>
-                                <th></th>
-                                {% for subject in subjects %}
-                                    <th>No. of Lectures</th>
-                                {% endfor %}
-                                <th></th>
-                                <th></th>
-                            </tr>
+
                         </thead>
                         <tbody>
                             {% for data in attendance_data %}
@@ -184,17 +195,20 @@
                                     <td>{{ data.student.RollNo }}</td>
                                     <td>{{ data.student.FirstName }} {{ data.student.LastName }}</td>
                                     {% for subject in subjects %}
-                                        <td>
+									<td>
                                             {% for record in data.attendance %}
-                                                {% if record.SubjectName == subject %}
-                                                    {{ record.attended_count }}/{{ record.total_lectures }}
+                                             {% if record.SubjectName == subject %}
+											 
+                                                    {{ record.attended_count }}\{{ record.total_lectures }}
                                                 {% endif %}
+												
                                             {% endfor %}
                                         </td>
+										
                                     {% endfor %}
 									
                                     <td>{{ data.total_attended }}</td>
-									
+									<td>{{data.average_percentage|floatformat:2}}</td>
                                 </tr>
                             {% endfor %}
                         </tbody>
@@ -203,5 +217,33 @@
             </section>
         </main>
     </section>
+	<script>
+		document.getElementById('downloadBtn').addEventListener('click', function () {
+			var table = document.getElementById('attendanceTable');
+			var rows = Array.from(table.querySelectorAll('tr'));
+			
+			var csv = [];
+			rows.forEach(function (row) {
+				var cols = Array.from(row.querySelectorAll('th, td')).map(function (cell) {
+					// Replace the '/' with '\\' to escape it
+					return cell.innerText.replace(/\//g, '\\/').replace(/,/g, ''); // Also remove commas to prevent CSV format issues
+				});
+				csv.push(cols.join(','));
+			});
+		
+			var csvString = csv.join('\n');
+			var blob = new Blob([csvString], { type: 'text/csv' });
+			var url = window.URL.createObjectURL(blob);
+			var a = document.createElement('a');
+			a.setAttribute('hidden', '');
+			a.setAttribute('href', url);
+			a.setAttribute('download', 'attendance_data.csv');
+			document.body.appendChild(a);
+			a.click();
+			document.body.removeChild(a);
+		});
+		
+		
+	</script>
 </body>
 </html>

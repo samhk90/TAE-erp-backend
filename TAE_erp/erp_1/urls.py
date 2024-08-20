@@ -5,8 +5,10 @@ from django.conf import settings
 urlpatterns = [
 
     path('', views.index, name='index'),
-    path('login/', views.login, name='login'),
-    path('attendance_form',views.attendance_form,name='attendance_form'),
+    path('login/', views.login, name='login'),    
+    path('attendance_form/', views.attendance_form, name='attendance_form'),
+    # path('attendance_form/<int:sub>/<int:id>/<str:class_name>/', views.attendance_form, name='attendance_form'),
+    path('attendance_form/<int:sub>/<int:id>/<str:class_name>/<str:batch>', views.attendance_form, name='attendance_form'),
     path('students',views.students,name='students'),
     path('notices',views.notices,name='notices'),
     path('noticeform',views.noticeform,name='noticefrom'),

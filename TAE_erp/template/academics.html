@@ -12,11 +12,108 @@
 	<link rel="stylesheet" href="{% static '/assets/style/style.css'%}">
 	<link rel="stylesheet" href="{% static 'assets/style/pacademics.css' %}">
 	<title>TAE</title>
+	<style>
+		.course{
+			display: flex;
+			flex-direction: column;
+		}
+		.box2{
+			display: flex;
+			flex-direction: column;
+			justify-content:center;
+			align-items: center;
+			width: 50%;
+		}
+		.class-batch, .class-branch{
+			height: max-content;
+			border-radius: 5px;
+			border: none;
+			width: 100%;
+		}
+		.class-branch select{
+			background-color: transparent;
+			border-radius: 5px;
+			border: none;
+			border-bottom: 1px solid black;
+			border-radius: 1px;
+		}
+		.class-batch select{
+			background-color: transparent;
+			border-radius: 5px;
+			border: none;
+			border-bottom: 1px solid black;
+			border-radius: 1px;
+		}
+		.main-course{
+			margin-top:20px ;
+			text-transform: capitalize;
+		  }
+		  .course-box{
+			padding: 10px 10px 30px 10px;
+			margin-top: 10px;
+			background: #fff;
+			border-radius: 10px;
+			box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+		   
+		  }
+		  a{
+			  color: black;
+		  }
+		  .course-box ul{
+			list-style: none;
+			display: flex;
+			
+		  }
+		  .course-box ul li{
+			margin: 10px;
+			color: gray;
+			cursor: pointer;
+		  }
+		  .course-box ul .active{
+			color: #000;
+			border-bottom: 1px solid #000;
+		  }
+		  .course-box  {
+			  display: grid;
+			 grid-template-columns: repeat(3,1fr);
+		  }
+		  .box1{
+			/* width: 33%; */
+			display: flex;
+			justify-content: space-between;
+			padding: 10px;
+			margin: 15px;
+			border-radius: 10px;
+			background: rgb(235, 233, 233);
+			box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
+		  }
+		  .sec{
+			  padding-left: 50px;
+			  
+		  }
+		  .sec #divi{
+			  text-align: center;
+		  }
+
+		  .box1 p{
+			font-size: 12px;
+			margin-top: 5px;
+		  }
+		  .box1 button{
+			background: #3C91E6;
+			border: none;
+			color: #fff;
+			padding: 7px 10px;
+			border-radius: 10px;
+			margin-top: 3rem;
+			cursor: pointer;
+		  }
+	</style>
 </head>
 
 <body>
 
-	{% if teacher %}
+	{% if is_teacher %}
 		<!-- SIDEBAR -->
 		<section id="sidebar">
 			<a href="#" class="brand">
@@ -84,7 +181,7 @@
 		</section>
 		<!-- SIDEBAR -->
 	{% endif %}
-	{% if Principal %}
+	{% if principal %}
 			<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
@@ -442,29 +539,29 @@ a{
 	<!-- CONTENT -->
 	{% endif %}
 
-	{% if teacher %}
+	{% if is_teacher %}
 	<!-- CONTENT -->
 	<section id="content">
 		<!-- NAVBAR -->
 		<nav>
 			<div class="intro">
-				<h2>Trinity Academy of Engineering</h2>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					<h2>Trinity Academy of Engineering</h2>
 				</div>
-			</form>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell'></i>
-				<span class="num">8</span>
-			</a>
-
-			<a href="#" class="profile" >
-				<p></p>	<img src="/assets/img/nilufermam.jpg">
-			</a>
-		</nav>
+				<!-- <form action="#">
+					<div class="form-input">
+						<input type="search" placeholder="Search...">
+						<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					</div>
+				</form>
+				<a href="#" class="notification">
+					<i class='bx bxs-bell'></i>
+					<span class="num">8</span>
+				</a> -->
+	
+				<a href="#" class="profile" style="width: 100%;">
+					<p>Prof.{{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
+				</a>
+			</nav>
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->
@@ -481,7 +578,7 @@ a{
 							<a class="active" href="academics">Attendance</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
-						{% if classteacher %}
+						{% if is_classteacher %}
 						<li>
 							<a class="active" href="greenbook">GreenBook</a>
 						</li>
@@ -495,21 +592,48 @@ a{
 			<section class="main-course">
 				<h1>Subjects</h1>
 				<div class="course-box">
-
+					{% for subject in subjects %}
 					<div class="course">
-						{% for subject in subjects %}
-						<div class="box">
+						<form method="post">
+							{% csrf_token %}
+						
+						<div class="box1">
 							<div>
 							<h3>{{subject.SubjectName}}</h3>
 							<p>{{subject.SubjectYear}} ({{subject.SubjectSemester}}<sup style="text-transform: lowercase;">rd</sup> Semester)</p>
 							<p>8 lectures conducted</p>
-
-							<a href="attendance_form?sub={{subject.SubjectID}}&id={{subject.CurrentClassID_id}}"> <button> See Attendance </button></a>
+							<input style="display: none;" type="hidden" name="sub" value="{{ subject.SubjectID }}">
+							<input style="display: none;" type="hidden" name="id" value="{{subject.CurrentClassID_id}}">
+							<!-- <a href="attendance_form?sub={{subject.SubjectID}}&id={{subject.CurrentClassID_id}}"> <button> Take Attendance </button></a> -->
+								<button>Take Attendance</button>
+						</div>
+						<div class="box2">
+							<div class="class-batch">
+								<select name="class" required>
+									<option value="">Select Class</option>
+									{% for class in classes %}
+										<option value="{{ class.ClassID }}">{{ class.ClassName }}</option>
+									{% endfor %}
+								</select>
+							</div>
+							{% if not subject.SubjectType%}
+							<div class="class-branch">
+								<select name="batch" id="batch&class">
+									<option value="">Branch</option>
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+								
+							</div>
+							{% endif %}
 						</div>
 					</div>
-					{% endfor %}
+				
+				</form>
 				</div>
-				<div class="add"></div>
+				{% endfor %}
+				</div>
 
 			</section>
 			<style>
@@ -518,71 +642,7 @@ a{
 
 
 
-.main-course{
-  margin-top:20px ;
-  text-transform: capitalize;
-}
-.course-box{
-  padding: 10px 10px 30px 10px;
-  margin-top: 10px;
-  background: #fff;
-  border-radius: 10px;
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
- 
-}
-a{
-	color: black;
-}
-.course-box ul{
-  list-style: none;
-  display: flex;
-  
-}
-.course-box ul li{
-  margin: 10px;
-  color: gray;
-  cursor: pointer;
-}
-.course-box ul .active{
-  color: #000;
-  border-bottom: 1px solid #000;
-}
-.course-box .course{
-	display: grid;
-   grid-template-columns: repeat(3,1fr);
-}
-.box{
-  /* width: 33%; */
-  padding: 10px;
-  margin: 15px;
-  border-radius: 10px;
-  background: rgb(235, 233, 233);
-  box-shadow: 0 20px 35px rgba(0, 0, 0, 0.1);
-}
-.sec{
-	padding-left: 50px;
-	
-}
-.sec #divi{
-	text-align: center;
-}
-.box{
-	display: flex;
-	grid-template-columns: repeat(2,1fr);
-}
-.box p{
-  font-size: 12px;
-  margin-top: 5px;
-}
-.box button{
-  background: #3C91E6;
-  border: none;
-  color: #fff;
-  padding: 7px 10px;
-  border-radius: 10px;
-  margin-top: 3rem;
-  cursor: pointer;
-}
+
 	</style>
 	</section>
 

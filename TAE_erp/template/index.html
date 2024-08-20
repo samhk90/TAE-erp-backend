@@ -168,23 +168,23 @@
 		<!-- NAVBAR -->
 		<nav>
 			<div class="intro">
-				<h2>Trinity Academy of Engineering</h2>
-			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					<h2>Trinity Academy of Engineering</h2>
 				</div>
-			</form>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell'></i>
-				<span class="num">8</span>
-			</a>
-
-			<a href="#" class="profile" >
-				<p>Prof. Nilufer Zaman</p>	<img src="/assets/img/nilufermam.jpg">
-			</a>
-		</nav>
+				<!-- <form action="#">
+					<div class="form-input">
+						<input type="search" placeholder="Search...">
+						<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
+					</div>
+				</form>
+				<a href="#" class="notification">
+					<i class='bx bxs-bell'></i>
+					<span class="num">8</span>
+				</a> -->
+	
+				<a href="#" class="profile" style="width: 100%;">
+					<p>Prof.{{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
+				</a>
+			</nav>
 		<!-- NAVBAR -->
 
 		<!-- MAIN -->

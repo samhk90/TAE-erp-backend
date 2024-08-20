@@ -33,14 +33,12 @@ class Subject(models.Model):
     SubjectName = models.CharField(max_length=255)
     CurrentClassID = models.ForeignKey('Classes', on_delete=models.CASCADE,default='none')
     SubjectSemester = models.IntegerField()
-    SubjectType = models.CharField(
-        max_length=50,
-        choices=[('Theoretical', 'Theoretical'), ('Practical', 'Practical')]
-    )
     SubjectBatch = models.CharField(max_length=255)
     SubjectYear=models.CharField(max_length=255,default='none')
+    SubjectType=models.BooleanField(max_length=50,default=True)
     SubjectDepartment=models.CharField(max_length=255,default='none')
-
+    Subjectdep=models.ForeignKey(Department, on_delete=models.CASCADE,default=4)
+    Subjectyr=models.ForeignKey(Year, on_delete=models.CASCADE,default=2)
     def __str__(self):
         return self.SubjectName
 
@@ -68,6 +66,7 @@ class Student(models.Model):
     AdmissionQuota = models.CharField(max_length=255,default='none')
     RoleID = models.ForeignKey('Roles', on_delete=models.CASCADE,default=2)
     YearDownStatus = models.BooleanField(default=False)
+    batch=models.IntegerField(default=1)
 
 class Backlog(models.Model):
     BacklogID = models.AutoField(primary_key=True)
@@ -112,9 +111,9 @@ class StudentProgression(models.Model):
 class Attendance(models.Model):
     AttendanceID = models.AutoField(primary_key=True)
     StudentID = models.ForeignKey('Student', on_delete=models.CASCADE)
-    ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
     SubjectID = models.ForeignKey(Subject, on_delete=models.CASCADE, default=1)
     SubjectName = models.CharField(max_length=50, default='DEFAULT_SUBJECT_NAME')
+    ClassID=models.ForeignKey(Classes, on_delete=models.CASCADE, default=3)
     Date = models.DateField()
     Timeto= models.CharField(max_length=50, default='DEFAULT_TIME')
     Timefrom= models.CharField(max_length=50, default='DEFAULT_TIME')
@@ -184,10 +183,8 @@ class ClassTeacherAssignment(models.Model):
 
 class Timetable(models.Model):
     TimetableID = models.AutoField(primary_key=True)
-    DepartmentID = models.ForeignKey('Department', on_delete=models.CASCADE)
     ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
-    Division = models.CharField(max_length=255)
-    Timetable = models.TextField()
+    Timetable = models.ImageField(null=True, blank=True)
 
     def __str__(self):
         return f"Timetable {self.TimetableID} - {self.DepartmentID} - {self.ClassID} - {self.Division}"

@@ -142,7 +142,8 @@
 						{% csrf_token %}
 						<div class="row">
 							<div class="column">
-								<label for="load_type"> <b>Load Type:</b> {{subject.SubjectType}}</label>
+								<label for="load_type"> <b>Load Type:</b> {%if subject.SubjectType %}Therotical{% else %}
+									Practical{% endif %}</label>
 								
 							</div>
 							<div class="column">
@@ -158,38 +159,26 @@
 							
 						</div>
 						
-
 						<div class="row">
 							<div class="column">
-								<label for="div">Division:</label>
-								<select id="division" name="division" required>
-									<option value=""> None</option>
-									<option value="A">A</option>
-									<option value="B">B</option>
-									<option value="C">C</option>
-									<option value="D">D</option>
-									<option value="E">E</option>
-									<option value="all">All</option>
-								</select>
+								<label for="course"><b>Subject:</b>{{subject.SubjectName}}</label>
+								
 							</div>
-							
 							<div class="column">
-								<label for="batch">Select Batch:</label>
-								<select id="batch" name="batch" required>
-									<option value=""> Batch</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-									<option value="all">All</option>
-								</select>
+								<label for="course"><b>Class:</b>{{selected_class.ClassName}}</label>
+								
 							</div>
+							<div class="column">
+								<label for="course"><b>Batch:</b>{{batch}}</label>
+								
+							</div>
+						</div>
+						
+						<div class="row">
 							<div class="column">
 								<label for="batch">Date :</label>
 								<input type="date" name="date" id="date">
 							</div>
-							
-						</div>
-						<div class="row">
 							<div class="column">
 								<label for="from_time">From:</label>
 								<select id="from_time" name="from_time">
