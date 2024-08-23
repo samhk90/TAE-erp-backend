@@ -292,34 +292,28 @@
 				<input type="checkbox"   id="toggle">
 				<label for="toggle" id="ltoggle"></label>
 				<div class="nav">
-					<form action="/submit" method="POST">
+					<form method="POST">
+						{% csrf_token %}
 						<div>
-							<input type="text" id="name" name="name" placeholder="Prof. Name">
-						</div>
-						<div>
-							<input type="text" id="title" name="title" placeholder="Notice Title">
+							<input type="text" id="title" name="noticeTitle" placeholder="Notice Title">
 						</div>
 					
 						<div>
-							<Select>
-								<option value="">Department</option>
-								<option value="">Comp</option>
-								<option value="">I.T.</option>
-								<option value="">Mech</option>
-								<option value="">Civil</option>
-								<option value="">E&TC</option>
+							<Select id="class" name="class" value="">
+								<option  >Class</option>
+								{% for class in classes %}
+								<option value="{{class.ClassID}}">{{class.ClassName}}</option>
+								{% endfor %}
 							</Select>
 						</div>
 						<div>
 							<label for="date">Date</label>
-							<input type="datetime-local">
-						</div>
-						<div>
-							<label for="vdate">Valid Upto</label>
-							<input type="datetime-local">
+							<input required type="datetime-local">
 						</div>
 						<div>
 							<input type="file" id="file" name="file" accept=".pdf">
+							<button class="btn btn-secondary" >Upload</button>
+							<p id="upload-status"></p>
 						</div>
 						
 						<button type="submit">Publish</button>
@@ -332,52 +326,74 @@
 
 	</section>
 	<!-- CONTENT -->
+	<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
 	<script>
 		var now = new Date();
 		var datetime = now.toLocaleString();
 		document.getElementById("datetime").innerHTML = datetime;
-		const supabase = window.supabase.createClient('https://gipdgkwmxmmykyaliwhr.supabase.co/'
-		, 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI');
-		
-		async function uploadImage(event) {
-		  event.preventDefault();
-		  const fileInput = document.getElementById('file');
-		  const  year= document.getElementById('year').value;
-		  const department = document.getElementById('department').value;
-		  const file = fileInput.files[0];
-		  if (!file) {
-			console.error('No file selected.');
-			return;
-		  }
-  
-		  const fileData = await file.arrayBuffer();
-		  const content_type = file.type || 'application/octet-stream';
-		  path='public/'+year+'/'+department+'/'+file.name+'';
-		  try {
-			const { data, error } = await supabase.storage.from('noticebucket').upload(path, fileData, {
-			  contentType: content_type,
-			});
-			
-			if (error) {
-			  if(error.message==='The resource already exists'){
-				alert('File already exists, please rename the file and upload again.');
-			  }else{
-				console.error('Error uploading image:', error.message);
-				alert('Error uploading image');
-			  }
+	
+		document.addEventListener("DOMContentLoaded", function() {
+			// Initialize Supabase client
+			const supabase = window.supabase.createClient(
+				'https://gipdgkwmxmmykyaliwhr.supabase.co/', 
+				'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI'
+			);
+	
+			// Upload PDF function
+			async function uploadImage(event) {
+				event.preventDefault();
+				const fileInput = document.getElementById('file');
+				const classid = document.getElementById('class').value;
+				const file = fileInput.files[0];
+	
+				if (!file) {
+					alert('Please select a file before uploading.');
+					return;
+				}
+	
+				const fileData = await file.arrayBuffer();
+				const content_type = file.type || 'application/octet-stream';
+				const path = `public/${classid}/${file.name}`;
+				
+				// Show an alert to the user that the upload is in progress
+				const uploadStatus = document.getElementById('upload-status');
+				uploadStatus.textContent = 'Uploading file... Please wait.';
+				uploadStatus.style.color = 'blue';
+	
+				try {
+					const { data, error } = await supabase.storage.from('noticebucket').upload(path, fileData, {
+						contentType: content_type,
+						cacheControl: '3600', // Set cache control if necessary
+						upsert: false // Set to true if you want to overwrite files
+					});
+	
+					if (error) {
+						if (error.message === 'The resource already exists') {
+							uploadStatus.textContent = 'File already exists, please rename the file and upload again.';
+							uploadStatus.style.color = 'red';
+						} else {
+							console.error('Error uploading image:', error.message);
+							uploadStatus.textContent = 'Error uploading file: ' + error.message;
+							uploadStatus.style.color = 'red';
+						}
+					} else {
+						uploadStatus.textContent = 'File uploaded successfully!';
+						uploadStatus.style.color = 'green';
+					}
+				} catch (error) {
+					console.error('Error uploading image:', error.message);
+					uploadStatus.textContent = 'Error uploading file: ' + error.message;
+					uploadStatus.style.color = 'red';
+				}
 			}
-			 else {
-			  alert('Image uploaded successfully');
-			}
-		  } catch (error) {
-			console.error('Error uploading image:', error.message);
-		  }
-		}
-	  </script>
-	  </script>
-
-	<script src="assets/script/script.js"></script>
-
+	
+			// Attach the upload function to the form submit button
+			const uploadButton = document.querySelector('.btn.btn-secondary');
+			uploadButton.addEventListener('click', uploadImage);
+		});
+	</script>
+	
+	
 </body>
 
 </html>

@@ -32,8 +32,10 @@ def index(request):
             attendance_percentage = (present_count / total_count) * 100
         else:
             attendance_percentage = 0 
-
+        email=request.session.get('teacher_email')
+        teacherinfo=Teacher.objects.get(Email=email)
         context = {
+            'teacherinfo':teacherinfo,
         'teacher':teacher,
         'present': present_count,
         'absent': absent_count,
@@ -303,21 +305,24 @@ def attendance_form(request, sub, id, class_name,batch):
 
     class_name=Classes.objects.get(ClassID=class_name)
     subjecttype=subject.SubjectType
+    role1 = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
+    is_classteacher = role1 and role1.RoleID.RoleName == 'Classteacher'
     context = {
         'subjecttype':subjecttype,
         'students': students,
         'teacher': teacher,
         'subject': subject,
         'selected_class': class_name,
-        'batch':batch
+        'batch':batch,
+        'is_classteacher':is_classteacher
     }
     return render(request, 'attendance_form.html', context)
-@supabase_login_required
 @supabase_login_required
 def students(request):
     year = Year.objects.all()
     department = Department.objects.all()
-
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
     if request.method == 'POST':
         yearid = request.POST.get('year')
         departmentid = request.POST.get('department')
@@ -349,18 +354,36 @@ def students(request):
             'year': year,
             'department': department,
             'students_data': students_data,
+            'teacher':teacher
         }
 
         return render(request, 'students.html', context)
 
-    return render(request, 'students.html', {'year': year, 'department': department})
+    return render(request, 'students.html', {'year': year, 'department': department,'teacher':teacher})
 
 @supabase_login_required
 def notices(request):
     allnotices= Notices.objects.order_by('-date')
     email=request.session.get('teacher_email')
     teacher=Teacher.objects.get(Email=email)
-    return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher})
+    role=teacher.RoleID.RoleName
+    is_teacher = role == 'Teacher' 
+    if is_teacher:
+        department=teacher.DepartmentID.DepartmentName
+        if request.method == 'POST':
+            title = request.POST.get('noticeTitle')
+            description = request.POST.get('noticeBody')
+            date = request.POST.get('noticeDate')
+            attachment = request.FILES.get('file')
+            notice = Notices.objects.create(
+            title=title,
+            description=description,
+            date=date,
+            attachment=attachment,
+        )
+            allnotices=Notices.objects.order_by('-date')
+        classes=Classes.objects.filter(DepartmentID__DepartmentName=department)
+    return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
 @supabase_login_required
 def edit_notice(request):
     noticeid = request.GET.get('noticeid')
