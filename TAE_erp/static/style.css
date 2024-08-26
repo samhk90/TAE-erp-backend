@@ -169,7 +169,9 @@ table{
 thead{
   border-bottom: .5px solid #8390a2;
 }
-
+li a{
+  cursor: pointer;
+}
 tr,td,th{
   padding: 8px 20px;
 }

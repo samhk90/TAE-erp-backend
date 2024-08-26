@@ -57,7 +57,10 @@ def index(request):
             attendance_percentage = (present_count / total_count) * 100
         else:
             attendance_percentage = 0 
+        email=request.session.get('teacher_email')
+        teacherinfo=Teacher.objects.get(Email=email)
         context = {
+        'teacherinfo':teacherinfo,
         'Principal':Principal,
         'present': present_count,
         'absent': absent_count,
@@ -177,44 +180,39 @@ def academics(request):
     teacher = get_object_or_404(Teacher, Email=email)
     role = teacher.RoleID.RoleName
     role1 = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
-
-    # Determine roles
     is_teacher = role == 'Teacher'
     is_classteacher = role1 and role1.RoleID.RoleName == 'Classteacher'
     principal=role=='Principal'
     if request.method == 'POST':
-        class_id = request.POST.get('id')
-        selected_class = request.POST.get('class')
-        subject_id = request.POST.get('sub')
+        selected_class=request.POST.get('class')
         batch=request.POST.get('batch')
-        if class_id and selected_class and subject_id :
-            # Redirect to attendance_form view
-            return redirect('attendance_form', sub=subject_id, id=class_id, class_name=selected_class,batch=batch)
-        elif class_id and selected_class and subject_id and batch:
-            # Redirect to attendance_form view
-            return redirect('attendance_form', sub=subject_id, id=class_id, class_name=selected_class,batch=batch)
-        else:
-            messages.error(request, "Invalid form submission.")
-            return redirect('academics')
-
-    assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
-    subjects = [assignment.SubjectID for assignment in assignments]
-    subject_deps = Subject.objects.filter(SubjectName__in=subjects).values_list('Subjectdep', flat=True)
-    subject_yrs = Subject.objects.filter(SubjectName__in=subjects).values_list('Subjectyr', flat=True)
-
-# Filter classes that match the department and year of the subjects
-    assigned_classes = Classes.objects.filter(
-    DepartmentID__in=subject_deps,
-    YearID__in=subject_yrs
-).distinct()
+        
+        assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
+        subjects = [assignment.SubjectID for assignment in assignments]
+        department=teacher.DepartmentID.DepartmentID
+        assigned_classes = Classes.objects.filter(DepartmentID=department)
+        print(subjects)
+        context = {
+        'principal':principal,
+        'is_classteacher': is_classteacher,
+        'subjects':subjects,
+        'selected_class':selected_class,
+        'batch':batch,
+        'is_teacher': is_teacher,
+        'teacher':teacher,
+        'classes': assigned_classes,
+    }
+        return render(request,'academics.html',context)
+    department=teacher.DepartmentID.DepartmentID
+    assigned_classes = Classes.objects.filter(DepartmentID=department)
     context = {
         'principal':principal,
         'is_classteacher': is_classteacher,
         'is_teacher': is_teacher,
-        'subjects': subjects,
+        'teacher':teacher,
         'classes': assigned_classes,
     }
-    return render(request, 'academics.html', context)
+    return render(request,'academics.html',context)
 
 @supabase_login_required
 def greenbook(request):
@@ -261,22 +259,24 @@ def greenbook(request):
     }
     return render(request, 'green.html', context)
 @supabase_login_required
-def attendance_form(request, sub, id, class_name,batch):
+def attendance_form(request):
     email = request.session.get('teacher_email')
     teacher = get_object_or_404(Teacher, Email=email)
-
+    selected_class = request.GET.get('class')
+    subject_id = request.GET.get('sub')
+    batch = request.GET.get('batch') 
     if request.method == 'POST':
-        # Handle attendance submission
         date = request.POST.get('date')
         time_to = request.POST.get('to_time')
         time_from = request.POST.get('from_time')
 
-        subject = get_object_or_404(Subject, SubjectID=sub)
-        if subject.SubjectType==False:
-            batch=int(batch)
-            students=Student.objects.filter(CurrentClassID=class_name,batch=batch).order_by('RollNumber')
+        subject = get_object_or_404(Subject, SubjectID=subject_id)
+        
+        if subject.SubjectType == False:
+            batch = int(batch)  # Ensure batch is an integer if needed
+            students = Student.objects.filter(CurrentClassID=selected_class, batch=batch).order_by('RollNumber')
         else:
-            students = Student.objects.filter(CurrentClassID=class_name).order_by('RollNumber')
+            students = Student.objects.filter(CurrentClassID=selected_class).order_by('RollNumber')
 
         attendance_records = []
         for student in students:
@@ -296,25 +296,26 @@ def attendance_form(request, sub, id, class_name,batch):
         return redirect('academics')
 
     # If GET request or form not submitted
-    subject = get_object_or_404(Subject, SubjectID=sub)
-    if subject.SubjectType==False:
-            batch=int(batch)
-            students=Student.objects.filter(CurrentClassID=class_name,batch=batch).order_by('RollNumber')
+    subject = get_object_or_404(Subject, SubjectID=subject_id)
+    
+    if subject.SubjectType == False:
+        batch = int(batch)  # Ensure batch is an integer if needed
+        students = Student.objects.filter(CurrentClassID=selected_class, batch=batch).order_by('RollNumber')
     else:
-            students = Student.objects.filter(CurrentClassID=class_name).order_by('RollNumber')
+        students = Student.objects.filter(CurrentClassID=selected_class).order_by('RollNumber')
 
-    class_name=Classes.objects.get(ClassID=class_name)
-    subjecttype=subject.SubjectType
+    subjecttype = subject.SubjectType
     role1 = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
     is_classteacher = role1 and role1.RoleID.RoleName == 'Classteacher'
+    selected_class=Classes.objects.get(ClassID=selected_class)
     context = {
-        'subjecttype':subjecttype,
+        'subjecttype': subjecttype,
         'students': students,
         'teacher': teacher,
         'subject': subject,
-        'selected_class': class_name,
-        'batch':batch,
-        'is_classteacher':is_classteacher
+        'selected_class': selected_class,
+        'batch': batch,
+        'is_classteacher': is_classteacher
     }
     return render(request, 'attendance_form.html', context)
 @supabase_login_required
@@ -368,88 +369,78 @@ def notices(request):
     teacher=Teacher.objects.get(Email=email)
     role=teacher.RoleID.RoleName
     is_teacher = role == 'Teacher' 
-    if is_teacher:
-        department=teacher.DepartmentID.DepartmentName
-        if request.method == 'POST':
-            title = request.POST.get('noticeTitle')
-            description = request.POST.get('noticeBody')
-            date = request.POST.get('noticeDate')
-            attachment = request.FILES.get('file')
+    department=teacher.DepartmentID.DepartmentName
+    if request.method == 'POST':
+            title = request.POST.get('title')
+            teacherid=teacher.Teacherid
+            date = request.POST.get('date')
+            classid=request.POST.get('class')
+            classid=Classes.objects.get(ClassID=classid)
+            attachment = request.POST.get('file')
+            print(attachment)
             notice = Notices.objects.create(
             title=title,
-            description=description,
+            teacherpublished=teacher,
+            ClassID=classid,
             date=date,
             attachment=attachment,
         )
-            allnotices=Notices.objects.order_by('-date')
-        classes=Classes.objects.filter(DepartmentID__DepartmentName=department)
+            return redirect('notices')
+    allnotices=Notices.objects.order_by('-date')
+    classes=Classes.objects.filter(DepartmentID__DepartmentName=department)
     return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
+
+from django.shortcuts import redirect
+from django.conf import settings
+import supabase
+
+# Initialize Supabase client (You should ideally move this to a separate configuration file)
+supabase_url = 'https://gipdgkwmxmmykyaliwhr.supabase.co/'
+supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI'
+supabase_client = supabase.create_client(supabase_url, supabase_key)
+
 @supabase_login_required
-def edit_notice(request):
-    noticeid = request.GET.get('noticeid')
-    teacher_id = request.GET.get('id')
-    notice = Notices.objects.get(id=noticeid)
-    teacher=Teacher.objects.get(Teacherid=teacher_id)
+def delete_notice(request, id):
     if request.method == 'POST':
-        title = request.POST.get('noticeTitle')
-        description = request.POST.get('noticeBody')
-        date = request.POST.get('noticeDate')
-        attachment = request.FILES.get('noticeattachment')
-        year=request.POST.get('year')
-        department=request.POST.get('department')
-        notice.title = title
-        notice.description = description
-        notice.date = date
-        notice.attachment = attachment
-        notice.year=year
-        notice.derpartment=department
+        notice_id = request.POST.get('notice_id')
+        notice = Notices.objects.get(id=notice_id)
+        class_id = notice.ClassID.ClassID
+        attachment = notice.attachment
+        
+        # Delete the notice record from the database
+        notice.delete()
+        
+        # Construct the file path
+        file_path = f'public/{class_id}/{attachment}'
+        
+        # Delete the file from Supabase storage
+        response = supabase_client.storage.from_('noticebucket').remove([file_path])
+        
+        # Check if there is an error in the response
+        if any(item.get('error') for item in response):
+            # Handle the error if file deletion failed
+            errors = [item['error']['message'] for item in response if item.get('error')]
+            for error in errors:
+                print(f"Error deleting file from Supabase: {error}")
+        else:
+            print("File deleted successfully from Supabase.")
 
-
-        notice.save()
-        notice=Notices.objects.order_by('-date')
-        return render(request, 'notice.html', {'notice': notice,'teacher':teacher})
-
-    return render(request, 'noticeform.html', {'notice': notice})
-@supabase_login_required
-def noticeform(request):
-    id=request.GET.get('id')
-    teacher=Teacher.objects.get(Teacherid=id)
-    if request.method == 'POST':
-        title = request.POST.get('noticeTitle')
-        description = request.POST.get('noticeBody')
-        date = request.POST.get('noticeDate')
-        year=request.POST.get('year')
-        department=request.POST.get('department')
-        attachment = request.FILES.get('noticeattachment')
-        notice = Notices.objects.create(
-            title=title,
-            description=description,
-            date=date,
-            attachment=attachment.name,
-            year=year,
-            derpartment=department
-        )
-        allnotices=Notices.objects.order_by('-date')
-        return render(request,'notice.html',{'notice': allnotices,'teacher':teacher})  
+        allnotice = Notices.objects.order_by('-date')
+        return redirect('notices')
     else:
-        return render(request, 'noticeform.html',{'teacher':teacher})
-@supabase_login_required
-def delete_notice(request): 
-    id=request.GET.get('id')
-    teacher=Teacher.objects.get(Teacherid=id) 
-    notice_id = request.POST.get('notice_id') 
-    Notices.objects.filter(id=notice_id).delete() 
-    allnotice=Notices.objects.order_by('-date')
-    return render(request,'notice.html',{'teacher':teacher,'notice':allnotice}) 
+        return redirect('notices')  # or wherever you want to redirect to
+
 
 from django.shortcuts import render
 from django.db.models import Count
 from .models import Attendance
 from django.utils import timezone
+@supabase_login_required
 def logs(request):
     # Get today's date
     today = timezone.now().date()
-    
+    email=request.session.get('teacher_email')
+    teacher=Teacher.objects.get(Email=email)
     # Query attendance records for today and join with TeacherSubjectAssignment to get faculty names
     attendance_records = Attendance.objects.select_related('SubjectID').filter(Date=today).values(
         'Timefrom', 'Timeto', 'SubjectID__SubjectName','SubjectID__SubjectDepartment','SubjectID__SubjectYear','SubjectID__teachersubjectassignment__TeacherID__FirstName'
@@ -460,5 +451,9 @@ def logs(request):
     # Context to pass data to the template
     context = {
         'attendance_records': attendance_records,
+        'teacher':teacher
     }
     return render(request,'logs.html',context)
+@supabase_login_required
+def history(request):
+    return render(request,'history.html')

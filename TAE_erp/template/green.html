@@ -55,16 +55,16 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="{%static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li>
 				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
+			<li class="active">
 				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
@@ -88,19 +88,19 @@
 					<span class="text">Leaves</span>
 				</a>
 			</li>
-
+			<!-- <li>
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li> -->
 			<li>
 				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
 			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-group'></i>
-					<span class="text">Feedback</span>
-				</a>
-			</li>
+
 		</ul>
 		<ul class="side-menu">
 			<li>
@@ -110,7 +110,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
 					<span class="text">Logout</span>
 				</a>
@@ -150,12 +150,9 @@
 			<div class="head-title">
 				<div class="left">
 					<ul class="breadcrumb">
+						
 						<li>
-							<a  href="#">Academics</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="academics">Attendance</a>
+							<a class="" href="academics">Attendance</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						{% if classteacher %}
@@ -163,9 +160,9 @@
 							<a class="active" href="greenbook">GreenBook</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>{% endif %}
-						<li>
-							<a class="active" href="history.html">History</a>
-						</li>
+						<!-- <li>
+							<a class="" href="history">History</a>
+						</li> -->
 					</ul>
 				</div>
 			</div>

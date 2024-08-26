@@ -20,16 +20,16 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="{%static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li >
 				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
+			<li class="active">
 				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
@@ -53,19 +53,19 @@
 					<span class="text">Leaves</span>
 				</a>
 			</li>
-
+			<!-- <li>
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li> -->
 			<li>
-				<a href="">
+				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
 			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-group'></i>
-					<span class="text">Feedback</span>
-				</a>
-			</li>
+
 		</ul>
 		<ul class="side-menu">
 			<li>
@@ -75,7 +75,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
 					<span class="text">Logout</span>
 				</a>
@@ -107,21 +107,17 @@
 					<h1>Academics</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a  href="#">Academics</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
 							<a class="active" href="academics">Attendance</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						{% if is_classteacher %}
 						<li>
-							<a class="active" href="greenbook">GreenBook</a>
+							<a  href="greenbook">GreenBook</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>{% endif %}
-						<li>
-							<a class="active" href="history.html">History</a>
-						</li>
+						<!-- <li>
+							<a class="" href="history">History</a>
+						</li> -->
 					</ul>
 				</div>
 			</div>
@@ -137,11 +133,11 @@
 								
 							</div>
 							<div class="column">
-								<label for="year"> <b>Teacher Name:</b>{{teacher.FirstName}} {{teacher.LastName}}</label>
+								<label for="year"> <b>Teacher Name:</b> {{teacher.FirstName}} {{teacher.LastName}}</label>
 								<!-- <input type="text" id="year" name="year" required> -->
 							</div>
 							<div class="column">
-								<label for="course"><b>Department:</b>{{subject.SubjectDepartment}}</label>
+								<label for="course"><b>Department:</b> {{subject.SubjectDepartment}}</label>
 								
 							</div>
 							<br>
@@ -151,15 +147,15 @@
 						
 						<div class="row">
 							<div class="column">
-								<label for="course"><b>Subject:</b>{{subject.SubjectName}}</label>
+								<label for="course"><b>Subject:</b> {{subject.SubjectName}}</label>
 								
 							</div>
 							<div class="column">
-								<label for="course"><b>Class:</b>{{selected_class.ClassName}}</label>
+								<label for="course"><b>Class:</b> {{selected_class.ClassName}}</label>
 								
 							</div>
 							<div class="column">
-								<label for="course"><b>Batch:</b>{{batch}}</label>
+								<label for="course"><b>Batch:</b> {{batch}}</label>
 								
 							</div>
 						</div>
@@ -167,11 +163,11 @@
 						<div class="row">
 							<div class="column">
 								<label for="batch">Date :</label>
-								<input type="date" name="date" id="date">
+								<input type="date" name="date" id="date" required>
 							</div>
 							<div class="column">
 								<label for="from_time">From:</label>
-								<select id="from_time" name="from_time">
+								<select id="from_time" name="from_time" required>
 									<option value="">Select Time</option>
 									<option value="09:15 am">09:15 am</option>
 									<option value="10:15 am">10:15 am</option>
@@ -183,7 +179,7 @@
 							</div>
 							<div class="column">
 								<label for="to_time">To:</label>
-								<select id="to_time" name="to_time">
+								<select id="to_time" name="to_time" required>
 									<option value="">Select Time</option>
 									<option value="10:15 am">10:15 am</option>
 									<option value="11:15 am">11:15 am</option>
@@ -215,7 +211,7 @@
 								<input type="checkbox" name="is_present_{{ student.StudentID }}" id="is_present_{{ student.StudentID }}">
            
 							</td>
-							<td>{{student.FirstName}}</td>
+							<td>{{student.FirstName}} {{student.LastName}}</td>
 							<td>100%</td>
 							<td > <a href="" class="view">View</a> </td>
 						</tr>

@@ -19,7 +19,7 @@
 		}
 		.box2{
 			display: flex;
-			flex-direction: column;
+			flex-direction: row;
 			justify-content:center;
 			align-items: center;
 			width: 50%;
@@ -29,6 +29,7 @@
 			border-radius: 5px;
 			border: none;
 			width: 100%;
+			margin: 20px;
 		}
 		.class-branch select{
 			background-color: transparent;
@@ -108,6 +109,15 @@
 			margin-top: 3rem;
 			cursor: pointer;
 		  }
+		  .box2 button{
+			background: #3C91E6;
+			border: none;
+			color: #fff;
+			padding: 7px 10px;
+			border-radius: 10px;
+			width: 100%;
+			cursor: pointer;
+		  }
 	</style>
 </head>
 
@@ -120,13 +130,13 @@
 				<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
 			</a>
 			<ul class="side-menu top">
-				<li class="active">
+				<li>
 					<a href="/">
 						<i class='bx bxs-dashboard'></i>
 						<span class="text">Dashboard</span>
 					</a>
 				</li>
-				<li>
+				<li class="active">
 					<a href="academics">
 						<i class='bx bxs-calendar-star'></i>
 						<span class="text">Academics</span>
@@ -188,28 +198,29 @@
 			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
-				<a href="index">
+			<li >
+				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-			<li>
+			<li class="active">
 				<a href="pacademics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="notices">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
 				</a>
 			</li>
 			<li>
 				<a href="logs">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Daily Logs</span>
-				</a>
-			</li>
-			<li>
-				<a href="notices">
-					<i class='bx bxs-doughnut-chart'></i>
-					<span class="text">Notices</span>
 				</a>
 			</li>
 			<li>
@@ -229,12 +240,6 @@
 				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
-				</a>
-			</li>
-			<li>
-				<a href="feedback">
-					<i class='bx bxs-group'></i>
-					<span class="text">Feedback</span>
 				</a>
 			</li>
 		</ul>
@@ -258,25 +263,13 @@
 	<section id="content">
 		<!-- NAVBAR -->
 		<nav>
-			<i class='bx bx-menu'></i>
-
-
 			<div class="intro">
 				<h2>Trinity Academy of Engineering</h2>
 			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell'></i>
-				<span class="num">8</span>
-			</a>
+
 
 			<a href="#" class="profile" >
-				Dr. N.J.Uke<img src="/assets/img/principal.jpeg">
+				<p>Prof. {{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
 			</a>
 		</nav>
 		<!-- NAVBAR -->
@@ -288,15 +281,7 @@
 					<h1>Academics</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Academics</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="#">Attendance</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="#">GreenBook</a>
+							<a href="academics" >Academics</a>
 						</li>
 					</ul>
 				</div>
@@ -321,11 +306,11 @@
 											<option value="all">All</option>
 										</select>
 									</div>
-									<div class="column">
+									<!-- <div class="column">
 										<label for="div">Year:</label>
 										<input type="month" name="year"  placeholder="YYYY" min="1999" max="2050"  id="year">
 										
-									</div>
+									</div> -->
 									<div class="column">
 										<label for="div">Academic Year:</label>
 										<select id="division" name="division" required >
@@ -571,32 +556,53 @@ a{
 					<h1>Academics</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a  href="#">Academics</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
 							<a class="active" href="academics">Attendance</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>
 						{% if is_classteacher %}
 						<li>
-							<a class="active" href="greenbook">GreenBook</a>
+							<a class="" href="greenbook">GreenBook</a>
 						</li>
 						<li><i class='bx bx-chevron-right'></i></li>{% endif %}
-						<li>
-							<a class="active" href="history.html">History</a>
-						</li>
+						<!-- <li>
+							<a href="history">History</a>
+						</li> -->
 					</ul>
 				</div>
 			</div>
 			<section class="main-course">
-				<h1>Subjects</h1>
+				<h1>Subjects</h1><form method="post">
+					{% csrf_token %}
+				<div class="box2">
+					
+					
+					<div class="class-batch">
+						<select name="class" required>
+							<option value="">Select Class</option>
+							{% for class in classes %}
+								<option value="{{ class.ClassID }}">{{ class.ClassName }}</option>
+							{% endfor %}
+						</select>
+					</div>
+					<div class="class-branch" >
+						<select name="batch" required id="batch&class">
+							<option value="">Batch</option>
+							<option value="All">All</option>
+							<option value="1">1</option>
+							<option value="2">2</option>
+							<option value="3">3</option>
+							
+						</select>
+						
+					</div>
+					<button class="btn btn-primary">Get Subjects</button>
+					</form>
+				</div>
 				<div class="course-box">
+					{% if subjects %}
 					{% for subject in subjects %}
 					<div class="course">
-						<form method="post">
-							{% csrf_token %}
-						
+
 						<div class="box1">
 							<div>
 							<h3>{{subject.SubjectName}}</h3>
@@ -604,37 +610,21 @@ a{
 							<p>8 lectures conducted</p>
 							<input style="display: none;" type="hidden" name="sub" value="{{ subject.SubjectID }}">
 							<input style="display: none;" type="hidden" name="id" value="{{subject.CurrentClassID_id}}">
-							<!-- <a href="attendance_form?sub={{subject.SubjectID}}&id={{subject.CurrentClassID_id}}"> <button> Take Attendance </button></a> -->
+							<a href="{% url 'attendance_form' %}?sub={{ subject.SubjectID }}&class={{ selected_class }}&batch={{batch}}">
 								<button>Take Attendance</button>
+							</a>
 						</div>
-						<div class="box2">
-							<div class="class-batch">
-								<select name="class" required>
-									<option value="">Select Class</option>
-									{% for class in classes %}
-										<option value="{{ class.ClassID }}">{{ class.ClassName }}</option>
-									{% endfor %}
-								</select>
-							</div>
-							{% if not subject.SubjectType%}
-							<div class="class-branch">
-								<select name="batch" id="batch&class">
-									<option value="">Branch</option>
-									<option value="1">1</option>
-									<option value="2">2</option>
-									<option value="3">3</option>
-								</select>
-								
-							</div>
-							{% endif %}
-						</div>
+
 					</div>
 				
-				</form>
 				</div>
 				{% endfor %}
+				{% else %}
+				<div style="padding: 50px;">
+					<h3>Please select Class and Batch</h3>
+			</div>{% endif %}
 				</div>
-
+				
 			</section>
 			<style>
 				/* Courses */

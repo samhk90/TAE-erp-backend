@@ -6,19 +6,203 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
-	<!-- Boxicons -->
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
 	<!-- <link rel="stylesheet" href="assets/style/progressbar.css"> -->
+	<style>
+		
+		.modal {
+			visibility: hidden;
+			opacity: 0;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			transition: opacity 0.3s ease, visibility 0.3s ease;
+		}
+
+		.info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.info .left-content {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.select-checkbox {
+			margin-right: 10px;
+		}
+
+		.fas.fa-bell {
+			margin-right: 10px;
+		}
+
+		/* Modal content */
+		.modal-content {
+			margin-top: 140px;
+			background-color: #fefefe;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			max-width: 500px;
+			border-radius: 8px;
+			position: relative;
+		}
+
+		.modal #announcementTitle,
+		#date,
+		#modal_submit {
+			width: 100%;
+			border-radius: 5px;
+			border: 1px solid rgb(183, 182, 182);
+			height: 28px;
+		}
+
+		#modal_submit {
+			color: white;
+			font-size: 16px;
+			font-weight: 600;
+			background-color: #3C91E6;
+			border: none;
+		}
+
+		input[type="text"],
+		input[type="date"],
+		textarea {
+			padding: 15px;
+			width: calc(100%);
+			box-sizing: border-box;
+		}
+
+		.dropdown {
+			position: relative;
+		}
+
+		.dropdown .dropdown-content {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			justify-content: space-between;
+			max-width: 420px;
+		}
+
+		.dropdown .dropdown-content label {
+			display: flex;
+			align-items: center;
+			width: 48%;
+			/* Two columns, adjust width if necessary */
+		}
+
+		.dropdown .dropdown-content label p {
+			padding-left: 10px;
+		}
+
+		.close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			color: #aaa;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: black;
+			text-decoration: none;
+		}
+
+		/* Checkbox label styling */
+		.dropdown-content label {
+			display: flex;
+			padding: 8px;
+			cursor: pointer;
+		}
+
+		#deleteButton {
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+			color: red;
+		}
+	</style>
+	<style>
+		.info {
+			position: relative;
+			/* Make sure .info is the reference for absolute positioning */
+			display: block;
+			width: 100%;
+		}
+
+		.user,
+		.date {
+			display: block;
+			margin: 0;
+		}
+
+		.desc {
+			position: absolute;
+			/* Position absolutely within .info */
+			top: -90px;
+			/* Move it above the content. Adjust as necessary */
+			left: 0;
+			width: 280px;
+			/* Fixed width */
+			height: 100%;
+			/* Fixed height */
+			display: none;
+			/* Initially hidden */
+			background-color: #f9f9f9;
+			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			font-size: 1.4em;
+			color: #333;
+			box-sizing: border-box;
+			/* Ensure padding and border are included in width and height */
+		}
+
+		.close-btn {
+			position: absolute;
+			/* Position absolutely within .desc */
+			top: 5px;
+			/* Adjust as necessary */
+			right: 10px;
+			/* Adjust as necessary */
+			background-color: transparent;
+			border: none;
+			color: red;
+			font-size: 20px;
+			cursor: pointer;
+			/* Pointer cursor on hover */
+		}
+
+		.info.expanded .desc {
+			display: block;
+		}
+	</style>
+
 	<title>TAE</title>
 </head>
 
 <body>
 
-	{% if teacher %}
 		<!-- SIDEBAR -->
 		<section id="sidebar">
 			<a href="#" class="brand">
@@ -31,14 +215,23 @@
 						<span class="text">Dashboard</span>
 					</a>
 				</li>
+				{% if teacher%}
 				<li>
 					<a href="academics">
 						<i class='bx bxs-calendar-star'></i>
 						<span class="text">Academics</span>
 					</a>
 				</li>
+				{% else%}
 				<li>
-					<a href="notices.html">
+					<a href="logs">
+						<i class='bx bxs-calendar-star'></i>
+						<span class="text">Daily logs</span>
+					</a>
+				</li>
+				{% endif %}
+				<li>
+					<a href="notices">
 						<i class='bx bxs-doughnut-chart'></i>
 						<span class="text">Notices</span>
 					</a>
@@ -55,19 +248,19 @@
 						<span class="text">Leaves</span>
 					</a>
 				</li>
-	
+				<!-- <li>
+					<a href="logs">
+						<i class='bx bxs-calendar-star'></i>
+						<span class="text">Daily Logs</span>
+					</a>
+				</li> -->
 				<li>
 					<a href="students">
 						<i class='bx bxs-group'></i>
 						<span class="text">Student Info</span>
 					</a>
 				</li>
-				<li>
-					<a href="">
-						<i class='bx bxs-group'></i>
-						<span class="text">Feedback</span>
-					</a>
-				</li>
+
 			</ul>
 			<ul class="side-menu">
 				<li>
@@ -85,81 +278,6 @@
 			</ul>
 		</section>
 		<!-- SIDEBAR -->
-	{% endif %}
-	{% if Principal %}
-			<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="/" class="brand">
-			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
-		</a>
-		<ul class="side-menu top">
-			<li class="active">
-				<a href="/">
-					<i class='bx bxs-dashboard'></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			<li>
-				<a href="academics">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Academics</span>
-				</a>
-			</li>
-			<li>
-				<a href="logs">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily Logs</span>
-				</a>
-			</li>
-			<li>
-				<a href="notices">
-					<i class='bx bxs-doughnut-chart'></i>
-					<span class="text">Notices</span>
-				</a>
-			</li>
-			<li>
-				<a href="timetable">
-					<i class='bx bxs-message-dots'></i>
-					<span class="text">Time Table</span>
-				</a>
-			</li>
-			<li>
-				<a href="leaves">
-					<i class='bx bxs-group'></i>
-					<span class="text">Leaves</span>
-				</a>
-			</li>
-
-			<li>
-				<a href="students">
-					<i class='bx bxs-group'></i>
-					<span class="text">Student Info</span>
-				</a>
-			</li>
-			<li>
-				<a href="feedback">
-					<i class='bx bxs-group'></i>
-					<span class="text">Feedback</span>
-				</a>
-			</li>
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
-			<li>
-				<a href="logout" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
-	<!-- SIDEBAR -->
-	{% endif %}
 
 
 
@@ -194,11 +312,7 @@
 					<h1>Dashboard</h1>
 					<ul class="breadcrumb">
 						<li>
-							<a href="#">Dashboard</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="#">Home</a>
+							<a class="active" href="/">Home</a>
 						</li>
 					</ul>
 				</div>
@@ -212,19 +326,7 @@
 
 						<hr>
 					</p>
-					<div style="display: grid; grid-template-columns: repeat(2,1fr);">
-						<div>
-							<p class="total" style="font-size: 12px; font-weight: 600;">Total Student: 100</p>
 
-						</div>
-						<div style="font-size: 12px; font-weight: 600;"><label for="cars">View:</label>
-							<select name="class" style="border: .5px solid black; border-radius: 5px;">
-								<option value="second_year">Subject</option>
-								<option value="third_year">Subject</option>
-								<option value="final_year">Subject</option>
-								<option value="audi">None</option>
-							</select>
-						</div>
 					</div>
 
 
@@ -268,29 +370,90 @@
 					<p class="title">Employees on Leave
 						<hr>
 					</p>
+
 					<div class="details">
 						<div class="info">
-							<div class="user"><img src="/assets/img/user.png" alt=""> Sikha Sharma</div>
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Sikha Sharma</div>
 
 							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/user.png" alt=""> Nilufer Zaman</div>
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/user.png" alt=""> Rambhau lagdive</div>
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/user.png" alt=""> Abhijeet Cholke</div>
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/user.png" alt=""> Bharat Devhare</div>
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Nilufer Zaman</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Rambhau lagdive</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Abhijeet Cholke</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/user.png' %}" alt=""> Bharat Devhare</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
@@ -298,51 +461,171 @@
 					</div>
 				</li>
 				<li>
-					<p class="title">Announcements <i class="fa-solid  fa-triangle-exclamation fa-fade"></i>
-						<hr>
+					<div class="title" style="display: flex; justify-content: space-between; align-items: center;">
+						<div style="display: flex; align-items: center;">
+							<p>Announcements</p>
+							<i class="fa-solid fa-triangle-exclamation fa-fade" style="margin-left: 8px;"></i>
+						</div>
+						<button id="addButton" style="background-color: transparent; border: none;">
+							<p style="color: green; font-weight: 600; cursor: pointer;">Add <i class="fa-solid fa-plus"
+									style="font-size: 16px;"></i></p>
+						</button>
+						<button id="deleteButton"><i class="fa-solid fa-trash"></i></button>
+					</div>
+
+					<!-- Modal Structure -->
+					<div id="modal" class="modal">
+						<div class="modal-content">
+							<span class="close">&times;</span>
+							<form>
+								<label for="date">Date:</label><br>
+								<input type="date" id="date" name="date" required><br><br>
+								<label for="announcementTitle">Title:</label><br>
+								<input type="text" id="announcementTitle" placeholder="Announcement Title"
+									name="announcementTitle" required><br><br>
+								<label for="announcementTitle">Description:</label><br>
+								<textarea name="message" id="message"></textarea><br><br>
+								<label for="department">Department:</label><br>
+								<div class="dropdown">
+									<div id="dropdownContent" class="dropdown-content">
+										<label><input type="checkbox" value="computer_eng">
+											<p>Computer Eng.</p>
+										</label>
+										<label><input type="checkbox" value="it_eng">
+											<p>I.T. Eng. </p>
+										</label>
+										<label><input type="checkbox" value="etc_eng">
+											<p>E&TC Eng. </p>
+										</label>
+										<label><input type="checkbox" value="mechanical_eng">
+											<p>Mechanical Eng. </p>
+										</label>
+										<label><input type="checkbox" value="civil_eng">
+											<p>Civil Eng. </p>
+										</label>
+										<label><input type="checkbox" value="all">
+											<p>All </p>
+										</label>
+									</div>
+								</div>
+
+
+								<br><br>
+								<input type="submit" id="modal_submit" value="Submit" style="cursor: pointer;">
+							</form>
+						</div>
+					</div>
+					<hr>
 					</p>
 
 					<div class="announce">
 
-						<div class="info">
-							<div class="user"> <i class='fas fa-bell'></i> Staff Meeting</div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+						<div class="info">
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<div class="desc">
+								<button class="close-btn">&times;</button>
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
+						</div>
+						
+						<div class="info">
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
+
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> Seminar in seminar hall </div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> Internship review </div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> New joining</div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 						<div class="info">
-							<div class="user"><i class='fas fa-bell'></i> Unit test dates</div>
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
+						</div>
+						<div class="info">
+							<div class="user">
+								<i class='fas fa-bell'></i> Staff Meeting
+							</div>
+							<p class="date">10 <sup>th</sup>April 2024</p>
+
+							<div class="desc">
+								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
+									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+							</div>
 						</div>
 
 					</div>
 
 				</li>
+
 				<li>
 					<p class="title">My Attendance
 						<hr>
@@ -386,32 +669,64 @@
 					</p>
 					<div class="details">
 						<div class="info">
-							<div class="user"><img src="/assets/img/makar.png" alt="">Makar Sankranti</div>
-
-							<div class="date">10 <sup>th</sup>April 2024 </div>
-						</div>
-						<div class="info">
-							<div class="user"><img src="/assets/img/holi.png" alt=""> Holi</div>
+							<div class="user"><img src="{% static '/assets/img/makar.png'%}" alt="">Makar Sankranti</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/rak.png" alt=""> Rakshabandhan</div>
+							<div class="user"><img src="{% static '/assets/img/holi.png' %}" alt=""> Holi</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/diwali.png" alt=""> Diwali</div>
+							<div class="user"><img src="{% static '/assets/img/rak.png' %}" alt=""> Rakshabandhan</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/diwali.png' %}" alt=""> Diwali</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/santa.png" alt=""> Christmas</div>
+							<div class="user"><img src="{% static '/assets/img/santa.png' %}" alt=""> Christmas</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
 						<div class="info">
-							<div class="user"><img src="/assets/img/newyear.png" alt=""> New Year</div>
+							<div class="user"><img src="{% static '/assets/img/newyear.png' %}" alt=""> New Year</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/makar.png' %}" alt="">Makar Sankranti</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/holi.png' %}" alt=""> Holi</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/rak.png' %}" alt=""> Rakshabandhan</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/diwali.png' %}" alt=""> Diwali</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/santa.png' %}" alt=""> Christmas</div>
+
+							<p class="date">10 <sup>th</sup>April 2024 </p>
+						</div>
+						<div class="info">
+							<div class="user"><img src="{% static '/assets/img/newyear.png' %}" alt=""> New Year</div>
 
 							<p class="date">10 <sup>th</sup>April 2024 </p>
 						</div>
@@ -424,39 +739,44 @@
 					</p>
 					<div class="details">
 						<div class="info">
-							<div class="user"> August <span>(2023-2024)</span></div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
 							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> Holi</div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user">Rakshabandhan</div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user">Diwali</div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user">Christmas</div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user">New Year</div>
+							<div class="user"> August <span>(2024-2025)</span></div>
 
-							<p class="date">10 <sup>th</sup>April 2024 </p>
+							<div class="date">10 <sup>th</sup>April 2024 </div>
 						</div>
+						<div class="info">
+							<div class="user"> August <span>(2024-2025)</span></div>
+
+							<div class="date">10 <sup>th</sup>April 2024 </div>
+						</div>
+						
 
 					</div>
 				</li>
-
 			</ul>
 		</main>
 		<!-- MAIN -->
@@ -465,38 +785,92 @@
 	<!-- CONTENT -->
 
 
-	<!-- <script src="{% static 'assets/script/script.js'%}"></script> -->
-	<!-- <script src="{% static 'script.js'%}"></script> -->
-	<!-- <script>
-		const number = document.getElementById("num");
-const circle = document.getElementById("circle"); // Assuming this is the circle element
-const circumference = 2 * Math.PI * 70; // For a circle with radius 70
+	<!-- <script src="{% static 'assets/script/script.js'%}"></script> 
+	<script src="{% static 'script.js'%}"></script> -->
+	<script>
 
-let counter = 0;
-const time = 2000 / randomNum;
+// Index page announcement modal script
 
-const updateStrokeOffset = (percentage) => {
-    const offset = circumference - (circumference * (percentage / 100));
-    circle.style.strokeDashoffset = offset;
-};
+document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById("modal");
+    var btn = document.getElementById("addButton");
+    var span = document.getElementsByClassName("close")[0];
 
-const interval = setInterval(() => {
-    if (counter >= randomNum) {
-        clearInterval(interval);
-        number.innerHTML = randomNum + "%";
-        updateStrokeOffset(randomNum);
-    } else {
-        counter += 1;
-        number.innerHTML = counter + "%";
-        updateStrokeOffset(counter);
+    btn.addEventListener('click', function() {
+        modal.style.visibility = "visible";
+        modal.style.opacity = "1";
+    });
+    span.addEventListener('click', function() {
+        modal.style.visibility = "hidden";
+        modal.style.opacity = "0";
+    });
+
+    
+    window.addEventListener('click', function(event) {
+        if (event.target === modal) {
+            modal.style.visibility = "hidden";
+            modal.style.opacity = "0";
+        }
+    });
+
+    const today = new Date().toISOString().split('T')[0];
+    document.getElementById('date').value = today;
+});
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    function getSelectedDepartments() {
+        var selectElement = document.getElementById('department');
+        var selectedOptions = Array.from(selectElement.selectedOptions);
+        return selectedOptions.map(option => option.value);
     }
-}, time);
 
-// Initial setup for the circle stroke
-circle.style.strokeDasharray = circumference;
-circle.style.strokeDashoffset = circumference;
+    document.querySelector('form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        var selectedDepartments = getSelectedDepartments();
+    });
+});
 
-	</script> -->
+
+
+// Function to handle clicks on .user elements
+document.querySelectorAll('.user').forEach(userElement => {
+    userElement.addEventListener('click', function (event) {
+        // Stop click event from bubbling up to the document
+        event.stopPropagation();
+
+        // Hide any currently visible .desc boxes
+        document.querySelectorAll('.info.expanded').forEach(expandedInfo => {
+            expandedInfo.classList.remove('expanded');
+        });
+
+        // Show the clicked .desc box
+        const infoDiv = this.closest('.info');
+        infoDiv.classList.toggle('expanded');
+    });
+});
+
+// Function to handle clicks outside of .info elements
+document.addEventListener('click', function (event) {
+    if (!event.target.closest('.info')) {
+        document.querySelectorAll('.info.expanded').forEach(expandedInfo => {
+            expandedInfo.classList.remove('expanded');
+        });
+    }
+});
+
+// Function to handle clicks on the close button
+document.addEventListener('click', function (event) {
+    if (event.target.classList.contains('close-btn')) {
+        event.stopPropagation(); // Prevent the event from bubbling up
+        const desc = event.target.closest('.desc');
+        if (desc) {
+            desc.parentElement.classList.remove('expanded'); // Remove the expanded class from .info
+        }
+    }
+});
+	</script>
+
 </body>
 
 </html>

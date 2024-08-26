@@ -120,8 +120,9 @@ class Attendance(models.Model):
     Status = models.BooleanField(max_length=50)
 class Notices(models.Model):
     id = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=100)
-    description = models.TextField()
+    title = models.CharField(max_length=100)    
+    teacherpublished = models.ForeignKey('Teacher',on_delete=models.CASCADE,default=uuid.UUID('45d8c03d-0e93-48a7-b036-41ad381b7233')
+    )
     ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
     date = models.DateField()
     attachment = models.ImageField(null=True, blank=True)

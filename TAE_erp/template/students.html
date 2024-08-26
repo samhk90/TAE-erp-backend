@@ -18,8 +18,8 @@
 <body>
 
     <section id="sidebar">
-        <a href="/" class="brand">
-            <span class="text"><img src="{% static 'assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+        <a href="#" class="brand">
+            <span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
         </a>
         <ul class="side-menu top">
             <li class="active">
@@ -52,18 +52,19 @@
                     <span class="text">Leaves</span>
                 </a>
             </li>
-            <li>
-                <a href="">
+            <!-- <li>
+                <a href="logs">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li> -->
+            <li class="active">
+                <a href="students">
                     <i class='bx bxs-group'></i>
                     <span class="text">Student Info</span>
                 </a>
             </li>
-            <li>
-                <a href="">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Feedback</span>
-                </a>
-            </li>
+
         </ul>
         <ul class="side-menu">
             <li>
@@ -73,7 +74,7 @@
                 </a>
             </li>
             <li>
-                <a href="#" class="logout">
+                <a href="logout" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="text">Logout</span>
                 </a>
@@ -113,11 +114,11 @@
                     <h1>Students</h1>
                     <ul class="breadcrumb">
                         <li>
-                            <a href="#">Students</a>
+                            <a class="active" href="students">Students</a>
                         </li>
                         <li><i class='bx bx-chevron-right'></i></li>
                         <li>
-                            <a class="active" href="student">Registration</a>
+                            <a href="student">Registration</a>
                         </li>
                     </ul>
                 </div>
@@ -167,7 +168,7 @@
                                 <td>{{ student_data.student.MobileNumber }}</td>
                                 <td>{{ student_data.student.CurrentClassID.DepartmentID.DepartmentName }}</td>
                                 <td>{{ student_data.student.CurrentClassID.YearID.YearName }}</td>
-                                <td>{{ student_data.average_percentage }}%</td>
+                                <td>{{ student_data.average_percentage|floatformat:2 }}%</td>
                             </tr>
                             {% endfor %}
                             {% else %}

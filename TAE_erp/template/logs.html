@@ -20,27 +20,30 @@
 	<!-- SIDEBAR -->
 	<section id="sidebar">
 		<a href="#" class="brand">
-			<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li >
 				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
+			{% if teacher1 %}
 			<li>
 				<a href="academics">
 					<i class='bx bxs-calendar-star'></i>
 					<span class="text">Academics</span>
 				</a>
 			</li>
-			<li>
+			{% else%}
+			<li class="active">
 				<a href="logs">
 					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily Logs</span>
+					<span class="text">Daily logs</span>
 				</a>
 			</li>
+			{% endif %}
 			<li>
 				<a href="notices">
 					<i class='bx bxs-doughnut-chart'></i>
@@ -48,30 +51,30 @@
 				</a>
 			</li>
 			<li>
-				<a href="timetable">
+				<a href="">
 					<i class='bx bxs-message-dots'></i>
 					<span class="text">Time Table</span>
 				</a>
 			</li>
 			<li>
-				<a href="leaves">
+				<a href="">
 					<i class='bx bxs-group'></i>
 					<span class="text">Leaves</span>
 				</a>
 			</li>
-
+			<!-- <li>
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li> -->
 			<li>
 				<a href="students">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
 			</li>
-			<li>
-				<a href="feedback">
-					<i class='bx bxs-group'></i>
-					<span class="text">Feedback</span>
-				</a>
-			</li>
+
 		</ul>
 		<ul class="side-menu">
 			<li>
@@ -81,7 +84,7 @@
 				</a>
 			</li>
 			<li>
-				<a href="#" class="logout">
+				<a href="logout" class="logout">
 					<i class='bx bxs-log-out-circle'></i>
 					<span class="text">Logout</span>
 				</a>
@@ -99,19 +102,10 @@
 			<div class="intro">
 				<h2>Trinity Academy of Engineering</h2>
 			</div>
-			<form action="#">
-				<div class="form-input">
-					<input type="search" placeholder="Search...">
-					<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-				</div>
-			</form>
-			<a href="#" class="notification">
-				<i class='bx bxs-bell'></i>
-				<span class="num">8</span>
-			</a>
+
 
 			<a href="#" class="profile" >
-				<p>Dr. N.J.Uke</p>	<img src="/assets/img/principal.jpeg">
+				<p>Prof. {{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
 			</a>
 		</nav>
 		
@@ -136,8 +130,8 @@
 			   <div class="projects">
 				  <div class="card-header flex">
 					 <h3>Daily record</h3>
-						
-					 <button id="seeall">See all</button>
+<!-- 						
+					 <button id="seeall">See all</button> -->
 				  </div>
    
 
