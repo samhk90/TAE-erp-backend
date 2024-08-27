@@ -1,9 +1,12 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,Year,Classes,ClassTeacherAssignment
-from supabase import create_client, Client
+from supabase import create_client, Client,SupabaseAuthClient
+import supabase
+print(dir(supabase))
 url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
 key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
 supabase: Client = create_client(url, key)
+from supabase_auth import AuthResponse
 from django.core.serializers import serialize
 from django.shortcuts import render
 from erp_1.decorators import supabase_login_required  # Adjust the import path accordingly
@@ -69,107 +72,136 @@ def index(request):
     }
         return render(request,'index.html',context)
     return render(request, 'index.html',{'role':role})
+# Inspect the 'auth' attribute of the client
+
+
 
 def login(request):
     if request.method == 'POST':
         email = request.POST.get('username1')
         password = request.POST.get('password')
-        
+        url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
+        key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+        supabase: Client = create_client(url, key)
         try:
-            # Attempt to sign in with the provided credentials
-            sign_in_data = supabase.auth.sign_in_with_password({'email': email, "password": password})
-            user = sign_in_data.user
+            response =supabase.auth.sign_in_with_password({'email':email,'password':password})
+            user = response.user
+
+            if user:
+                request.session['teacher_email'] = email  
+                return redirect('index')  # Redirect to the index page after login
+
         except Exception as e:
             # Handle authentication error
             error_message = "Invalid login credentials. Please try again."
+            print(e)  # Print the error for debugging
             return render(request, 'login.html', {'error_message': error_message})
-
-        if user:
-            request.session['teacher_email'] = email
-            return redirect('index')  # Redirect to the index page after login
 
     return render(request, 'login.html')
 
 def logout(request):
     request.session.flush()
+    url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
+    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+    supabase: Client = create_client(url, key)
     res = supabase.auth.sign_out()
     return redirect('login')
 
-#student reg.
+import csv
+from django.http import HttpResponse
+
 @supabase_login_required
 def student(request):
     if request.method == 'POST':
-        firstname = request.POST.get('firstname')
-        lastname=request.POST.get('lastname')
-        mothersname=request.POST.get('mothersname')
-        fathersname=request.POST.get('fathersname')
-        email = request.POST.get('email')
-        password = '123456'  # Default password for demonstration; consider generating a secure password
-        date_of_birth = request.POST.get('date_of_birth')
-        Adharcardnumber = request.POST.get('Adharcardnumber')
-        mobile_number = request.POST.get('mobile_number')
-        father_number = request.POST.get('father_number')
-        mother_number = request.POST.get('mother_number')
-        gender = request.POST.get('gender')
-        admission_type = request.POST.get('admission_type')
-        category=request.POST.get('category')
-        bloodgrp=request.POST.get('bloodgrp')
-        course=request.POST.get('course')
-        tempaddress = request.POST.get('tempaddress')
-        permanetaddress = request.POST.get('permanetaddress')
-        state = request.POST.get('state')
-        city = request.POST.get('city')
-        admission_date = request.POST.get('admission_date')
-        print(email)
-        
-        try:
-            # Sign up user with Supabase
-            sign_up_response = supabase.auth.sign_up({
-                'email': email,
-                'password': password,
-            })
-            
-            # Debugging information
-            print("Sign up response:", sign_up_response)
+        # Check if the request is a CSV file upload
+        if 'csv_file' in request.FILES:
+            csv_file = request.FILES['csv_file']
 
-            # Check if the sign up was successful
-            if sign_up_response.user:
-                user_id = sign_up_response.user.id  # Correct way to access the user ID
-                # Print the user ID to verify
-                print("User ID:", user_id)
+            # Check if the uploaded file is a CSV file
+            if not csv_file.name.endswith('.csv'):
+                messages.error(request, 'Please upload a CSV file.')
+                return render(request, 'student_form.html')
+
+            try:
+                # Read the CSV file
+                decoded_file = csv_file.read().decode('utf-8').splitlines()
+                reader = csv.DictReader(decoded_file)
                 
-                # Create a Student instance in the database
-                student = Student.objects.create(
-                    StudentID=user_id,
-                    FirstName=firstname,
-                    Email=email,
-                    LastName=lastname,
-                    PRN='123456',
-                    RollNumber=00,
-                    FatherName=fathersname,
-                    FatherContact=father_number,
-                    MotherName=mothersname,
-                    MotherContact=mother_number,
-                    MobileNumber=mobile_number,
-                    AdharNumber=Adharcardnumber,
-                    DOB=date_of_birth,
-                    Gender=gender,
-                    AdmissionQuota=admission_type,
-                   Category=category,
-                   Bloodgrp=bloodgrp,
-                   permenentadd=permanetaddress,
-                   tempadd=tempaddress,
-                   YearDownStatus='False',
-                   
-                )
+                for row in reader:
+                    # Extract student data from each row
+                    firstname = row['firstname']
+                    lastname = row['lastname']
+                    mothersname = row['mothersname']
+                    fathersname = row['fathersname']
+                    email = row['email']
+                    password = '123456'  # Default password; consider generating a secure password
+                    date_of_birth = row['date_of_birth']
+                    Adharcardnumber = row['Adharcardnumber']
+                    mobile_number = row['mobile_number']
+                    father_number = row['father_number']
+                    mother_number = row['mother_number']
+                    gender = row['gender']
+                    admission_type = row['admission_type']
+                    category = row['category']
+                    bloodgrp = row['bloodgrp']
+                    course = row['course']
+                    tempaddress = row['tempaddress']
+                    permanetaddress = row['permanetaddress']
+                    state = row['state']
+                    city = row['city']
+                    admission_date = row['admission_date']
 
-                messages.success(request, 'Student registered successfully.')
+                    try:
+                        # Sign up user with Supabase
+                        sign_up_response = supabase.auth.sign_up({
+                            'email': email,
+                            'password': password,
+                        })
+
+                        # Check if the sign-up was successful
+                        if sign_up_response.user:
+                            user_id = sign_up_response.user.id  # Get the user ID (UUID)
+
+                            # Create a Student instance in the database
+                            Student.objects.create(
+                                StudentID=user_id,
+                                FirstName=firstname,
+                                Email=email,
+                                LastName=lastname,
+                                PRN='123456',
+                                RollNumber=00,
+                                FatherName=fathersname,
+                                FatherContact=father_number,
+                                MotherName=mothersname,
+                                MotherContact=mother_number,
+                                MobileNumber=mobile_number,
+                                AdharNumber=Adharcardnumber,
+                                DOB=date_of_birth,
+                                Gender=gender,
+                                AdmissionQuota=admission_type,
+                                Category=category,
+                                Bloodgrp=bloodgrp,
+                                permenentadd=permanetaddress,
+                                tempadd=tempaddress,
+                                YearDownStatus='False',
+                            )
+
+                    except Exception as e:
+                        error_message = str(e)
+                        print(f"Error processing row {row}: {error_message}")
+                        continue  # Skip to the next row if there's an error
+
+                messages.success(request, 'Students registered successfully.')
                 return redirect('student')  # Redirect to a success page
 
-        except Exception as e:
-            error_message = str(e)
-            print("Exception:", error_message)  # Print exception for debugging
-            messages.error(request, error_message)
+            except Exception as e:
+                error_message = str(e)
+                print("Error processing CSV file:", error_message)
+                messages.error(request, 'There was an error processing the CSV file.')
+                return render(request, 'student_form.html')
+
+        else:
+            messages.error(request, 'No CSV file uploaded.')
             return render(request, 'student_form.html')
 
     return render(request, 'student_form.html')
@@ -188,7 +220,10 @@ def academics(request):
         batch=request.POST.get('batch')
         
         assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
-        subjects = [assignment.SubjectID for assignment in assignments]
+        subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
+
+# Filter subjects based on the selected class and the subject IDs from the assignments
+        subjects = Subject.objects.filter(SubjectID__in=subject_ids, CurrentClassID=selected_class)
         department=teacher.DepartmentID.DepartmentID
         assigned_classes = Classes.objects.filter(DepartmentID=department)
         print(subjects)
@@ -386,7 +421,7 @@ def notices(request):
             attachment=attachment,
         )
             return redirect('notices')
-    allnotices=Notices.objects.order_by('-date')
+    allnotices=Notices.objects.filter(ClassID__DepartmentID=teacher.DepartmentID).order_by('-date')
     classes=Classes.objects.filter(DepartmentID__DepartmentName=department)
     return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
 

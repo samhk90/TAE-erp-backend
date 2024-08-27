@@ -120,6 +120,7 @@
 
 			<div class="card">
 				<header>Student Registration</header>
+				
 
 				<form method="POST" >
 					{% csrf_token %}
@@ -559,13 +560,38 @@
 
 				</form>
 			</div>
+			<div class="container mt-5">
+				<h2 class="mb-4">Student Registration</h2>
+				
+				<!-- Display success or error messages -->
+				{% if messages %}
+					{% for message in messages %}
+						<div class="alert {% if message.tags %}alert-{{ message.tags }}{% else %}alert-info{% endif %}">
+							{{ message }}
+						</div>
+					{% endfor %}
+				{% endif %}
+		
+				<!-- Form for uploading CSV file -->
+				<form method="POST" enctype="multipart/form-data">
+					{% csrf_token %}
+					<div class="form-group">
+						<label for="csv_file">Upload CSV File</label>
+						<input type="file" class="form-control-file" id="csv_file" name="csv_file" accept=".csv" required>
+					</div>
+					<button type="submit" class="btn btn-primary">Upload</button>
+				</form>
+			</div>
+		
 
 
 		</main>
 
 	</section>
 
-
+	<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 	<script src="./assets/script/script.js"></script>
 	<script src="script.js"></script>
 
