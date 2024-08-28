@@ -1,8 +1,6 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,Year,Classes,ClassTeacherAssignment
 from supabase import create_client, Client,SupabaseAuthClient
-import supabase
-print(dir(supabase))
 url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
 key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
 supabase: Client = create_client(url, key)
@@ -78,7 +76,7 @@ def index(request):
 
 def login(request):
     if request.method == 'POST':
-        email = request.POST.get('username1')
+        email = request.POST.get('username1').replace(' ', '')
         password = request.POST.get('password')
         url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
         key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
@@ -109,6 +107,26 @@ def logout(request):
 
 import csv
 from django.http import HttpResponse
+from django.http import HttpResponse
+
+def download_csv_template(request):
+    # Define the CSV format headers
+    csv_header = [
+        'rollnumber',
+        'firstname', 'lastname','batch', 'email', 
+        'mobile_number', 'PRN', 
+        'classid'
+    ]
+    
+    # Create the HTTP response with CSV content type
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename="student_template.csv"'
+
+    # Write CSV header to the response
+    writer = csv.writer(response)
+    writer.writerow(csv_header)
+    
+    return response
 
 @supabase_login_required
 def student(request):
@@ -126,38 +144,27 @@ def student(request):
                 # Read the CSV file
                 decoded_file = csv_file.read().decode('utf-8').splitlines()
                 reader = csv.DictReader(decoded_file)
+                url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
+                key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+                supabase: Client = create_client(url, key)
+                res = supabase.auth.sign_out()
                 
                 for row in reader:
                     # Extract student data from each row
                     firstname = row['firstname']
                     lastname = row['lastname']
-                    mothersname = row['mothersname']
-                    fathersname = row['fathersname']
                     email = row['email']
-                    password = '123456'  # Default password; consider generating a secure password
-                    date_of_birth = row['date_of_birth']
-                    Adharcardnumber = row['Adharcardnumber']
+                    password = '123456'  
                     mobile_number = row['mobile_number']
-                    father_number = row['father_number']
-                    mother_number = row['mother_number']
-                    gender = row['gender']
-                    admission_type = row['admission_type']
-                    category = row['category']
-                    bloodgrp = row['bloodgrp']
-                    course = row['course']
-                    tempaddress = row['tempaddress']
-                    permanetaddress = row['permanetaddress']
-                    state = row['state']
-                    city = row['city']
-                    admission_date = row['admission_date']
-
+                    RollNumber=row['rollnumber']
+                    classid=row['classid']
                     try:
                         # Sign up user with Supabase
                         sign_up_response = supabase.auth.sign_up({
                             'email': email,
                             'password': password,
                         })
-
+                        current_class = get_object_or_404(Classes, pk=classid)
                         # Check if the sign-up was successful
                         if sign_up_response.user:
                             user_id = sign_up_response.user.id  # Get the user ID (UUID)
@@ -168,22 +175,9 @@ def student(request):
                                 FirstName=firstname,
                                 Email=email,
                                 LastName=lastname,
-                                PRN='123456',
-                                RollNumber=00,
-                                FatherName=fathersname,
-                                FatherContact=father_number,
-                                MotherName=mothersname,
-                                MotherContact=mother_number,
                                 MobileNumber=mobile_number,
-                                AdharNumber=Adharcardnumber,
-                                DOB=date_of_birth,
-                                Gender=gender,
-                                AdmissionQuota=admission_type,
-                                Category=category,
-                                Bloodgrp=bloodgrp,
-                                permenentadd=permanetaddress,
-                                tempadd=tempaddress,
-                                YearDownStatus='False',
+                                RollNumber=RollNumber,
+                                CurrentClassID=current_class
                             )
 
                     except Exception as e:
@@ -425,42 +419,28 @@ def notices(request):
     classes=Classes.objects.filter(DepartmentID__DepartmentName=department)
     return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
 
-from django.shortcuts import redirect
-from django.conf import settings
-import supabase
 
-# Initialize Supabase client (You should ideally move this to a separate configuration file)
-supabase_url = 'https://gipdgkwmxmmykyaliwhr.supabase.co/'
-supabase_key = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI'
-supabase_client = supabase.create_client(supabase_url, supabase_key)
+from django.shortcuts import redirect
+from django.http import HttpResponse
+from .models import Notices
+import supabase
 
 @supabase_login_required
 def delete_notice(request, id):
     if request.method == 'POST':
-        notice_id = request.POST.get('notice_id')
-        notice = Notices.objects.get(id=notice_id)
+        # Initialize Supabase client
+        supabase_url = 'https://gipdgkwmxmmykyaliwhr.supabase.co/'
+        supabase_key = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+                
+        supabase_client = supabase.create_client(supabase_url, supabase_key)
+        
+        # Get the notice object
+        notice = Notices.objects.get(id=id)
         class_id = notice.ClassID.ClassID
         attachment = notice.attachment
         
         # Delete the notice record from the database
         notice.delete()
-        
-        # Construct the file path
-        file_path = f'public/{class_id}/{attachment}'
-        
-        # Delete the file from Supabase storage
-        response = supabase_client.storage.from_('noticebucket').remove([file_path])
-        
-        # Check if there is an error in the response
-        if any(item.get('error') for item in response):
-            # Handle the error if file deletion failed
-            errors = [item['error']['message'] for item in response if item.get('error')]
-            for error in errors:
-                print(f"Error deleting file from Supabase: {error}")
-        else:
-            print("File deleted successfully from Supabase.")
-
-        allnotice = Notices.objects.order_by('-date')
         return redirect('notices')
     else:
         return redirect('notices')  # or wherever you want to redirect to

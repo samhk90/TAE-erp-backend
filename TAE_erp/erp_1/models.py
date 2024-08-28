@@ -44,28 +44,15 @@ class Subject(models.Model):
 
 class Student(models.Model):
     StudentID = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    PRN = models.CharField(max_length=255, unique=True)
+    PRN=models.CharField(max_length=255,default='102012')
     FirstName = models.CharField(max_length=255)
     LastName = models.CharField(max_length=255)
-    AdharNumber = models.CharField(max_length=255,default='none')
-    DOB = models.DateField(default='none')
-    Gender=models.CharField(max_length=50,default='none')
-    Category=models.CharField(max_length=200,default='none')
-    Bloodgrp=models.CharField(max_length=20,default='none')
-    tempadd=models.CharField(max_length=255,default='none')
-    permenentadd=models.CharField(max_length=255,default='none')
-    FatherName = models.CharField(max_length=255, blank=True, null=True)
-    FatherContact = models.CharField(max_length=255, blank=True, null=True)
-    MotherName = models.CharField(max_length=255, blank=True, null=True)
-    MotherContact = models.CharField(max_length=255, blank=True, null=True)
     CurrentClassID = models.ForeignKey('Classes', on_delete=models.CASCADE,default=3)
     Email = models.CharField(max_length=255, unique=True)
     MobileNumber = models.CharField(max_length=255, unique=True)
     RollNumber = models.IntegerField()
     CreatedAt = models.DateTimeField(auto_now_add=True)
-    AdmissionQuota = models.CharField(max_length=255,default='none')
     RoleID = models.ForeignKey('Roles', on_delete=models.CASCADE,default=2)
-    YearDownStatus = models.BooleanField(default=False)
     batch=models.IntegerField(default=1)
 
 class Backlog(models.Model):
@@ -125,7 +112,7 @@ class Notices(models.Model):
     )
     ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
     date = models.DateField()
-    attachment = models.ImageField(null=True, blank=True)
+    attachment = models.ImageField(max_length=500,null=True, blank=True)
 class Fees(models.Model):
     FeeID = models.AutoField(primary_key=True)
     TotalAmount = models.DecimalField(max_digits=10, decimal_places=2)

@@ -607,7 +607,7 @@ a{
 							<div>
 							<h3>{{subject.SubjectName}}</h3>
 							<p>{{subject.SubjectYear}} ({{subject.SubjectSemester}}<sup style="text-transform: lowercase;">rd</sup> Semester)</p>
-							<p>8 lectures conducted</p>
+							<!-- <p>8 lectures conducted</p> -->
 							<input style="display: none;" type="hidden" name="sub" value="{{ subject.SubjectID }}">
 							<input style="display: none;" type="hidden" name="id" value="{{subject.CurrentClassID_id}}">
 							<a href="{% url 'attendance_form' %}?sub={{ subject.SubjectID }}&class={{ selected_class }}&batch={{batch}}">

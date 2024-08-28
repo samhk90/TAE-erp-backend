@@ -15,7 +15,9 @@ urlpatterns = [
     path('student',views.student,name='student'),
     path('greenbook',views.greenbook,name='greenbook'),
     path('logs',views.logs,name='logs'),
-    path('history',views.history,name='history')
+    path('history',views.history,name='history'),
+    path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
+    
 
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
