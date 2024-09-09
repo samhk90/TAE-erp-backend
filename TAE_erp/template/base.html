@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<!-- My CSS -->
+    <link rel="stylesheet" href="{% static 'assets/style/dailylog.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/notice.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/history.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/students.css' %}">
+    <style>
+        .loader {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            display: none; /* Initially hidden */
+        }
+    
+        .loader-box {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+    
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #3498db;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1s linear infinite;
+        }
+    
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+    
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    
+        .loader-box p {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
+{% block style %}
+
+{% endblock %}
+    <title>TAE</title>
+</head>
+
+<body>
+    {% if teacher.RoleID.RoleName == 'Teacher' %}
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+        </a>
+        <ul class="side-menu top">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/academics' %}active{% endif %}">
+                <a href="{% url 'academics' %}">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Academics</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/notices' %}active{% endif %}">
+                <a href="{% url 'notices' %}">
+                    <i class='bx bxs-doughnut-chart'></i>
+                    <span class="text">Notices</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/timetable' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Time Table</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/leaves' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Leaves</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
+                <a href="{% url 'logs' %}">
+                    <i class='bx bx-calendar-check'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li>
+            <li class="{% if request.path == 'students' %}active{% endif %}">
+                <a href="{% url 'students' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Student Info</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li class="{% if request.path == '/settings/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    {% endif %}
+    {% if teacher.RoleID.RoleName == 'Principal' %}
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+        </a>
+        <ul class="side-menu top">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/academics' %}active{% endif %}">
+                <a href="{% url 'academics' %}">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Academics</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/notices' %}active{% endif %}">
+                <a href="{% url 'notices' %}">
+                    <i class='bx bxs-doughnut-chart'></i>
+                    <span class="text">Notices</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/timetable' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Time Table</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/leaves' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Leaves</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
+                <a href="{% url 'logs' %}">
+                    <i class='bx bx-calendar-check'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li>
+            <li class="{% if request.path == 'students' %}active{% endif %}">
+                <a href="{% url 'students' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Student Info</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li class="{% if request.path == '/settings/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    {% endif %}
+    <!-- SIDEBAR -->
+
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <div class="intro">
+                <h2>Trinity Academy of Engineering</h2>
+            </div>
+            <a href="#" class="profile" style="width: 100%;">
+                <p>Prof.{{teacher.FirstName}} {{teacher.LastName}}</p>
+                <img src="{% static 'assets/img/user.png' %}">
+            </a>
+        </nav>
+        <!-- NAVBAR -->
+        <div id="loader" class="loader">
+            <div class="loader-box">
+                <div class="spinner"></div>
+                <p>Loading...</p>
+            </div>
+        </div>
+        <!-- MAIN -->
+        <main>
+                <!-- Loader -->
+
+            {% block content %}
+            {% endblock %}
+        </main>
+    </section>
+    <!-- CONTENT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            var loader = document.getElementById('loader');
+
+            // Function to show the loader
+            function showLoader() {
+                if (loader) {
+                    loader.style.display = 'flex';
+                }
+            }
+
+            // Function to hide the loader
+            function hideLoader() {
+                if (loader) {
+                    loader.style.display = 'none';
+                }
+            }
+
+            // Show loader on form submit
+            var forms = document.querySelectorAll('form');
+            forms.forEach(function (form) {
+                form.addEventListener('submit', function () {
+                    showLoader();
+                });
+            });
+
+            // Show loader on link click
+            var links = document.querySelectorAll('a[href]');
+            links.forEach(function (link) {
+                link.addEventListener('click', function (e) {
+                    // Only show loader if the link is not an anchor or a modal trigger
+                    if (!link.hasAttribute('target') && !link.href.includes('#')) {
+                        showLoader();
+                    }
+                });
+            });
+
+            // Hide loader once the page is fully loaded
+            window.addEventListener('load', function () {
+                hideLoader();
+            });
+        });
+    </script>
+    {% block scripts %}
+
+    {% endblock %}
+</body>
+
+</html>

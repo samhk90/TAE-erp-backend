@@ -1,31 +1,32 @@
-// const number = document.getElementById("num");
+const number = document.getElementById("num");
 
-// const randomNum = 50;
+// Get the `randomNum` value from the heading tag
+const heading = document.getElementById("randomNumHeading");
+const randomNum = parseInt(heading.textContent, 10);
 
-// let counter = 0;
+let counter = 0;
+const time = 2000 / randomNum;
 
-// const time = 2000 / randomNum;
+const interval = setInterval(() => {
+    if (counter === randomNum) {
+        clearInterval(interval);
+        number.innerHTML = randomNum + "%";
+    } else {
+        counter += 1;
+        number.innerHTML = counter + "%";
+    }
+}, time);
 
-// setInterval(() => {
-//     if (counter === randomNum) {
-//         clearInterval();
-//         number.innerHTML = randomNum + "%";
-//     } else {
-//         counter += 1;
-//         number.innerHTML = counter + "%";
-//     }
-// }, time);
+const css = window.document.styleSheets[0];
 
-// const css = window.document.styleSheets[0]; 
-
-// const stroke = 440 - (440 * (randomNum / 100));
-// css.insertRule(`
-// @keyframes anim {
-//     100% {
-//         stroke-dashoffset: ${stroke};
-//     }
-// }
-// `, css.cssRules.length);
+const stroke = 440 - (440 * (randomNum / 100));
+css.insertRule(`
+@keyframes anim {
+    100% {
+        stroke-dashoffset: ${stroke};
+    }
+}
+`, css.cssRules.length);
 
 
 

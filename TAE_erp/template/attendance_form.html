@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,79 +13,131 @@
 	<link rel="stylesheet" href="{%static 'assets/style/style.css '%}">
 	<link rel="stylesheet" href="{%static 'assets/style/formstyle.css' %}">
 	<title>TAE</title>
+	<style>
+		/* Loader Styles */
+.loader {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4); /* Dark semi-transparent background */
+    backdrop-filter: blur(5px); /* Blurs the background */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 9999;
+}
+
+.loader-box {
+    background: #fff; /* White background for the loader box */
+    border-radius: 10px; /* Rounded corners for the loader box */
+    padding: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+    text-align: center;
+}
+
+.spinner {
+    border: 12px solid #f3f3f3; /* Light grey */
+    border-top: 12px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loader-box p {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #333;
+}
+
+	</style>
 </head>
 
 <body>
 
 
 	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="#" class="brand">
-			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
-		</a>
-		<ul class="side-menu top">
-			<li >
-				<a href="/">
-					<i class='bx bxs-dashboard'></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			<li class="active">
-				<a href="academics">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Academics</span>
-				</a>
-			</li>
-			<li>
-				<a href="notices">
-					<i class='bx bxs-doughnut-chart'></i>
-					<span class="text">Notices</span>
-				</a>
-			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-message-dots'></i>
-					<span class="text">Time Table</span>
-				</a>
-			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-group'></i>
-					<span class="text">Leaves</span>
-				</a>
-			</li>
-			<!-- <li>
-				<a href="logs">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily Logs</span>
-				</a>
-			</li> -->
-			<li>
-				<a href="students">
-					<i class='bx bxs-group'></i>
-					<span class="text">Student Info</span>
-				</a>
-			</li>
-
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
-			<li>
-				<a href="logout" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+        </a>
+        <ul class="side-menu top">
+            <li class="{% if request.path == '/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/academics' %}active{% endif %}">
+                <a href="{% url 'academics' %}">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Academics</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/notices' %}active{% endif %}">
+                <a href="{% url 'notices' %}">
+                    <i class='bx bxs-doughnut-chart'></i>
+                    <span class="text">Notices</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/timetable' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Time Table</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/leaves' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Leaves</span>
+                </a>
+            </li>
+            <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
+                <a href="{% url 'logs' %}">
+                    <i class='bx bx-calendar-check'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li>
+            <li class="{% if request.path == 'students' %}active{% endif %}">
+                <a href="{% url 'students' %}">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Student Info</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li class="{% if request.path == '/settings/' %}active{% endif %}">
+                <a href="{% url 'index' %}">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="{% url 'logout' %}" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
 	<!-- SIDEBAR -->
 
 
+<!-- Loader -->
+<div id="loader" class="loader" style="display: none;">
+    <div class="loader-box">
+        <div class="spinner"></div>
+        <p>Submitting Attendance...</p>
+    </div>
+</div>
 
 	<!-- CONTENT -->
 	<section id="content">
@@ -124,7 +177,7 @@
 			<div class="card">
 				<h2>Attendance Search</h2>
 				<div class="container">
-					<form  method="post">
+					<form  method="post" enctype="multipart/form-data">
 						{% csrf_token %}
 						<div class="row">
 							<div class="column">
@@ -223,6 +276,13 @@
 				<button type="submit" class="attendance-button">Submit</button>
 			</div>
 		</form>
+		{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }}">
+        {{ message }}
+    </div>
+    {% endfor %}
+{% endif %}
 	</section>
 
 	</main>
@@ -275,7 +335,23 @@
 		});
 	</script>
 	<script>
-
+		document.addEventListener("DOMContentLoaded", function () {
+			var form = document.querySelector('form');
+			var loader = document.getElementById('loader');
+		
+			form.addEventListener('submit', function (e) {
+				// Show the loader
+				loader.style.display = 'flex';
+		
+				// Optionally, you can add a small delay to allow the loader to be visible
+				// This delay is not necessary if your form submission is fast
+				setTimeout(function() {
+					// Proceed with the form submission
+					form.submit();
+				}, 100); // 100 milliseconds delay
+			});
+		});
+		
 			const divisionSelect = document.getElementById('division');
 			const batchSelect = document.getElementById('batch');
 			const form = document.getElementById('myForm');

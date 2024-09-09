@@ -1,3 +1,4 @@
+{% extends 'base.html' %}
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -12,8 +13,63 @@
 	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
 	<!-- <link rel="stylesheet" href="assets/style/progressbar.css"> -->
+
+	{% block style %}
 	<style>
-		
+		.info {
+			position: relative;
+			/* Make sure .info is the reference for absolute positioning */
+			display: block;
+			width: 100%;
+		}
+
+		.user,
+		.date {
+			display: block;
+			margin: 0;
+		}
+
+		.desc {
+			position: absolute;
+			/* Position absolutely within .info */
+			top: -90px;
+			/* Move it above the content. Adjust as necessary */
+			left: 0;
+			width: 280px;
+			/* Fixed width */
+			height: 100%;
+			/* Fixed height */
+			display: none;
+			/* Initially hidden */
+			background-color: #f9f9f9;
+			padding: 10px;
+			border: 1px solid #ddd;
+			border-radius: 5px;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+			font-size: 1.4em;
+			color: #333;
+			box-sizing: border-box;
+			/* Ensure padding and border are included in width and height */
+		}
+
+		.close-btn {
+			position: absolute;
+			/* Position absolutely within .desc */
+			top: 5px;
+			/* Adjust as necessary */
+			right: 10px;
+			/* Adjust as necessary */
+			background-color: transparent;
+			border: none;
+			color: red;
+			font-size: 20px;
+			cursor: pointer;
+			/* Pointer cursor on hover */
+		}
+
+		.info.expanded .desc {
+			display: block;
+		}
 		.modal {
 			visibility: hidden;
 			opacity: 0;
@@ -141,172 +197,277 @@
 			color: red;
 		}
 	</style>
+
 	<style>
+		.modal {
+			visibility: hidden;
+			opacity: 0;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			transition: opacity 0.3s ease, visibility 0.3s ease;
+		}
+
 		.info {
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+		}
+
+		.info .left-content {
+			display: flex;
+			align-items: center;
+			gap: 10px;
+		}
+
+		.select-checkbox {
+			margin-right: 10px;
+		}
+
+		.fas.fa-bell {
+			margin-right: 10px;
+		}
+
+		/* Modal content */
+		.modal-content {
+			margin-top: 140px;
+			background-color: #fefefe;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			max-width: 500px;
+			border-radius: 8px;
 			position: relative;
-			/* Make sure .info is the reference for absolute positioning */
-			display: block;
+		}
+
+		.modal #announcementTitle,
+		#date,
+		#modal_submit {
+			width: 100%;
+			border-radius: 5px;
+			border: 1px solid rgb(183, 182, 182);
+			height: 28px;
+		}
+
+		#modal_submit {
+			color: white;
+			font-size: 16px;
+			font-weight: 600;
+			background-color: #3C91E6;
+			border: none;
+		}
+
+		input[type="text"],
+		input[type="date"],
+		textarea {
+			padding: 15px;
+			width: calc(100%);
+			box-sizing: border-box;
+		}
+
+		.dropdown {
+			position: relative;
+		}
+
+		.dropdown .dropdown-content {
+			display: flex;
+			flex-wrap: wrap;
+			gap: 10px;
+			justify-content: space-between;
+			max-width: 420px;
+		}
+
+		.dropdown .dropdown-content label {
+			display: flex;
+			align-items: center;
+			width: 48%;
+			/* Two columns, adjust width if necessary */
+		}
+
+		.dropdown .dropdown-content label p {
+			padding-left: 10px;
+		}
+
+		.close {
+			position: absolute;
+			top: 10px;
+			right: 10px;
+			color: #aaa;
+			font-size: 28px;
+			font-weight: bold;
+			cursor: pointer;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: black;
+			text-decoration: none;
+		}
+
+		/* Checkbox label styling */
+		.dropdown-content label {
+			display: flex;
+			padding: 8px;
+			cursor: pointer;
+		}
+
+		#deleteButton,
+		#holiday_deleteButton {
+			background-color: transparent;
+			border: none;
+			cursor: pointer;
+			color: red;
+		}
+
+
+		.modal_holiday {
+			visibility: hidden;
+			/* Hidden by default */
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+			display: flex;
+			justify-content: center;
+			align-items: center;
+			opacity: 0;
+			/* Add this for transition */
+			transition: visibility 0s, opacity 0.3s;
+			/* Smooth transition */
+		}
+
+		.modal_holiday.show {
+			visibility: visible;
+			/* Make it visible */
+			opacity: 1;
+			/* Fade in */
+		}
+
+		#holidayForm {
+			display: flex;
+			flex-direction: column;
 			width: 100%;
 		}
 
-		.user,
-		.date {
-			display: block;
-			margin: 0;
+		#holidayForm input,
+		select {
+			height: 32px;
+			border: .5px solid grey;
+			border-radius: 4px;
 		}
 
-		.desc {
-			position: absolute;
-			/* Position absolutely within .info */
-			top: -90px;
-			/* Move it above the content. Adjust as necessary */
-			left: 0;
-			width: 280px;
-			/* Fixed width */
-			height: 100%;
-			/* Fixed height */
-			display: none;
-			/* Initially hidden */
-			background-color: #f9f9f9;
-			padding: 10px;
-			border: 1px solid #ddd;
-			border-radius: 5px;
-			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-			font-size: 1.4em;
-			color: #333;
-			box-sizing: border-box;
-			/* Ensure padding and border are included in width and height */
+		#holidayForm input:focus,
+		#holidayForm select:focus {
+			border-color: none;
 		}
 
-		.close-btn {
-			position: absolute;
-			/* Position absolutely within .desc */
-			top: 5px;
-			/* Adjust as necessary */
-			right: 10px;
-			/* Adjust as necessary */
-			background-color: transparent;
+		#holidayForm label {
+			padding: 30px 0px 8px 0px;
+		}
+
+		#holiday_submit {
+			color: white;
+			font-size: 18px;
+			background-color: #3C91E6;
 			border: none;
-			color: red;
-			font-size: 20px;
+			border-radius: 4px;
+			height: 38px;
 			cursor: pointer;
-			/* Pointer cursor on hover */
 		}
 
-		.info.expanded .desc {
-			display: block;
+		/* Modal Content */
+		.modal_holiday-content {
+			background-color: #fefefe;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 580px;
+			position: relative;
+			border-radius: 8px;
+		}
+
+		.announcement_desc {
+			display: none;
+		}
+
+		/* Popup styling */
+		.popup {
+			visibility: hidden;
+			position: absolute;
+			background-color: #f9f9f9;
+			border: 1px solid #ccc;
+			padding: 10px;
+			border-radius: 5px;
+			z-index: 10;
+			width: 376px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+			transition: visibility 0.3s ease-in-out, opacity 0.3s ease-in-out;
+			opacity: 0;
+		}
+
+		.popup.show {
+			visibility: visible;
+			opacity: 1;
+		}
+
+		/* Close button styling */
+		.popup-close {
+			position: absolute;
+			top: 5px;
+			right: 10px;
+			font-size: 20px;
+			font-weight: bold;
+			color: #aaa;
+			cursor: pointer;
+		}
+
+		.popup-close:hover {
+			color: red;
+			transition: .3s all ease-in-out;
+		}
+
+
+
+		/* Hoilday section after hitting delete icon */
+		.holiday-info .date {
+			white-space: nowrap;
+			margin-left: auto;
+		}
+
+
+		/* Newsletter link color */
+		.details .info a {
+			color: black;
 		}
 	</style>
 
+	{% endblock %}
 	<title>TAE</title>
 </head>
 
 <body>
 
-		<!-- SIDEBAR -->
-		<section id="sidebar">
-			<a href="#" class="brand">
-				<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
-			</a>
-			<ul class="side-menu top">
-				<li class="active">
-					<a href="/">
-						<i class='bx bxs-dashboard'></i>
-						<span class="text">Dashboard</span>
-					</a>
-				</li>
-				{% if teacher%}
-				<li>
-					<a href="academics">
-						<i class='bx bxs-calendar-star'></i>
-						<span class="text">Academics</span>
-					</a>
-				</li>
-				{% else%}
-				<li>
-					<a href="logs">
-						<i class='bx bxs-calendar-star'></i>
-						<span class="text">Daily logs</span>
-					</a>
-				</li>
-				{% endif %}
-				<li>
-					<a href="notices">
-						<i class='bx bxs-doughnut-chart'></i>
-						<span class="text">Notices</span>
-					</a>
-				</li>
-				<li>
-					<a href="">
-						<i class='bx bxs-message-dots'></i>
-						<span class="text">Time Table</span>
-					</a>
-				</li>
-				<li>
-					<a href="">
-						<i class='bx bxs-group'></i>
-						<span class="text">Leaves</span>
-					</a>
-				</li>
-				<!-- <li>
-					<a href="logs">
-						<i class='bx bxs-calendar-star'></i>
-						<span class="text">Daily Logs</span>
-					</a>
-				</li> -->
-				<li>
-					<a href="students">
-						<i class='bx bxs-group'></i>
-						<span class="text">Student Info</span>
-					</a>
-				</li>
 
-			</ul>
-			<ul class="side-menu">
-				<li>
-					<a href="#">
-						<i class='bx bxs-cog'></i>
-						<span class="text">Settings</span>
-					</a>
-				</li>
-				<li>
-					<a href="logout" class="logout">
-						<i class='bx bxs-log-out-circle'></i>
-						<span class="text">Logout</span>
-					</a>
-				</li>
-			</ul>
-		</section>
-		<!-- SIDEBAR -->
 
 
 
 	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<div class="intro">
-					<h2>Trinity Academy of Engineering</h2>
-				</div>
-				<!-- <form action="#">
-					<div class="form-input">
-						<input type="search" placeholder="Search...">
-						<button type="submit" class="search-btn"><i class='bx bx-search'></i></button>
-					</div>
-				</form>
-				<a href="#" class="notification">
-					<i class='bx bxs-bell'></i>
-					<span class="num">8</span>
-				</a> -->
-	
-				<a href="#" class="profile" style="width: 100%;">
-					<p>Prof.{{teacherinfo.FirstName}} {{teacherinfo.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
-				</a>
-			</nav>
+
 		<!-- NAVBAR -->
 
+		{% block content %}
 		<!-- MAIN -->
-		<main>
 			<div class="head-title">
 				<div class="left">
 					<h1>Dashboard</h1>
@@ -323,15 +484,10 @@
 
 				<li>
 					<p class="title">Attendance
-
 						<hr>
 					</p>
-
-					</div>
-
-
-
-
+					
+				
 					<div class="progress">
 						<div class="container">
 							<div class="outer-circle">
@@ -350,22 +506,20 @@
 							</svg>
 						</div>
 					</div>
-					
+				
 					<div class="icons">
-						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green;">
+						<div class="count" style="background-color: rgba(5, 255, 5, 0.358); color: green;">
 							<h3>{{ present }} <br> Present</h3>
 						</div>
-						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4);">
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406); color: rgb(110, 4, 4);">
 							<h3>{{ absent }} <br> Absent</h3>
 						</div>
-						<div class="count" style="background-color: rgba(0, 191, 255, 0.596);color: blue;">
+						<div class="count" style="background-color: rgba(0, 191, 255, 0.596); color: blue;">
 							<h3>{{ total }} <br> Total</h3>
 						</div>
 					</div>
-					
-
-
 				</li>
+				
 				<li>
 					<p class="title">Employees on Leave
 						<hr>
@@ -470,7 +624,8 @@
 							<p style="color: green; font-weight: 600; cursor: pointer;">Add <i class="fa-solid fa-plus"
 									style="font-size: 16px;"></i></p>
 						</button>
-						<button id="deleteButton"><i class="fa-solid fa-trash"></i></button>
+						<button id="deleteBtn" class="delete-btn"><i class="fa-solid fa-trash"></i></button>
+
 					</div>
 
 					<!-- Modal Structure -->
@@ -519,110 +674,143 @@
 					</p>
 
 					<div class="announce">
-
-
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
 							<p class="date">10 <sup>th</sup> April 2024</p>
-							<div class="desc">
-								<button class="close-btn">&times;</button>
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
-							</div>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
 						</div>
-						
-						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
-							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
 
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+						<div class="info">
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
+						</div>
 
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+						<div class="info">
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
+						</div>
 
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+						<div class="info">
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
+						</div>
 
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+						<div class="info">
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
+						</div>
 
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
+						<div class="info">
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
-
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
-							</div>
+							<p class="date">10 <sup>th</sup> April 2024</p>
+							<p class="time">10:00am</p>
+							<p class="announcement_desc">This is the first meeting description.</p>
 						</div>
+
 						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
+							<div class="user" style="cursor: pointer;">
+								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+								<i class='fas fa-bell'></i>
+								<span class="meeting-text">Staff Meeting</span>
 							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
-
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
-							</div>
+							<p class="date">11 <sup>th</sup> April 2024</p>
+							<p class="time">11:00am</p>
+							<p class="announcement_desc">This is the second meeting description.</p>
 						</div>
-						<div class="info">
-							<div class="user">
-								<i class='fas fa-bell'></i> Staff Meeting
-							</div>
-							<p class="date">10 <sup>th</sup>April 2024</p>
-
-							<div class="desc">
-								<p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Placeat quisquam deleniti
-									ducimus officiis esse praesentium aspernatur nam iusto! Ut, corrupti!</p>
-							</div>
-						</div>
-
 					</div>
+
+					<!-- Popup element Don't try to delete it -->
+					<div id="popup" class="popup">
+						<span id="popupClose" class="popup-close">&times;</span>
+						<p id="popupContent">This is the pretext content for the meeting.</p>
+					</div>
+
+
+
+
 
 				</li>
 
@@ -739,54 +927,104 @@
 					</p>
 					<div class="details">
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> January
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>January 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> February
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>February 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> March
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>March 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> April
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>April 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> May
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>May 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> June
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>June 2024 </div>
 						</div>
 						<div class="info">
-							<div class="user"> August <span>(2024-2025)</span></div>
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> July
+									<span>(2024-2025)</span>
+								</div>
+							</a>
 
-							<div class="date">10 <sup>th</sup>April 2024 </div>
+							<div class="date">30 <sup>th</sup>July 2024 </div>
 						</div>
-						
+						<div class="info">
+							<a href="https://www.kjei.edu.in/tae/Newletter/newsletter.html">
+								<div class="user">
+									<i class="fa-regular fa-newspaper fa-bounce"></i> August
+									<span>(2024-2025)</span>
+								</div>
+							</a>
+							<div class="date">30 <sup>th</sup>August 2024 </div>
+
+						</div>
+
+
+
 
 					</div>
 				</li>
 			</ul>
-		</main>
-		<!-- MAIN -->
 
+		<!-- MAIN -->
+		{% endblock %}
 	</section>
 	<!-- CONTENT -->
 
 
-	<!-- <script src="{% static 'assets/script/script.js'%}"></script> 
-	<script src="{% static 'script.js'%}"></script> -->
+	
+	<!-- <script src="{% static 'script.js'%}"></script>  -->
+
+	{% block scripts %}
+	<script src="{% static 'assets/script/script.js'%}"></script> 
 	<script>
 
 // Index page announcement modal script
@@ -870,7 +1108,150 @@ document.addEventListener('click', function (event) {
     }
 });
 	</script>
+	<script>
 
+		// Holiday Modal
+		var modal = document.getElementById("holidayModal");
+
+		var btn = document.getElementById("holiday_addButton");
+
+		var closeBtn = document.querySelector(".modal_holiday .close");
+
+		btn.onclick = function () {
+			modal.classList.add("show");
+		}
+
+		closeBtn.onclick = function () {
+			modal.classList.remove("show");
+		}
+
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.classList.remove("show");
+			}
+		}
+
+
+
+	</script>
+
+
+
+
+	<script>
+
+
+		// Popup content for announcements
+		var popup = document.getElementById('popup');
+		var popupContent = document.getElementById('popupContent');
+
+		var meetingTexts = document.querySelectorAll('.meeting-text');
+
+		meetingTexts.forEach(function (meeting) {
+			meeting.addEventListener('click', function (event) {
+				var announcementDesc = meeting.closest('.info').querySelector('.announcement_desc');
+
+				popupContent.textContent = announcementDesc.textContent;
+
+				var rect = meeting.getBoundingClientRect();
+
+				var popupWidth = popup.offsetWidth;
+				var windowWidth = window.innerWidth;
+
+				var leftPosition = rect.left;
+				var topPosition = rect.top - popup.offsetHeight - 1;
+
+				if (leftPosition + popupWidth > windowWidth) {
+					leftPosition = windowWidth - popupWidth - 10;
+				}
+
+
+				if (leftPosition < 0) {
+					leftPosition = 10;
+				}
+				popup.style.top = topPosition + 'px';
+				popup.style.left = leftPosition + '-100px';
+				popup.classList.add('show');
+			});
+		});
+
+		window.addEventListener('click', function (event) {
+			if (!event.target.closest('.meeting-text') && !event.target.closest('.popup')) {
+				popup.classList.remove('show');
+			}
+		});
+		window.addEventListener('click', function (event) {
+			if (!event.target.closest('.meeting-text') && !event.target.closest('.popup')) {
+				popup.classList.remove('show');
+			}
+		});
+
+		popupClose.addEventListener('click', function () {
+			popup.classList.remove('show');
+		});
+
+
+	</script>
+
+
+
+
+
+
+
+
+
+
+	<script>
+
+		var deleteBtn = document.getElementById('deleteBtn');
+		var checkboxes = document.querySelectorAll('.announcement-delete-checkbox');
+
+		deleteBtn.addEventListener('click', function () {
+			checkboxes.forEach(function (checkbox) {
+				checkbox.style.display = checkbox.style.display === 'none' ? 'inline-block' : 'none';
+			});
+		});
+
+		deleteBtn.addEventListener('click', function () {
+			checkboxes.forEach(function (checkbox) {
+				if (checkbox.checked) {
+					var meetingInfo = checkbox.closest('.info');
+					meetingInfo.remove();
+				}
+			});
+		});
+
+
+	</script>
+
+
+
+
+	<script>
+		var holidayDeleteBtn = document.getElementById('holiday_deleteButton');
+
+		var holidayCheckboxes = document.querySelectorAll('.holiday-delete-checkbox');
+
+		holidayDeleteBtn.addEventListener('click', function () {
+			holidayCheckboxes.forEach(function (checkbox) {
+				checkbox.style.display = checkbox.style.display === 'none' ? 'inline-block' : 'none';
+			});
+		});
+
+		holidayDeleteBtn.addEventListener('click', function () {
+			holidayCheckboxes.forEach(function (checkbox) {
+				if (checkbox.checked) {
+					var holidayInfo = checkbox.closest('.holiday-info');
+					holidayInfo.remove();
+				}
+			});
+		});
+
+
+
+	</script>
+{% endblock %}
 </body>
 
 </html>

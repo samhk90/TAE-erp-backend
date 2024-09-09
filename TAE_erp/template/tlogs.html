@@ -1,0 +1,129 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    {% block style %}
+    <style>
+        table {
+            width: 100%;
+            border-spacing: 0;
+            box-shadow: 0 2px 15px rgba(64, 64, 64, .7);
+            border-radius: 6px 6px 0 0;
+            overflow: hidden;
+        }
+
+        td,
+        th {
+            padding: 12px 10px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #0f85e0;
+            color: #fafafa;
+            font-family: 'Open Sans', Sans-serif;
+            font-weight: 600;
+        }
+
+        .present {
+            color: green;
+            font-weight: 600;
+        }
+
+        .absent {
+            font-weight: 600;
+            color: red;
+        }
+
+        td {
+            border-bottom: 1px solid rgb(204, 202, 202);
+        }
+
+        tr {
+            width: 100%;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        tr:hover {
+            background-color: rgb(225, 222, 222);
+        }
+    </style>
+    {% endblock %}
+    <title>TAE</title>
+</head>
+
+<body>
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- MAIN -->
+        {% block content %}
+        <div class="head-title">
+            <div class="left">
+                <h1>Daily Logs</h1>
+                <ul class="breadcrumb">
+                    <li>
+                        <a href="#">Daily Logs</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li class="active">
+                        <a href="#" class="active">Daily records</a>
+                    </li>
+                    <li><i class='bx bx-chevron-right'></i></li>
+                    <li class="active">
+                        <a href="#" class="active">Previous record</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Date</th>
+                        <th>Time Slot</th>
+                        <th>Day</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Subject</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>See</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.Date|date:"d/m/Y" }}</td> <!-- Assuming `Date` field exists and contains the date -->
+                        <td>{{ record.Timefrom }} - {{ record.Timeto }}</td>
+                        <td>{{ record.Date|date:"l" }}</td> <!-- Display day of the week -->
+                        <td>{{ record.SubjectID__SubjectDepartment }}</td>
+                        <td>{{ record.SubjectID__SubjectYear }}</td>
+                        <td>{{ record.SubjectID__SubjectName }}</td>
+                        <td class="present">{{ record.student_count }}</td> <!-- Assuming `student_count` represents present students -->
+                        <td class="absent">{{ total_students|default:100|add:"- record.student_count" }}</td> <!-- Example to calculate absent -->
+                        <td><a href="./dailylogs2.html"><i class="fa-solid fa-eye" style="color:#5ca7f1;"></i></a></td>
+                        <td><a href="###"><i class="fa-solid fa-download" style="color:#5ca7f1;"></i></a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">No records available for today.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% endblock %}
+    </section>
+
+    {% block scripts %}
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    {% endblock %}
+</body>
+
+</html>

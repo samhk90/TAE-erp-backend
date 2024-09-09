@@ -18,7 +18,6 @@ def index(request):
     email=request.session.get('teacher_email')
     role=Teacher.objects.get(Email=email).RoleID
     if role.RoleName=='Teacher':
-        teacher=True
         department=Teacher.objects.get(Email=email)
         department=department.DepartmentID
         today=date.today()
@@ -28,15 +27,13 @@ def index(request):
         present_count = attendance_records.filter(ClassID__DepartmentID=department,Status=True).count()
         absent_count = attendance_records.filter(ClassID__DepartmentID=department,Status=False).count()
         total_count = Student.objects.filter(CurrentClassID__DepartmentID=department).count()
-        print(total_count)
         if total_count > 0:
             attendance_percentage = (present_count / total_count) * 100
         else:
             attendance_percentage = 0 
         email=request.session.get('teacher_email')
-        teacherinfo=Teacher.objects.get(Email=email)
+        teacher=Teacher.objects.get(Email=email)
         context = {
-            'teacherinfo':teacherinfo,
         'teacher':teacher,
         'present': present_count,
         'absent': absent_count,
@@ -45,12 +42,10 @@ def index(request):
     }
         return render(request,'index.html',context)
     elif  role.RoleName=='Principal':
-        Principal=True
         today=date.today()
         timefrom="09:15 am"
         timeto='10:15 am'
         attendance_records = Attendance.objects.filter(Timefrom=timefrom,Timeto=timeto,Date=today).distinct()
-        print(attendance_records)
         present_count = attendance_records.filter(Status=True).count()
         absent_count = attendance_records.filter(Status=False).count()
         total_count = Student.objects.all().count()
@@ -59,10 +54,9 @@ def index(request):
         else:
             attendance_percentage = 0 
         email=request.session.get('teacher_email')
-        teacherinfo=Teacher.objects.get(Email=email)
+        teacher=Teacher.objects.get(Email=email)
         context = {
-        'teacherinfo':teacherinfo,
-        'Principal':Principal,
+        'teacher':teacher,
         'present': present_count,
         'absent': absent_count,
         'total':total_count,
@@ -106,7 +100,6 @@ def logout(request):
     return redirect('login')
 
 import csv
-from django.http import HttpResponse
 from django.http import HttpResponse
 
 def download_csv_template(request):
@@ -204,44 +197,51 @@ def student(request):
 def academics(request):
     email = request.session.get('teacher_email')
     teacher = get_object_or_404(Teacher, Email=email)
-    role = teacher.RoleID.RoleName
     role1 = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
-    is_teacher = role == 'Teacher'
     is_classteacher = role1 and role1.RoleID.RoleName == 'Classteacher'
-    principal=role=='Principal'
+
     if request.method == 'POST':
-        selected_class=request.POST.get('class')
-        batch=request.POST.get('batch')
-        
+        selected_class = request.POST.get('class')
+        batch = request.POST.get('batch')
+
+        # Get the subjects assigned to the teacher
         assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
         subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
 
-# Filter subjects based on the selected class and the subject IDs from the assignments
+        # Filter subjects based on the selected class and the subject IDs from the assignments
         subjects = Subject.objects.filter(SubjectID__in=subject_ids, CurrentClassID=selected_class)
-        department=teacher.DepartmentID.DepartmentID
-        assigned_classes = Classes.objects.filter(DepartmentID=department)
-        print(subjects)
+        
+        # Get the unique class IDs associated with the assigned subjects
+        class_ids = Subject.objects.filter(SubjectID__in=subject_ids).values_list('CurrentClassID', flat=True).distinct()
+        
+        # Fetch the classes using the class IDs
+        assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
+        
         context = {
-        'principal':principal,
-        'is_classteacher': is_classteacher,
-        'subjects':subjects,
-        'selected_class':selected_class,
-        'batch':batch,
-        'is_teacher': is_teacher,
-        'teacher':teacher,
-        'classes': assigned_classes,
-    }
-        return render(request,'academics.html',context)
-    department=teacher.DepartmentID.DepartmentID
-    assigned_classes = Classes.objects.filter(DepartmentID=department)
+            'is_classteacher': is_classteacher,
+            'subjects': subjects,
+            'selected_class': selected_class,
+            'batch': batch,
+            'teacher': teacher,
+            'classes': assigned_classes,
+        }
+        return render(request, 'academics.html', context)
+    assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
+    subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
+
+        # Filter subjects based on the selected class and the subject IDs from the assignments
+    subjects = Subject.objects.filter(SubjectID__in=subject_ids)
+    class_ids = Subject.objects.filter(SubjectID__in=subject_ids).values_list('CurrentClassID', flat=True).distinct()
+        
+        # Fetch the classes using the class IDs
+    assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
+
     context = {
-        'principal':principal,
         'is_classteacher': is_classteacher,
-        'is_teacher': is_teacher,
-        'teacher':teacher,
+        'teacher': teacher,
         'classes': assigned_classes,
     }
-    return render(request,'academics.html',context)
+    return render(request, 'academics.html', context)
 
 @supabase_login_required
 def greenbook(request):
@@ -287,20 +287,38 @@ def greenbook(request):
         'subjects': subjects_list,
     }
     return render(request, 'green.html', context)
+from django.contrib import messages
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Attendance, Teacher, Subject, Student, ClassTeacherAssignment, Classes
+from django.core.exceptions import ValidationError
+
 @supabase_login_required
 def attendance_form(request):
     email = request.session.get('teacher_email')
     teacher = get_object_or_404(Teacher, Email=email)
     selected_class = request.GET.get('class')
     subject_id = request.GET.get('sub')
-    batch = request.GET.get('batch') 
+    batch = request.GET.get('batch')
+    
     if request.method == 'POST':
         date = request.POST.get('date')
         time_to = request.POST.get('to_time')
         time_from = request.POST.get('from_time')
-
         subject = get_object_or_404(Subject, SubjectID=subject_id)
-        
+
+        # Check for existing attendance records
+        existing_attendance = Attendance.objects.filter(
+            Date=date,
+            Timefrom=time_from,
+            Timeto=time_to,
+            SubjectID=subject
+        ).exists()
+
+        if existing_attendance:
+            # If attendance already exists, show an error message
+            messages.error(request, 'Attendance already exists for the selected date and time. Please change the date or time.')
+            return redirect(request.path_info)  # Redirect back to the same form with the error message
+
         if subject.SubjectType == False:
             batch = int(batch)  # Ensure batch is an integer if needed
             students = Student.objects.filter(CurrentClassID=selected_class, batch=batch).order_by('RollNumber')
@@ -336,7 +354,8 @@ def attendance_form(request):
     subjecttype = subject.SubjectType
     role1 = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
     is_classteacher = role1 and role1.RoleID.RoleName == 'Classteacher'
-    selected_class=Classes.objects.get(ClassID=selected_class)
+    selected_class = Classes.objects.get(ClassID=selected_class)
+    
     context = {
         'subjecttype': subjecttype,
         'students': students,
@@ -452,23 +471,56 @@ from .models import Attendance
 from django.utils import timezone
 @supabase_login_required
 def logs(request):
+    # Get the email of the logged-in teacher from the session
+    email = request.session.get('teacher_email')
+    teacher = Teacher.objects.get(Email=email)
+
     # Get today's date
     today = timezone.now().date()
-    email=request.session.get('teacher_email')
-    teacher=Teacher.objects.get(Email=email)
-    # Query attendance records for today and join with TeacherSubjectAssignment to get faculty names
-    attendance_records = Attendance.objects.select_related('SubjectID').filter(Date=today).values(
-        'Timefrom', 'Timeto', 'SubjectID__SubjectName','SubjectID__SubjectDepartment','SubjectID__SubjectYear','SubjectID__teachersubjectassignment__TeacherID__FirstName'
-    ).annotate(
-        student_count=Count('StudentID')
-    ).order_by('Timefrom', 'Timeto')
-    
-    # Context to pass data to the template
-    context = {
-        'attendance_records': attendance_records,
-        'teacher':teacher
-    }
-    return render(request,'logs.html',context)
+
+    if teacher.RoleID.RoleName == 'Teacher':
+        # Query attendance records only for the classes taken by the logged-in teacher
+        attendance_records = Attendance.objects.select_related('SubjectID').filter(
+            Date=today,
+            SubjectID__teachersubjectassignment__TeacherID=teacher
+        ).values(
+            'Timefrom', 
+            'Timeto', 
+            'SubjectID__SubjectName',
+            'SubjectID__SubjectDepartment',
+            'SubjectID__SubjectYear',
+            'SubjectID__teachersubjectassignment__TeacherID__FirstName'
+        ).annotate(
+            student_count=Count('StudentID')
+        ).order_by('Timefrom', 'Timeto')
+
+        context = {
+            'attendance_records': attendance_records,
+            'teacher': teacher
+        }
+        return render(request, 'tlogs.html', context)
+
+    elif teacher.RoleID.RoleName == 'Principal':
+        # Query attendance records for all classes since Principal can view all
+        attendance_records = Attendance.objects.select_related('SubjectID').filter(
+            Date=today
+        ).values(
+            'Timefrom', 
+            'Timeto', 
+            'SubjectID__SubjectName',
+            'SubjectID__SubjectDepartment',
+            'SubjectID__SubjectYear',
+            'SubjectID__teachersubjectassignment__TeacherID__FirstName'
+        ).annotate(
+            student_count=Count('StudentID')
+        ).order_by('Timefrom', 'Timeto')
+
+        context = {
+            'attendance_records': attendance_records,
+            'teacher': teacher
+        }
+        return render(request, 'logs.html', context)
+
 @supabase_login_required
 def history(request):
     return render(request,'history.html')
