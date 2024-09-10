@@ -3,195 +3,247 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<!-- Boxicons -->
-	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<!-- My CSS -->
-	<link rel="stylesheet" href="{% static '/assets/style/style.css' %}">
-	<link rel="stylesheet" href="{% static 'dailylog.css' %}">
-	<title>TAE</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Boxicons -->
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- My CSS -->
+    <link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'dailylog.css' %}">
+    <title>Daily Logs</title>
+	<style>
+		
+        /* Style for the form container */
+.card form {
+    margin-bottom: 20px; /* Space between form and table */
+    padding: 15px;
+    background-color: #f9f9f9; /* Light background for form */
+    border-radius: 8px; /* Rounded corners for the form */
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow for the form */
+    width: max-content;
+}
+
+/* Style for the label */
+.card form label {
+    font-size: 16px;
+    margin-right: 10px;
+    font-weight: bold;
+}
+
+/* Style for the date input */
+.card form input[type="date"] {
+    padding: 8px 12px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    outline: none;
+    transition: border-color 0.3s ease;
+}
+
+.card form input[type="date"]:focus {
+    border-color: #5ca7f1; /* Highlight border on focus */
+    box-shadow: 0 0 5px rgba(90, 167, 241, 0.3); /* Subtle shadow on focus */
+}
+
+/* Style for the filter button */
+.card form button {
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #5ca7f1; /* Blue background for the button */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Button hover state */
+.card form button:hover {
+    background-color: #4a92d1; /* Darker blue on hover */
+}
+
+/* Button active state */
+.card form button:active {
+    background-color: #397bb6; /* Even darker blue when pressed */
+    box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.2); /* Inner shadow on click */
+}
+
+	</style>
 </head>
 
 <body>
 
+    <!-- SIDEBAR -->
+    <section id="sidebar">
+        <a href="#" class="brand">
+            <span class="text"><img src="{% static 'assets/img/tae-logo.png' %}" height="100px" alt=""></span>
+        </a>
+        <ul class="side-menu top">
+            <li>
+                <a href="/">
+                    <i class='bx bxs-dashboard'></i>
+                    <span class="text">Dashboard</span>
+                </a>
+            </li>
+            {% if teacher1 %}
+            <li>
+                <a href="academics">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Academics</span>
+                </a>
+            </li>
+            {% else %}
+            <li class="active">
+                <a href="logs">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li>
+            {% endif %}
+            <li>
+                <a href="notices">
+                    <i class='bx bxs-doughnut-chart'></i>
+                    <span class="text">Notices</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Time Table</span>
+                </a>
+            </li>
+            <li>
+                <a href="#">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Leaves</span>
+                </a>
+            </li>
+            <li>
+                <a href="students">
+                    <i class='bx bxs-group'></i>
+                    <span class="text">Student Info</span>
+                </a>
+            </li>
+        </ul>
+        <ul class="side-menu">
+            <li>
+                <a href="#">
+                    <i class='bx bxs-cog'></i>
+                    <span class="text">Settings</span>
+                </a>
+            </li>
+            <li>
+                <a href="logout" class="logout">
+                    <i class='bx bxs-log-out-circle'></i>
+                    <span class="text">Logout</span>
+                </a>
+            </li>
+        </ul>
+    </section>
+    <!-- SIDEBAR -->
 
-	<!-- SIDEBAR -->
-	<section id="sidebar">
-		<a href="#" class="brand">
-			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
-		</a>
-		<ul class="side-menu top">
-			<li >
-				<a href="/">
-					<i class='bx bxs-dashboard'></i>
-					<span class="text">Dashboard</span>
-				</a>
-			</li>
-			{% if teacher1 %}
-			<li>
-				<a href="academics">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Academics</span>
-				</a>
-			</li>
-			{% else%}
-			<li class="active">
-				<a href="logs">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily logs</span>
-				</a>
-			</li>
-			{% endif %}
-			<li>
-				<a href="notices">
-					<i class='bx bxs-doughnut-chart'></i>
-					<span class="text">Notices</span>
-				</a>
-			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-message-dots'></i>
-					<span class="text">Time Table</span>
-				</a>
-			</li>
-			<li>
-				<a href="">
-					<i class='bx bxs-group'></i>
-					<span class="text">Leaves</span>
-				</a>
-			</li>
-			<!-- <li>
-				<a href="logs">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily Logs</span>
-				</a>
-			</li> -->
-			<li>
-				<a href="students">
-					<i class='bx bxs-group'></i>
-					<span class="text">Student Info</span>
-				</a>
-			</li>
+    <!-- CONTENT -->
+    <section id="content">
+        <!-- NAVBAR -->
+        <nav>
+            <div class="intro">
+                <h2>Trinity Academy of Engineering</h2>
+            </div>
 
-		</ul>
-		<ul class="side-menu">
-			<li>
-				<a href="#">
-					<i class='bx bxs-cog'></i>
-					<span class="text">Settings</span>
-				</a>
-			</li>
-			<li>
-				<a href="logout" class="logout">
-					<i class='bx bxs-log-out-circle'></i>
-					<span class="text">Logout</span>
-				</a>
-			</li>
-		</ul>
-	</section>
-	<!-- SIDEBAR -->
+            <a href="#" class="profile">
+                <p>Prof. {{ teacher.FirstName }} {{ teacher.LastName }}</p>
+                <img src="{% static 'assets/img/user.png' %}">
+            </a>
+        </nav>
 
+        <main>
+            <div class="head-title">
+                <div class="left">
+                    <h1>Daily Logs</h1>
+                    <ul class="breadcrumb">
+                        <li>
+                            <a href="#">Logs</a>
+                        </li>
+                        <li><i class='bx bx-chevron-right'></i></li>
+                        <li>
+                            <a class="active" href="#">Date: {{ selected_date|date:"d/m/Y" }}</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div class="card">
+				<form method="post" class="filter-form">
+					{% csrf_token %}
+					<label for="attendance_date">Select Date:</label>
+					<input type="date" id="attendance_date" name="attendance_date" value="{{ selected_date|date:'Y-m-d' }}">
 
-
-	<!-- CONTENT -->
-	<section id="content">
-		<!-- NAVBAR -->
-		<nav>
-			<div class="intro">
-				<h2>Trinity Academy of Engineering</h2>
-			</div>
-
-
-			<a href="#" class="profile" >
-				<p>Prof. {{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
-			</a>
-		</nav>
-		
-		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Daily Logs</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#">Logs</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a class="active" href="#">Date : 24/04/2024</a>
-						</li>
-						
-					</ul>
-				</div>
-			</div>
-			<div class="card">
-			<div class="wrapper flex">
-			   <div class="projects">
-				  <div class="card-header flex">
-					 <h3>Daily record</h3>
-<!-- 						
-					 <button id="seeall">See all</button> -->
-				  </div>
-   
-
-				  <table>
-					<thead>
-						<th>
-						   <tr>
-							  <td>Slots</td>
-							  <td><form action="" class="year" method="post">
-								<label for="Depa
-								rtment">Department</label>
-								<select id="division" name="division" required>
-									<option value=""></option>
-									<option value="comp">Computer Eng.</option>
-									<option value="itdept">IT Department</option>
-									<option value="me">Mechanical Department</option>
-									<option value="entc">EnTC Department</option>
-									<option value="civil">Civil Department</option>
-									<option value="all">All</option>
-								</select>
-							</form></td>
-							  <td>Year</td>
-							  <td>Faculty</td>
-							  <td>Subject</td>
-							  <td>Student count</td>
-						   </tr>
-						</th>
-					 </thead>
-					<tbody>
-						{% for record in attendance_records %}
-							<tr>
-								<td>{{ record.Timefrom }} - {{ record.Timeto }}</td>
-								<td>{{ record.SubjectID__SubjectDepartment }}</td>
-								<td>{{ record.SubjectID__SubjectYear }}</td>
-								<td>{{ record.SubjectID__teachersubjectassignment__TeacherID__FirstName }}</td>
-								<td>{{ record.SubjectID__SubjectName }}</td>
-								<td>{{ record.student_count }}</td>
-							</tr>
-						{% empty %}
-							<tr>
-								<td colspan="4">No records found for today.</td>
-							</tr>
+					{% if classteacher %}
+					<label for="subject">Select Subject:</label>
+					<select id="subject" name="subject">
+						<option value="">All Subjects</option>
+						{% for subject in subjects %}
+							<option value="{{ subject.SubjectID }}" {% if selected_subject == subject.SubjectID %}selected{% endif %}>
+								{{ subject.SubjectName }}
+							</option>
 						{% endfor %}
-					</tbody>
-				</table>
-			   </div>
-   
-			   
-			</div>
-		</div>
-		 </main>
-			
+					</select>
+					{% endif %}
 
+					<button type="submit">Filter</button>
+				</form>
 
-	</section>
-	<!-- CONTENT -->
-	
+                <div class="wrapper flex">
+                    <div class="projects">
+                        <div class="card-header flex">
+                            <h3>Daily Record</h3>
+                        </div>
 
+                      
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Time From</th>
+                                    <th>Time To</th>
+                                    <th>Subject Name</th>
+                                    <th>Class Name</th>
+                                    <th>Subject Department</th>
+                                    <th>Subject Year</th>
+                                    <th>Teacher Name</th>
+                                    <th>Total Students</th>
+                                    <th>Present</th>
+                                    <th>Absent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for record in attendance_records %}
+                                <tr>
+                                    <td>{{ record.Timefrom }}</td>
+                                    <td>{{ record.Timeto }}</td>
+                                    <td>{{ record.SubjectID__SubjectName }}</td>
+                                    <td>{{ record.ClassID__ClassName }}</td>
+                                    <td>{{ record.SubjectID__SubjectDepartment }}</td>
+                                    <td>{{ record.SubjectID__SubjectYear }}</td>
+                                    <td>{{ record.SubjectID__teachersubjectassignment__TeacherID__FirstName }}</td>
+                                    <td>{{ record.student_count }}</td>
+                                    <td>{{ record.present_count }}</td>
+                                    <td>{{ record.absent_count }}</td>
+                                </tr>
+                                {% empty %}
+                                <tr>
+                                    <td colspan="10">No records found for today.</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </section>
+    <!-- CONTENT -->
 
-	<script src="assets/script/script.js"></script>
+    <script src="{% static 'assets/script/script.js' %}"></script>
 
 </body>
 

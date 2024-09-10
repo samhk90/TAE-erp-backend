@@ -176,6 +176,13 @@
 
 		<!-- MAIN -->
 		 {% block content %}
+		 {% if messages %}
+		 {% for message in messages %}
+			 <script>
+				 alert("{{ message }}");
+			 </script>
+		 {% endfor %}
+	 {% endif %}
 		 <div id="loader" class="loader">
 			<div class="loader-box">
 				<div class="spinner"></div>

@@ -1,10 +1,7 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,Year,Classes,ClassTeacherAssignment
 from supabase import create_client, Client,SupabaseAuthClient
-url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
-key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
-supabase: Client = create_client(url, key)
-from supabase_auth import AuthResponse
+
 from django.core.serializers import serialize
 from django.shortcuts import render
 from erp_1.decorators import supabase_login_required  # Adjust the import path accordingly
@@ -66,21 +63,21 @@ def index(request):
     return render(request, 'index.html',{'role':role})
 # Inspect the 'auth' attribute of the client
 
-
-
 def login(request):
     if request.method == 'POST':
-        email = request.POST.get('username1').replace(' ', '')
-        password = request.POST.get('password')
         url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
         key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
         supabase: Client = create_client(url, key)
+        
+        email = request.POST.get('username1', '').strip()
+        password = request.POST.get('password', '')
+
         try:
-            response =supabase.auth.sign_in_with_password({'email':email,'password':password})
+            response = supabase.auth.sign_in_with_password({'email': email, 'password': password})
             user = response.user
 
             if user:
-                request.session['teacher_email'] = email  
+                request.session['teacher_email'] = email
                 return redirect('index')  # Redirect to the index page after login
 
         except Exception as e:
@@ -92,12 +89,18 @@ def login(request):
     return render(request, 'login.html')
 
 def logout(request):
-    request.session.flush()
     url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
-    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9zZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
     supabase: Client = create_client(url, key)
-    res = supabase.auth.sign_out()
+
+    try:
+        res = supabase.auth.sign_out()
+    except Exception as e:
+        print(e)
+    
+    request.session.flush()
     return redirect('login')
+
 
 import csv
 from django.http import HttpResponse
@@ -203,19 +206,16 @@ def academics(request):
     if request.method == 'POST':
         selected_class = request.POST.get('class')
         batch = request.POST.get('batch')
-
-        # Get the subjects assigned to the teacher
         assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
         subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
+        if batch == 'All':
+            subjects = Subject.objects.filter(SubjectID__in=subject_ids, CurrentClassID=selected_class, SubjectType=True)
+        else:
+            subjects = Subject.objects.filter(SubjectID__in=subject_ids, CurrentClassID=selected_class, SubjectType=False)
 
-        # Filter subjects based on the selected class and the subject IDs from the assignments
-        subjects = Subject.objects.filter(SubjectID__in=subject_ids, CurrentClassID=selected_class)
-        
-        # Get the unique class IDs associated with the assigned subjects
         class_ids = Subject.objects.filter(SubjectID__in=subject_ids).values_list('CurrentClassID', flat=True).distinct()
-        
-        # Fetch the classes using the class IDs
         assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
+
         
         context = {
             'is_classteacher': is_classteacher,
@@ -317,7 +317,7 @@ def attendance_form(request):
         if existing_attendance:
             # If attendance already exists, show an error message
             messages.error(request, 'Attendance already exists for the selected date and time. Please change the date or time.')
-            return redirect(request.path_info)  # Redirect back to the same form with the error message
+            return redirect('academics')  # Redirect back to the same form with the error message
 
         if subject.SubjectType == False:
             batch = int(batch)  # Ensure batch is an integer if needed
@@ -418,6 +418,9 @@ def notices(request):
     role=teacher.RoleID.RoleName
     is_teacher = role == 'Teacher' 
     department=teacher.DepartmentID.DepartmentName
+    url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
+    key: str = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdpcGRna3dteG1teWt5YWxpd2hyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU1OTg4NTIsImV4cCI6MjAyMTE3NDg1Mn0.GrCKjv0gzqFMRr5l3iTEWSa79LX2HU4P0KjEmWxfkKI"
+    supabase: Client = create_client(url, key)
     if request.method == 'POST':
             title = request.POST.get('title')
             teacherid=teacher.Teacherid
@@ -463,63 +466,92 @@ def delete_notice(request, id):
         return redirect('notices')
     else:
         return redirect('notices')  # or wherever you want to redirect to
-
-
-from django.shortcuts import render
-from django.db.models import Count
-from .models import Attendance
 from django.utils import timezone
+from django.db.models import Count, Q
+from django.shortcuts import get_object_or_404, render
+from .models import Teacher, ClassTeacherAssignment, Subject, Attendance
+
 @supabase_login_required
 def logs(request):
-    # Get the email of the logged-in teacher from the session
     email = request.session.get('teacher_email')
-    teacher = Teacher.objects.get(Email=email)
+    teacher = get_object_or_404(Teacher, Email=email)
 
-    # Get today's date
     today = timezone.now().date()
+    selected_date_str = request.POST.get('attendance_date')
+    selected_date = today if not selected_date_str else timezone.datetime.strptime(selected_date_str, "%Y-%m-%d").date()
+
+    selected_subject = request.POST.get('subject')
+
+    classteacher = False
+    class_id = None
 
     if teacher.RoleID.RoleName == 'Teacher':
-        # Query attendance records only for the classes taken by the logged-in teacher
-        attendance_records = Attendance.objects.select_related('SubjectID').filter(
-            Date=today,
-            SubjectID__teachersubjectassignment__TeacherID=teacher
-        ).values(
-            'Timefrom', 
-            'Timeto', 
-            'SubjectID__SubjectName',
-            'SubjectID__SubjectDepartment',
-            'SubjectID__SubjectYear',
-            'SubjectID__teachersubjectassignment__TeacherID__FirstName'
-        ).annotate(
-            student_count=Count('StudentID')
-        ).order_by('Timefrom', 'Timeto')
+        role = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
+        if role and role.RoleID.RoleName == 'Classteacher':
+            classteacher = True
+            class_id = role.ClassID.ClassID
 
-        context = {
-            'attendance_records': attendance_records,
-            'teacher': teacher
-        }
-        return render(request, 'tlogs.html', context)
+    # Get subjects only if the teacher is a class teacher
+    subjects = []
+    if classteacher:
+        subjects = Subject.objects.filter(
+            CurrentClassID=class_id
+        ).order_by('SubjectName')
 
+    # Base query for attendance records
+    attendance_records = Attendance.objects.select_related('SubjectID', 'ClassID').filter(Date=selected_date)
+
+    if classteacher:
+        if selected_subject:
+            # Filter by specific subject if selected
+            attendance_records = attendance_records.filter(
+                SubjectID=selected_subject,
+                ClassID=class_id
+            )
+        else:
+            # Filter by class ID if no specific subject is selected
+            attendance_records = attendance_records.filter(
+                ClassID=class_id
+            )
     elif teacher.RoleID.RoleName == 'Principal':
-        # Query attendance records for all classes since Principal can view all
-        attendance_records = Attendance.objects.select_related('SubjectID').filter(
-            Date=today
-        ).values(
-            'Timefrom', 
-            'Timeto', 
-            'SubjectID__SubjectName',
-            'SubjectID__SubjectDepartment',
-            'SubjectID__SubjectYear',
-            'SubjectID__teachersubjectassignment__TeacherID__FirstName'
-        ).annotate(
-            student_count=Count('StudentID')
-        ).order_by('Timefrom', 'Timeto')
+        # For principals, just filter by date
+        attendance_records = attendance_records.all()  # Remove ClassID filter
 
-        context = {
-            'attendance_records': attendance_records,
-            'teacher': teacher
-        }
-        return render(request, 'logs.html', context)
+    else:
+        # For other cases, filter attendance records by subjects assigned to the teacher
+        assigned_subjects = Subject.objects.filter(
+            teachersubjectassignment__TeacherID=teacher
+        ).values_list('SubjectID', flat=True)
+        attendance_records = attendance_records.filter(
+            SubjectID__in=assigned_subjects
+        )
+
+    # Annotate the attendance records with counts
+    attendance_records = attendance_records.values(
+        'Timefrom',
+        'Timeto',
+        'SubjectID__SubjectName',
+        'ClassID__ClassName',  # Assuming you have a ClassName field in Classes
+        'SubjectID__SubjectDepartment',
+        'SubjectID__SubjectYear',
+        'SubjectID__teachersubjectassignment__TeacherID__FirstName'
+    ).annotate(
+        student_count=Count('StudentID'),
+        present_count=Count('StudentID', filter=Q(Status=True)),
+        absent_count=Count('StudentID', filter=Q(Status=False))
+    ).order_by('Timefrom', 'Timeto')
+
+    context = {
+        'attendance_records': attendance_records,
+        'teacher': teacher,
+        'selected_date': selected_date,
+        'classteacher': classteacher,
+        'selected_subject': selected_subject,
+        'subjects': subjects,
+    }
+
+    template = 'tlogs.html' if teacher.RoleID.RoleName == 'Teacher' or classteacher else 'logs.html'
+    return render(request, template, context)
 
 @supabase_login_required
 def history(request):
