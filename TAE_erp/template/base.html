@@ -9,6 +9,9 @@
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<!-- My CSS -->
+     
+    <link rel="stylesheet" href="{% static 'assets/style/history.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/students.css' %}">
     <link rel="stylesheet" href="{% static 'assets/style/dailylog.css' %}">
     <link rel="stylesheet" href="{% static 'assets/style/notice.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
@@ -139,68 +142,70 @@
     {% if teacher.RoleID.RoleName == 'Principal' %}
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <a href="#" class="brand">
-            <span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
-        </a>
-        <ul class="side-menu top">
-            <li class="{% if request.path == '/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/academics' %}active{% endif %}">
-                <a href="{% url 'academics' %}">
-                    <i class='bx bxs-calendar-star'></i>
-                    <span class="text">Academics</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/notices' %}active{% endif %}">
-                <a href="{% url 'notices' %}">
-                    <i class='bx bxs-doughnut-chart'></i>
-                    <span class="text">Notices</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/timetable' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-message-dots'></i>
-                    <span class="text">Time Table</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/leaves' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Leaves</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
-                <a href="{% url 'logs' %}">
-                    <i class='bx bx-calendar-check'></i>
-                    <span class="text">Daily Logs</span>
-                </a>
-            </li>
-            <li class="{% if request.path == 'students' %}active{% endif %}">
-                <a href="{% url 'students' %}">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Student Info</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu">
-            <li class="{% if request.path == '/settings/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-cog'></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="{% url 'logout' %}" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </section>
+		<a href="#" class="brand">
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="/">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
+				</a>
+			<!-- </li>
+			<li>
+				<a href="timetable">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Time Table</span>
+				</a>
+			</li>
+			<li>
+				<a href="leaves">
+					<i class='bx bxs-group'></i>
+					<span class="text">Leaves</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="sub_allocation.html">
+					<i class='bx bx-chalkboard'></i>
+					<span class="text">Faculty</span>
+				</a>
+			</li> -->
+
+			<li>
+				<a href="students">
+					<i class='bx bxs-group'></i>
+					<span class="text">Student Info</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="logout" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
     {% endif %}
     <!-- SIDEBAR -->
 

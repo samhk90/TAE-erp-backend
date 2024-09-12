@@ -1,251 +1,12 @@
-{% if principal %}
-<!-- SIDEBAR -->
-<section id="sidebar">
-<a href="#" class="brand">
-<span class="text"><img src="{% static '/assets/img/tae-logo.png' %}" height="100px" alt=""></span>
-</a>
-<ul class="side-menu top">
-<li >
-	<a href="/">
-		<i class='bx bxs-dashboard'></i>
-		<span class="text">Dashboard</span>
-	</a>
-</li>
-<li class="active">
-	<a href="pacademics">
-		<i class='bx bxs-calendar-star'></i>
-		<span class="text">Academics</span>
-	</a>
-</li>
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
 
-<li>
-	<a href="notices">
-		<i class='bx bxs-doughnut-chart'></i>
-		<span class="text">Notices</span>
-	</a>
-</li>
-<li>
-	<a href="logs">
-		<i class='bx bxs-calendar-star'></i>
-		<span class="text">Daily Logs</span>
-	</a>
-</li>
-<li>
-	<a href="timetable">
-		<i class='bx bxs-message-dots'></i>
-		<span class="text">Time Table</span>
-	</a>
-</li>
-<li>
-	<a href="leaves">
-		<i class='bx bxs-group'></i>
-		<span class="text">Leaves</span>
-	</a>
-</li>
-
-<li>
-	<a href="students">
-		<i class='bx bxs-group'></i>
-		<span class="text">Student Info</span>
-	</a>
-</li>
-</ul>
-<ul class="side-menu">
-<li>
-	<a href="#">
-		<i class='bx bxs-cog'></i>
-		<span class="text">Settings</span>
-	</a>
-</li>
-<li>
-	<a href="logout" class="logout">
-		<i class='bx bxs-log-out-circle'></i>
-		<span class="text">Logout</span>
-	</a>
-</li>
-</ul>
-</section>
-<!-- SIDEBAR -->
-<!-- CONTENT -->
-<section id="content">
-<!-- NAVBAR -->
-<nav>
-<div class="intro">
-	<h2>Trinity Academy of Engineering</h2>
-</div>
-
-
-<a href="#" class="profile" >
-	<p>Prof. {{teacher.FirstName}} {{teacher.LastName}}</p>	<img src="{% static '/assets/img/user.png' %}">
-</a>
-</nav>
-<!-- NAVBAR -->
-
-<!-- MAIN -->
-<main>
-<div class="head-title">
-	<div class="left">
-		<h1>Academics</h1>
-		<ul class="breadcrumb">
-			<li>
-				<a href="academics" >Academics</a>
-			</li>
-		</ul>
-	</div>
-</div>
-<section class="main-course">
-	<div class="container">
-		<div class="card">
-			<h2>Attendance Search</h2>
-			<div class="container">
-				<form action="/submit_form" method="post">
-					
-					<div class="row" style="width: 100%; display: flex;">
-						<div class="column">
-							<label for="div">Department:</label>
-							<select id="division" name="division" required>
-								<option value=""> None</option>
-								<option value="comp">Computer Eng.</option>
-								<option value="itdept">IT Department</option>
-								<option value="me">Mechanical Department</option>
-								<option value="entc">EnTC Department</option>
-								<option value="civil">Civil Department</option>
-								<option value="all">All</option>
-							</select>
-						</div>
-						<!-- <div class="column">
-							<label for="div">Year:</label>
-							<input type="month" name="year"  placeholder="YYYY" min="1999" max="2050"  id="year">
-							
-						</div> -->
-						<div class="column">
-							<label for="div">Academic Year:</label>
-							<select id="division" name="division" required >
-								<option value=""> None</option>
-								<option value="fe">First year</option>
-								<option value="se">Second Year</option>
-								<option value="te">Third Year</option>
-								<option value="be">Final Year</option>
-								<option value="all">All</option>
-							</select>
-						</div>
-						<div class="column">
-							<label for="div">Division</label>
-							<select id="division" name="division" required >
-								<option value="A">A</option>
-								<option value="B">B</option>
-								<option value="C">C</option>
-								<option value="D">D</option>
-								<option value="E">E</option>
-								<option value="all">All</option>
-							</select>
-							
-						</div>
-						<button type="submit" class="attendance-button">Submit</button>
-						
-					</div>   
-					
-					
-						  
-				</form>
-	  
-		</div>
-		
-			<div class="card">
-			
-		
-				<table>
-					<tr>
-						<th>Roll No.</th>
-						<th>Name</th>
-						<th>Attendance</th>
-						<th id="view">  View</th>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-					<tr>
-						<td>1</td>
-						<td>Samee Shaikh</td>
-						<td>100%</td>
-						<td > <a href="" class="view">View</a> </td>
-					</tr>
-
-					<!-- Add more rows as needed -->
-				</table>
-				
-			</div>
-			
-		</div>
-
-</div>
-
-</section>
-<style>
-	/* Courses */
+<head>
+	{% block  style %}
+	<style>
+		/* Courses */
 .main-course{
 margin-top:20px ;
 text-transform: capitalize;
@@ -321,13 +82,206 @@ float: right;
 margin: -20px 20px 20px 0;
 }
 
-</style>
+	</style>
+	{% endblock %}
+	<title>TAE</title>
+</head>
 
-</section>
+<body>
 
 
-</main>
 
-</section>
-<!-- CONTENT -->
-{% endif %}
+
+
+	<!-- CONTENT -->
+	<section id="content">
+
+
+		<!-- MAIN -->
+		
+			{% block content %}
+			<div class="head-title">
+				<div class="left">
+					<h1>Academics</h1>
+					<ul class="breadcrumb">
+						<li>
+							<a href="#">Academics</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="#">Attendance</a>
+						</li>
+						<li><i class='bx bx-chevron-right'></i></li>
+						<li>
+							<a class="active" href="./green.html">GreenBook</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+			<section class="main-course">
+				<div class="container">
+					<div class="card">
+						<h2>Attendance Search</h2>
+						<div class="container">
+							<form action="/submit_form" method="post">
+								
+								<div class="row" style="width: 100%; display: flex;">
+									<div class="column">
+										<label for="div">Department:</label>
+										<select id="division" name="division" required>
+											<option value=""> None</option>
+											<option value="comp">Computer Eng.</option>
+											<option value="itdept">IT Department</option>
+											<option value="me">Mechanical Department</option>
+											<option value="entc">EnTC Department</option>
+											<option value="civil">Civil Department</option>
+											<option value="all">All</option>
+										</select>
+									</div>
+									<div class="column">
+										<label for="div">Year:</label>
+										<input type="month" name="year"  placeholder="YYYY" min="1999" max="2050"  id="year">
+										
+									</div>
+									<div class="column">
+										<label for="div">Academic Year:</label>
+										<select id="division" name="division" required >
+											<option value=""> None</option>
+											<option value="fe">First year</option>
+											<option value="se">Second Year</option>
+											<option value="te">Third Year</option>
+											<option value="be">Final Year</option>
+											<option value="all">All</option>
+										</select>
+									</div>
+									<div class="column">
+										<label for="div">Division</label>
+										<select id="division" name="division" required >
+											<option value="A">A</option>
+											<option value="B">B</option>
+											<option value="C">C</option>
+											<option value="D">D</option>
+											<option value="E">E</option>
+											<option value="all">All</option>
+										</select>
+										
+									</div>
+									<button type="submit" class="attendance-button">Submit</button>
+									
+								</div>   
+								
+								
+								      
+							</form>
+				  
+					</div>
+					
+						<div class="card">
+						
+					
+							<table>
+								<tr>
+									<th>Roll No.</th>
+									<th>Name</th>
+									<th>Attendance</th>
+									<th id="view">  View</th>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+								<tr>
+									<td>1</td>
+									<td>Samee Shaikh</td>
+									<td>100%</td>
+									<td > <a href="" class="view">View</a> </td>
+								</tr>
+		
+								<!-- Add more rows as needed -->
+							</table>
+							
+						</div>
+						
+					</div>
+		  
+			</div>
+
+			</section>
+			
+	</section>
+{% endblock %}
+
+
+
+	</section>
+	<!-- CONTENT -->
+	
+
+
+	<script src="assets/script/script.js"></script>
+
+</body>
+
+</html>

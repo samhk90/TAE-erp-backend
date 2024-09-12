@@ -1,3 +1,4 @@
+
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
@@ -11,7 +12,7 @@
     <!-- My CSS -->
     <link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
     <link rel="stylesheet" href="{% static 'dailylog.css' %}">
-    <title>Daily Logs</title>
+    <title>TAE</title>
 	<style>
 		
         /* Style for the form container */
@@ -76,71 +77,70 @@
 
     <!-- SIDEBAR -->
     <section id="sidebar">
-        <a href="#" class="brand">
-            <span class="text"><img src="{% static 'assets/img/tae-logo.png' %}" height="100px" alt=""></span>
-        </a>
-        <ul class="side-menu top">
-            <li>
-                <a href="/">
-                    <i class='bx bxs-dashboard'></i>
-                    <span class="text">Dashboard</span>
-                </a>
-            </li>
-            {% if teacher1 %}
-            <li>
-                <a href="academics">
-                    <i class='bx bxs-calendar-star'></i>
-                    <span class="text">Academics</span>
-                </a>
-            </li>
-            {% else %}
-            <li class="active">
-                <a href="logs">
-                    <i class='bx bxs-calendar-star'></i>
-                    <span class="text">Daily Logs</span>
-                </a>
-            </li>
-            {% endif %}
-            <li>
-                <a href="notices">
-                    <i class='bx bxs-doughnut-chart'></i>
-                    <span class="text">Notices</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-message-dots'></i>
-                    <span class="text">Time Table</span>
-                </a>
-            </li>
-            <li>
-                <a href="#">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Leaves</span>
-                </a>
-            </li>
-            <li>
-                <a href="students">
-                    <i class='bx bxs-group'></i>
-                    <span class="text">Student Info</span>
-                </a>
-            </li>
-        </ul>
-        <ul class="side-menu">
-            <li>
-                <a href="#">
-                    <i class='bx bxs-cog'></i>
-                    <span class="text">Settings</span>
-                </a>
-            </li>
-            <li>
-                <a href="logout" class="logout">
-                    <i class='bx bxs-log-out-circle'></i>
-                    <span class="text">Logout</span>
-                </a>
-            </li>
-        </ul>
-    </section>
+		<a href="#" class="brand">
+			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
+		</a>
+		<ul class="side-menu top">
+			<li class="active">
+				<a href="/">
+					<i class='bx bxs-dashboard'></i>
+					<span class="text">Dashboard</span>
+				</a>
+			</li>
+			<li>
+				<a href="logs">
+					<i class='bx bxs-calendar-star'></i>
+					<span class="text">Daily Logs</span>
+				</a>
+			</li>
+			<li>
+				<a href="notices">
+					<i class='bx bxs-doughnut-chart'></i>
+					<span class="text">Notices</span>
+				</a>
+			</li>
+			<!-- <li>
+				<a href="timetable">
+					<i class='bx bxs-message-dots'></i>
+					<span class="text">Time Table</span>
+				</a>
+			</li>
+			<li>
+				<a href="leaves">
+					<i class='bx bxs-group'></i>
+					<span class="text">Leaves</span>
+				</a>
+			</li>
+
+			<li>
+				<a href="sub_allocation.html">
+					<i class='bx bx-chalkboard'></i>
+					<span class="text">Faculty</span>
+				</a>
+			</li> -->
+
+			<li>
+				<a href="students">
+					<i class='bx bxs-group'></i>
+					<span class="text">Student Info</span>
+				</a>
+			</li>
+		</ul>
+		<ul class="side-menu">
+			<li>
+				<a href="#">
+					<i class='bx bxs-cog'></i>
+					<span class="text">Settings</span>
+				</a>
+			</li>
+			<li>
+				<a href="logout" class="logout">
+					<i class='bx bxs-log-out-circle'></i>
+					<span class="text">Logout</span>
+				</a>
+			</li>
+		</ul>
+	</section>
     <!-- SIDEBAR -->
 
     <!-- CONTENT -->
@@ -173,25 +173,32 @@
                 </div>
             </div>
             <div class="card">
-				<form method="post" class="filter-form">
-					{% csrf_token %}
-					<label for="attendance_date">Select Date:</label>
-					<input type="date" id="attendance_date" name="attendance_date" value="{{ selected_date|date:'Y-m-d' }}">
-
-					{% if classteacher %}
-					<label for="subject">Select Subject:</label>
-					<select id="subject" name="subject">
-						<option value="">All Subjects</option>
-						{% for subject in subjects %}
-							<option value="{{ subject.SubjectID }}" {% if selected_subject == subject.SubjectID %}selected{% endif %}>
-								{{ subject.SubjectName }}
-							</option>
-						{% endfor %}
-					</select>
-					{% endif %}
-
-					<button type="submit">Filter</button>
-				</form>
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Start Date Input -->
+                <label for="start_date">From:</label>
+                <input type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}">
+                
+                <!-- End Date Input -->
+                <label for="end_date">To:</label>
+                <input type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}">
+                
+                {% if classteacher %}
+                <!-- Subject Selection Dropdown -->
+                <select name="subject" style="width: 200px;">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.SubjectID }}" {% if subject.SubjectID == selected_subject %}selected{% endif %}>
+                        {{ subject.SubjectName }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                
+                <button type="submit">Filter</button>
+            </form>
+        
 
                 <div class="wrapper flex">
                     <div class="projects">

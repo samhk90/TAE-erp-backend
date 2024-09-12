@@ -340,7 +340,8 @@ def attendance_form(request):
                 Timefrom=time_from,
                 SubjectID=subject,
                 SubjectName=subject.SubjectName,
-                Status=is_present
+                Status=is_present,
+                ClassID=Classes.objects.get(ClassID=selected_class)
             ))
 
         Attendance.objects.bulk_create(attendance_records)
@@ -485,7 +486,7 @@ def logs(request):
     # Get start and end dates from the POST request
     start_date_str = request.POST.get('start_date')
     end_date_str = request.POST.get('end_date')
-    
+
     # Default dates to today if not provided
     start_date = today if not start_date_str else timezone.datetime.strptime(start_date_str, "%Y-%m-%d").date()
     end_date = today if not end_date_str else timezone.datetime.strptime(end_date_str, "%Y-%m-%d").date()
@@ -499,13 +500,13 @@ def logs(request):
         role = ClassTeacherAssignment.objects.filter(TeacherID=teacher.Teacherid).first()
         if role and role.RoleID.RoleName == 'Classteacher':
             classteacher = True
-            class_id = role.ClassID.ClassID
+            class_id = role.ClassID.ClassID  # Get the class ID assigned to the class teacher
 
     # Get subjects only if the teacher is a class teacher
     subjects = []
     if classteacher:
         subjects = Subject.objects.filter(
-            CurrentClassID=class_id
+            CurrentClassID=class_id  # Only show subjects for the assigned class
         ).order_by('SubjectName')
 
     # Base query for attendance records within the date range
@@ -514,17 +515,13 @@ def logs(request):
     )
 
     if classteacher:
+        # Ensure that the attendance records are filtered by the specific class ID assigned to the teacher
+        attendance_records = attendance_records.filter(ClassID=class_id)
+
         if selected_subject:
-            # Filter by specific subject if selected
-            attendance_records = attendance_records.filter(
-                SubjectID=selected_subject,
-                ClassID=class_id
-            )
-        else:
-            # Filter by class ID if no specific subject is selected
-            attendance_records = attendance_records.filter(
-                ClassID=class_id
-            )
+            # Further filter by specific subject if selected
+            attendance_records = attendance_records.filter(SubjectID=selected_subject)
+
     elif teacher.RoleID.RoleName == 'Principal':
         # For principals, no further filtering needed
         attendance_records = attendance_records.all()
