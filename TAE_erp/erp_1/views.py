@@ -21,6 +21,10 @@ def index(request):
         timefrom="09:15 am"
         timeto='10:15 am'
         attendance_records = Attendance.objects.filter(ClassID__DepartmentID=department,Date=today,Timefrom=timefrom,Timeto=timeto).distinct()
+        if attendance_records: attendance_records=attendance_records
+        else:
+            timeto='11:15 am'
+            attendance_records=Attendance.objects.filter(ClassID__DepartmentID=department,Date=today,Timefrom=timefrom,Timeto=timeto).distinct()
         present_count = attendance_records.filter(ClassID__DepartmentID=department,Status=True).count()
         absent_count = attendance_records.filter(ClassID__DepartmentID=department,Status=False).count()
         total_count = Student.objects.filter(CurrentClassID__DepartmentID=department).count()
@@ -30,13 +34,14 @@ def index(request):
             attendance_percentage = 0 
         email=request.session.get('teacher_email')
         teacher=Teacher.objects.get(Email=email)
+        print(attendance_percentage)
         context = {
         'teacher':teacher,
         'present': present_count,
         'absent': absent_count,
         'total':total_count,
         'attendance_percentage': attendance_percentage,
-    }
+    }   
         return render(request,'index.html',context)
     elif  role.RoleName=='Principal':
         today=date.today()
@@ -470,15 +475,20 @@ from django.utils import timezone
 from django.db.models import Count, Q
 from django.shortcuts import get_object_or_404, render
 from .models import Teacher, ClassTeacherAssignment, Subject, Attendance
-
 @supabase_login_required
 def logs(request):
     email = request.session.get('teacher_email')
     teacher = get_object_or_404(Teacher, Email=email)
 
     today = timezone.now().date()
-    selected_date_str = request.POST.get('attendance_date')
-    selected_date = today if not selected_date_str else timezone.datetime.strptime(selected_date_str, "%Y-%m-%d").date()
+
+    # Get start and end dates from the POST request
+    start_date_str = request.POST.get('start_date')
+    end_date_str = request.POST.get('end_date')
+    
+    # Default dates to today if not provided
+    start_date = today if not start_date_str else timezone.datetime.strptime(start_date_str, "%Y-%m-%d").date()
+    end_date = today if not end_date_str else timezone.datetime.strptime(end_date_str, "%Y-%m-%d").date()
 
     selected_subject = request.POST.get('subject')
 
@@ -498,8 +508,10 @@ def logs(request):
             CurrentClassID=class_id
         ).order_by('SubjectName')
 
-    # Base query for attendance records
-    attendance_records = Attendance.objects.select_related('SubjectID', 'ClassID').filter(Date=selected_date)
+    # Base query for attendance records within the date range
+    attendance_records = Attendance.objects.select_related('SubjectID', 'ClassID').filter(
+        Date__range=(start_date, end_date)
+    )
 
     if classteacher:
         if selected_subject:
@@ -514,11 +526,11 @@ def logs(request):
                 ClassID=class_id
             )
     elif teacher.RoleID.RoleName == 'Principal':
-        # For principals, just filter by date
-        attendance_records = attendance_records.all()  # Remove ClassID filter
+        # For principals, no further filtering needed
+        attendance_records = attendance_records.all()
 
     else:
-        # For other cases, filter attendance records by subjects assigned to the teacher
+        # For other roles, filter attendance records by subjects assigned to the teacher
         assigned_subjects = Subject.objects.filter(
             teachersubjectassignment__TeacherID=teacher
         ).values_list('SubjectID', flat=True)
@@ -528,6 +540,7 @@ def logs(request):
 
     # Annotate the attendance records with counts
     attendance_records = attendance_records.values(
+        'Date',  # Include the Date field here
         'Timefrom',
         'Timeto',
         'SubjectID__SubjectName',
@@ -539,12 +552,13 @@ def logs(request):
         student_count=Count('StudentID'),
         present_count=Count('StudentID', filter=Q(Status=True)),
         absent_count=Count('StudentID', filter=Q(Status=False))
-    ).order_by('Timefrom', 'Timeto')
+    ).order_by('Date', 'Timefrom', 'Timeto')
 
     context = {
         'attendance_records': attendance_records,
         'teacher': teacher,
-        'selected_date': selected_date,
+        'start_date': start_date,
+        'end_date': end_date,
         'classteacher': classteacher,
         'selected_subject': selected_subject,
         'subjects': subjects,

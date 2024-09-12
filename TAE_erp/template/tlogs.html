@@ -129,66 +129,74 @@
                 </ul>
             </div>
         </div>
-
-<div class="card">
-    <form method="POST">
-        {% csrf_token %}
-        <input type="date" name="attendance_date" value="{{ selected_date|date:'Y-m-d' }}">
-        {% if classteacher %}
-        <select name="subject" style="width: 200px;">
-            <option value="">All Subjects</option>
-            {% for subject in subjects %}
-            <option value="{{ subject.SubjectID }}">
-                {{ subject.SubjectName }}
-            </option>
-            {% endfor %}
-        </select>
-        {% endif %}
-        <button type="submit">Filter</button>
-    </form>
-    
-    
-
-    <table>
-        <thead>
-            <tr>
-                <th>Sr. No.</th>
-                <th>Date</th>
-                <th>Time Slot</th>
-                <th>Day</th>
-                <th>Department</th>
-                <th>Year</th>
-                <th>Subject</th>
-                <th>Present</th>
-                <th>Absent</th>
-                <th>See</th>
-                <th>Download</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for record in attendance_records %}
-            <tr>
-                <td>{{ forloop.counter }}</td>
-                <td>{{ selected_date|date:"d/m/Y" }}</td>
-                <td>{{ record.Timefrom }} - {{ record.Timeto }}</td>
-                <td>{{ selected_date|date:"l" }}</td>
-                <td>{{ record.SubjectID__SubjectDepartment }}</td>
-                <td>{{ record.SubjectID__SubjectYear }}</td>
-                <td>{{ record.SubjectID__SubjectName }}</td>
-                <td class="present">{{ record.present_count }}</td>
-                <td class="absent">{{ record.absent_count }}</td>
-                <td><a href="./dailylogs2.html"><i class="fa-solid fa-eye" style="color:#5ca7f1;"></i></a></td>
-                <td><a href="###"><i class="fa-solid fa-download" style="color:#5ca7f1;"></i></a></td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="11">No records available for the selected date.</td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-</div>
-
+        <div class="card">
+            <form method="POST">
+                {% csrf_token %}
+                
+                <!-- Start Date Input -->
+                <label for="start_date">From:</label>
+                <input type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}">
+                
+                <!-- End Date Input -->
+                <label for="end_date">To:</label>
+                <input type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}">
+                
+                {% if classteacher %}
+                <!-- Subject Selection Dropdown -->
+                <select name="subject" style="width: 200px;">
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.SubjectID }}" {% if subject.SubjectID == selected_subject %}selected{% endif %}>
+                        {{ subject.SubjectName }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                
+                <button type="submit">Filter</button>
+            </form>
+        
+            <table>
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>Date</th> <!-- Displaying Date Range -->
+                        <th>Time Slot</th>
+                        <th>Day</th>
+                        <th>Department</th>
+                        <th>Year</th>
+                        <th>Subject</th>
+                        <th>Present</th>
+                        <th>Absent</th>
+                        <th>See</th>
+                        <th>Download</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for record in attendance_records %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ record.Date }}</td> <!-- Adjust this line if Date is directly in the record -->
+                        <td>{{ record.Timefrom }} - {{ record.Timeto }}</td>
+                        <td>{{ record.Date|date:"l" }}</td>
+                        <td>{{ record.SubjectID__SubjectDepartment }}</td>
+                        <td>{{ record.SubjectID__SubjectYear }}</td>
+                        <td>{{ record.SubjectID__SubjectName }}</td>
+                        <td class="present">{{ record.present_count }}</td>
+                        <td class="absent">{{ record.absent_count }}</td>
+                        <td><a href="./dailylogs2.html"><i class="fa-solid fa-eye" style="color:#5ca7f1;"></i></a></td>
+                        <td><a href="###"><i class="fa-solid fa-download" style="color:#5ca7f1;"></i></a></td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="11">No records available for the selected date range.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        
+        
         {% endblock %}
     </section>
 
