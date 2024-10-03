@@ -16,6 +16,7 @@ urlpatterns = [
     path('greenbook',views.greenbook,name='greenbook'),
     path('logs',views.logs,name='logs'),
     path('history',views.history,name='history'),
+    path('report',views.report,name='report'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
     
 

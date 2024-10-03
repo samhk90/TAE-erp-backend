@@ -1,0 +1,246 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TAE</title>
+    {% block style %}
+    <link rel="stylesheet" href="{% static '/assets/style/formstyle.css' %}">
+    <style>
+        .container {
+            width: 100%; 
+            height: 100%;
+            display: block;
+            align-items: center;
+            margin: auto;
+        }
+        .form-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .form-container input,
+        .form-container select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-container button {
+            background-color: #3c91e6c2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #337ab7;
+        }
+
+        .container {
+            margin-top: 30px;
+            padding: 15px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table thead th {
+            background-color: #3c91e6c2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .download-btn {
+            background-color: #3c91e6c2;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #337ab7;
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+    <div class="head-title">
+        <div class="left">
+            <ul class="breadcrumb">
+                <li>
+                    <a class="active" href="academics">Attendance</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+                <li>
+                    <a href="greenbook">GreenBook</a>
+                </li>
+                <li><i class='bx bx-chevron-right'></i></li>
+            </ul>
+        </div>
+    </div>
+
+    <section id="mySection">
+        <div class="form-container">
+            <form method="POST">
+                {% csrf_token %}
+                <div class="d-flex flex-row " style="display: flex; flex-direction:row;">
+                <label style="margin:auto" for="start_date">From:</label>
+                <input style="margin:auto"  type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}">
+
+                <label style="margin-left:10px;" for="end_date">To:</label>
+                <input style="margin:auto" type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}">
+
+                </div>
+                <label for="subject">Subject:</label>
+                <select name="subject" style="width: 200px;" required>
+                    <option value="">All Subjects</option>
+                    {% for subject in subjects %}
+                    <option value="{{ subject.SubjectID }}" {% if subject.SubjectID == selected_subject %}selected{% endif %}>
+                        {{ subject.SubjectName }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <label for="class">Class:</label>
+                <select name="class" style="width: 200px;" required>
+                    <option value="">All Classes</option>
+                    {% for class in classes %}
+                    <option value="{{ class.ClassID }}" {% if class.ClassID == selected_class %}selected{% endif %}>
+                        {{ class.ClassName }}
+                    </option>
+                    {% endfor %}
+                </select>
+
+                <button type="submit">Generate Report</button>
+            </form>
+        </div>
+
+        <div class="container">
+            <button id="downloadBtn" class="btn btn-primary download-btn">Download as CSV</button>
+            <table id="attendanceTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Roll No</th>
+                        <th>Name of Student</th>
+                        {% for subject in subjects %}
+                            {% if subject.SubjectID|stringformat:"s" == selected_subject|stringformat:"s" %}
+                                <th>{{ subject.SubjectName }}</th>
+                            {% endif %}
+                        {% endfor %}
+                        <th>Total Lectures Conducted</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in attendance_data %}
+                        <tr>
+                            <td>{{ data.student.RollNo }}</td>
+                            <td>{{ data.student.FirstName }} {{ data.student.LastName }}</td>
+            
+                            {# Loop through subjects to display attendance #}
+                            
+                                <td>
+                                    
+                        
+                                    {# Check if attendance data exists for the current subject #}
+                                    {% for record in data.attendance %}
+                                            {{ record.attended_count }} / {{ record.total_lectures }}
+                                        
+                                    {% endfor %}
+                                
+                                </td>
+                            
+            
+                            {# Total attendance for the student #}
+                            <td>{{ data.total_attended }}</td>
+            
+                            {# Percentage of attendance #}
+                            <td>{{ data.average_percentage|floatformat:2 }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+        </div>
+    </section>
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function () {
+            var table = document.getElementById('attendanceTable');
+            var rows = Array.from(table.querySelectorAll('tr'));
+
+            var csv = [];
+            rows.forEach(function (row) {
+                var cols = Array.from(row.querySelectorAll('th, td')).map(function (cell) {
+                    return cell.innerText.replace(/\//g, '\\/').replace(/,/g, ''); 
+                });
+                csv.push(cols.join(','));
+            });
+
+            var csvString = csv.join('\n');
+            var blob = new Blob([csvString], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'attendance_data.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+    <script>
+        function checkClassSelection() {
+            var classSelect = document.getElementById("classSelect").value;
+            if (classSelect === "") {
+                alert("Please select a class.");
+            }
+        }
+        </script>
+    {% endblock %}
+</body>
+
+</html>

@@ -10,63 +10,79 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q
 from .models import Teacher, ClassTeacherAssignment, Student, Attendance
 from datetime import date
+
 @supabase_login_required
 def index(request):
-    email=request.session.get('teacher_email')
-    role=Teacher.objects.get(Email=email).RoleID
-    if role.RoleName=='Teacher':
-        department=Teacher.objects.get(Email=email)
-        department=department.DepartmentID
-        today=date.today()
-        timefrom="09:15 am"
-        timeto='10:15 am'
-        attendance_records = Attendance.objects.filter(ClassID__DepartmentID=department,Date=today,Timefrom=timefrom,Timeto=timeto).distinct()
-        if attendance_records: attendance_records=attendance_records
-        else:
-            timeto='11:15 am'
-            attendance_records=Attendance.objects.filter(ClassID__DepartmentID=department,Date=today,Timefrom=timefrom,Timeto=timeto).distinct()
-        present_count = attendance_records.filter(ClassID__DepartmentID=department,Status=True).count()
-        absent_count = attendance_records.filter(ClassID__DepartmentID=department,Status=False).count()
+    email = request.session.get('teacher_email')
+    today = date.today()
+    timefrom = "09:15 am"
+    timeto = "10:15 am"
+    try:
+        teacher = Teacher.objects.select_related('RoleID', 'DepartmentID').get(Email=email)
+        role = teacher.RoleID.RoleName
+    except Teacher.DoesNotExist:
+        return render(request, 'index.html', {'error_message': 'Teacher not found'})
+    if role == 'Teacher':
+        department = teacher.DepartmentID
+        attendance_records = Attendance.objects.filter(
+            ClassID__DepartmentID=department, Date=today, Timefrom=timefrom, Timeto=timeto
+        ).distinct()
+        if not attendance_records.exists():
+            timeto = '11:15 am'
+            attendance_records = Attendance.objects.filter(
+                ClassID__DepartmentID=department, Date=today, Timefrom=timefrom, Timeto=timeto
+            ).distinct()
+        attendance_summary = attendance_records.values('ClassID__DepartmentID').annotate(
+            present_count=Count('Status', filter=Q(Status=True)),
+            absent_count=Count('Status', filter=Q(Status=False))
+        ).order_by('AttendanceID').first()
+
+        present_count = attendance_summary['present_count'] if attendance_summary else 0
+        absent_count = attendance_summary['absent_count'] if attendance_summary else 0
         total_count = Student.objects.filter(CurrentClassID__DepartmentID=department).count()
-        if total_count > 0:
-            attendance_percentage = (present_count / total_count) * 100
-        else:
-            attendance_percentage = 0 
-        email=request.session.get('teacher_email')
-        teacher=Teacher.objects.get(Email=email)
-        print(attendance_percentage)
+
+        attendance_percentage = (present_count / total_count) * 100 if total_count > 0 else 0
+
         context = {
-        'teacher':teacher,
-        'present': present_count,
-        'absent': absent_count,
-        'total':total_count,
-        'attendance_percentage': attendance_percentage,
-    }   
-        return render(request,'index.html',context)
-    elif  role.RoleName=='Principal':
-        today=date.today()
-        timefrom="09:15 am"
-        timeto='10:15 am'
-        attendance_records = Attendance.objects.filter(Timefrom=timefrom,Timeto=timeto,Date=today).distinct()
-        present_count = attendance_records.filter(Status=True).count()
-        absent_count = attendance_records.filter(Status=False).count()
+            'teacher': teacher,
+            'present': present_count,
+            'absent': absent_count,
+            'total': total_count,
+            'attendance_percentage': attendance_percentage,
+        }
+        return render(request, 'index.html', context)
+
+    elif role == 'Principal':
+        attendance_records = Attendance.objects.filter(
+             Date=today, Timefrom=timefrom, Timeto=timeto
+        ).distinct()
+        if not attendance_records.exists():
+            timeto = '11:15 am'
+            attendance_records = Attendance.objects.filter(
+                 Date=today, Timefrom=timefrom, Timeto=timeto
+            ).distinct()
+        attendance_summary = attendance_records.values('ClassID__DepartmentID').annotate(
+            present_count=Count('Status', filter=Q(Status=True)),
+            absent_count=Count('Status', filter=Q(Status=False))
+        ).order_by('AttendanceID').first()
+
+        present_count = attendance_summary['present_count'] if attendance_summary else 0
+        absent_count = attendance_summary['absent_count'] if attendance_summary else 0
         total_count = Student.objects.all().count()
-        if total_count > 0:
-            attendance_percentage = (present_count / total_count) * 100
-        else:
-            attendance_percentage = 0 
-        email=request.session.get('teacher_email')
-        teacher=Teacher.objects.get(Email=email)
+
+        attendance_percentage = (present_count / total_count) * 100 if total_count > 0 else 0
+
         context = {
-        'teacher':teacher,
-        'present': present_count,
-        'absent': absent_count,
-        'total':total_count,
-        'attendance_percentage': attendance_percentage,
-    }
-        return render(request,'index.html',context)
-    return render(request, 'index.html',{'role':role})
-# Inspect the 'auth' attribute of the client
+            'teacher': teacher,
+            'present': present_count,
+            'absent': absent_count,
+            'total': total_count,
+            'attendance_percentage': attendance_percentage,
+        }
+        return render(request, 'index.html', context)
+
+    return render(request, 'index.html', {'role': role})
+
 
 def login(request):
     if request.method == 'POST':
@@ -159,6 +175,7 @@ def student(request):
                     mobile_number = row['mobile_number']
                     RollNumber=row['rollnumber']
                     classid=row['classid']
+                    
                     try:
                         # Sign up user with Supabase
                         sign_up_response = supabase.auth.sign_up({
@@ -415,6 +432,92 @@ def students(request):
         return render(request, 'students.html', context)
 
     return render(request, 'students.html', {'year': year, 'department': department,'teacher':teacher})
+
+from django.shortcuts import render, get_object_or_404
+from .models import Teacher, ClassTeacherAssignment, Student, Attendance, Subject, Classes
+from django.db.models import Count, Q
+from django.utils import timezone
+
+@supabase_login_required
+def report(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
+    subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
+
+        # Filter subjects based on the selected class and the subject IDs from the assignments
+    subjects = Subject.objects.filter(SubjectID__in=subject_ids)
+    class_ids = Subject.objects.filter(SubjectID__in=subject_ids).values_list('CurrentClassID', flat=True).distinct()
+        
+        # Fetch the classes using the class IDs
+    assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
+    if request.method == 'POST':
+        start_date = request.POST.get('start_date')
+        end_date = request.POST.get('end_date')
+        selected_subject = request.POST.get('subject')
+        selected_class = request.POST.get('class')
+        selected_class=Classes.objects.get(ClassID=selected_class)
+    # Get students in the assigned class
+        students = Student.objects.filter(CurrentClassID=selected_class).order_by('RollNumber')
+        
+    # Initialize attendance data list
+        attendance_data = []
+        subjects_set = set()
+        if start_date and end_date:
+            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d').date()
+        else:
+            start_date = None
+            end_date = None
+
+        attendance_data = []
+        subjects_set = set()
+        for student in students:
+            student_attendance = Attendance.objects.filter(
+        StudentID=student.StudentID,
+        SubjectID=selected_subject,
+        Date__range=(start_date, end_date)  # Filter by date range
+    ).values('SubjectID', 'SubjectName').annotate(
+        attended_count=Count('AttendanceID', filter=Q(Status=True)),
+        total_lectures=Count('Date')
+    )
+            for record in student_attendance:
+                subjects_set.add(record['SubjectName'])
+            total_attended = sum([subject['attended_count'] for subject in student_attendance])
+            total_conducted = sum([subject['total_lectures'] for subject in student_attendance])
+            average_percentage = (total_attended / total_conducted) * 100 if total_conducted > 0 else 0
+
+            attendance_data.append({
+            'student': {
+                'RollNo': student.RollNumber,
+                'FirstName': student.FirstName,
+                'LastName': student.LastName,
+            },
+            'attendance': list(student_attendance),
+            'total_attended': total_attended,
+            'average_percentage': average_percentage,
+        })
+    
+    
+        subjects_list = sorted(list(subjects_set))
+        context = {
+        'teacher': teacher,
+        'attendance_data': attendance_data,
+        'subjects': subjects,
+        'classes': assigned_classes,
+        'start_date': start_date,
+        'end_date': end_date,
+        'selected_subject': selected_subject,
+        'selected_class': selected_class,
+    }
+        return render(request, 'attendance_report.html', context)
+    # Render the template with the context data
+    context = {
+        'teacher': teacher,
+        'subjects': subjects,
+        'classes': assigned_classes,
+    }
+    return render(request, 'attendance_report.html', context)
 
 @supabase_login_required
 def notices(request):
