@@ -182,31 +182,9 @@
 				<p>Loading...</p>
 			</div>
 		</div>
-			<div class="head-title">
-				<div class="left">
-					<h1>Academics</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a class="" href="academics">Attendance</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						{% if is_classteacher %}
-						<li>
-							<a class="active" href="greenbook">GreenBook</a>
-						</li>
-						<li></li>
-							<a class="active" href="report">Report</a>
-						</li>
-						{% endif %}
-						<!-- <li><i class='bx bx-chevron-right'></i></li>
-						<li>
-							<a href="history">History</a>
-						</li> -->
-					</ul>
-				</div>
-			</div>
+
 			<section class="main-course">
-				<h1>Subjects</h1><form method="post">
+				<form method="post">
 					{% csrf_token %}
 				<div class="box2">
 					

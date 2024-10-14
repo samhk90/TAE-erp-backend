@@ -520,6 +520,25 @@ def report(request):
     return render(request, 'attendance_report.html', context)
 
 @supabase_login_required
+def preacademic(request):
+    email=request.session.get('teacher_email')
+    teacher=Teacher.objects.get(Email=email)
+    classteacher = False
+
+    try:
+        assignment = ClassTeacherAssignment.objects.get(TeacherID=teacher.Teacherid)
+        role = assignment.RoleID
+        if role.RoleName == 'Classteacher':
+            classteacher = True
+    except ClassTeacherAssignment.DoesNotExist:
+        # Handle case when no assignment is found, defaulting to classteacher=False
+        classteacher = False
+    context={
+        'teacher': teacher,
+        'classteacher':classteacher
+    }
+    return render(request,'preacademic.html',context)
+@supabase_login_required
 def notices(request):
     allnotices= Notices.objects.order_by('-date')
     email=request.session.get('teacher_email')

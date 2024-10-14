@@ -522,8 +522,8 @@ body {
                     <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/academics' %}active{% endif %}">
-                <a href="{% url 'academics' %}">
+            <li class="{% if request.path == '/preacademic' or request.path == '/academics' or request.path == '/greenbook' or request.path == '/report' or request.path == '/attendance_form' %}active{% endif %}">
+                <a href="{% url 'preacademic' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Academics</span>
                 </a>
@@ -537,15 +537,10 @@ body {
             <li class="{% if request.path == '/timetable' %}active{% endif %}">
                 <a href="{% url 'index' %}">
                     <i class='bx bxs-message-dots'></i>
-                    <span class="text">Time Table</span>
-                </a>
-            </li>
-            <li class="{% if request.path == '/leaves' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-group'></i>
                     <span class="text">Leaves</span>
                 </a>
             </li>
+
             <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
                 <a href="{% url 'logs' %}">
                     <i class='bx bx-calendar-check'></i>
@@ -601,25 +596,7 @@ body {
 
 		<!-- MAIN -->
 		<main>
-			<div class="head-title">
-				<div class="left">
-					<h1>Academics</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a  href="academics">Attendance</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>
-						{% if is_classteacher %}
-						<li>
-							<a  class="active" href="greenbook">GreenBook</a>
-						</li>
-						<li><i class='bx bx-chevron-right'></i></li>{% endif %}
-						<!-- <li>
-							<a class="" href="history">History</a>
-						</li> -->
-					</ul>
-				</div>
-			</div>
+
 			<div class="card">
 				<h2>Attendance Search</h2>
 				<div class="container">
@@ -701,19 +678,16 @@ body {
 							<th>Roll No.</th>
 							<th>Attendance</th>
 							<th>Name</th>
-							<th>Attendance</th>
-							<th id="view">  View</th>
 						</tr>
 						{% for student in students %}
 						<tr>
 							<td>{{student.RollNumber}}</td>
 							<td>
-								<input type="checkbox" name="is_present_{{ student.StudentID }}" id="is_present_{{ student.StudentID }}">
+								<input type="checkbox" name="is_present_{{ student.StudentID }}" id="is_present_{{ student.StudentID }}" style="transform: scale(1.5);">
            
 							</td>
 							<td>{{student.FirstName}} {{student.LastName}}</td>
-							<td>100%</td>
-							<td > <a href="" class="view">View</a> </td>
+							
 						</tr>
 						{% endfor %}
 					</table>

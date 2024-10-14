@@ -17,6 +17,7 @@ urlpatterns = [
     path('logs',views.logs,name='logs'),
     path('history',views.history,name='history'),
     path('report',views.report,name='report'),
+    path('preacademic',views.preacademic,name='preacademic'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
     
 

@@ -12,12 +12,10 @@
     <link rel="stylesheet" href="{%static '/assets/style/formstyle.css' %}">
     <link rel="stylesheet" href="{% static 'assets/style/history.css' %}">
     <link rel="stylesheet" href="{% static 'assets/style/students.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/style/dailylog.css' %}">
+    <!-- <link rel="stylesheet" href="{% static 'assets/style/dailylog.css' %}"> -->
     <link rel="stylesheet" href="{% static 'assets/style/notice.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/style/history.css' %}">
-    <link rel="stylesheet" href="{% static 'assets/style/students.css' %}">
     <style>
         .loader {
             position: fixed;
@@ -86,8 +84,8 @@
                     <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/academics' %}active{% endif %}">
-                <a href="{% url 'academics' %}">
+            <li class="{% if request.path == '/preacademic' or request.path == '/academics' or request.path == '/greenbook' or request.path == '/report' or request.path == '/attendance_form' %}active{% endif %}">
+                <a href="{% url 'preacademic' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Academics</span>
                 </a>
@@ -98,15 +96,9 @@
                     <span class="text">Notices</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/timetable' %}active{% endif %}">
-                <a href="{% url 'index' %}">
-                    <i class='bx bxs-message-dots'></i>
-                    <span class="text">Time Table</span>
-                </a>
-            </li>
             <li class="{% if request.path == '/leaves' %}active{% endif %}">
                 <a href="{% url 'index' %}">
-                    <i class='bx bxs-group'></i>
+                    <i class='bx bxs-message-dots'></i>
                     <span class="text">Leaves</span>
                 </a>
             </li>
@@ -240,21 +232,21 @@
     <script>
         document.addEventListener("DOMContentLoaded", function () {
             var loader = document.getElementById('loader');
-
+    
             // Function to show the loader
             function showLoader() {
                 if (loader) {
                     loader.style.display = 'flex';
                 }
             }
-
+            
             // Function to hide the loader
             function hideLoader() {
                 if (loader) {
                     loader.style.display = 'none';
                 }
             }
-
+    
             // Show loader on form submit
             var forms = document.querySelectorAll('form');
             forms.forEach(function (form) {
@@ -262,7 +254,7 @@
                     showLoader();
                 });
             });
-
+    
             // Show loader on link click
             var links = document.querySelectorAll('a[href]');
             links.forEach(function (link) {
@@ -273,13 +265,30 @@
                     }
                 });
             });
-
+            showLoader();
             // Hide loader once the page is fully loaded
             window.addEventListener('load', function () {
                 hideLoader();
             });
+    
+            // Ensure loader is hidden when page is loaded from cache
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted) {
+                    hideLoader();
+                } else {
+                    hideLoader(); // Ensure loader is hidden once the page is loaded
+                }
+            });
+    
+            // Hide loader when the user navigates away
+            window.addEventListener('pagehide', function () {
+                hideLoader();
+            });
         });
     </script>
+    
+
+    
     {% block scripts %}
 
     {% endblock %}
