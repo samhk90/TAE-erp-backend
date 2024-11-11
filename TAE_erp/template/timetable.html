@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    {% block style %}
+    <style>
+        /* Basic styles for the dropdown */
+        .dropdown {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            margin-bottom: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+    </style>
+    {% endblock %}
+</head>
+<body>
+    {% block content %}
+    {% for class in classes %}
+    {% if class.ClassID == selected_timetable_type%}
+    <h1>Timetable for {{class.ClassName}}</h1>
+    {% endif %}
+    {% endfor %}
+    
+    <!-- Dropdown for selecting timetable type -->
+    <form method="GET">
+        <select name="timetable_type" class="dropdown" onchange="this.form.submit()" required>
+            <option value="">Select Class</option>
+            <!-- <option value="Master" {% if selected_timetable_type == 'Master' %}selected{% endif %}>Master Timetable</option> -->
+            {% for class in classes %}
+            
+            <option value="{{class.ClassID}}" {% if selected_timetable_type == '{{class.ClassID}}' %}selected{% endif %}>{{class.ClassName}}</option>
+            {% endfor %}
+<!--             
+            <option value="Individual" {% if selected_timetable_type == 'Individual' %}selected{% endif %}>Individual Timetable</option> -->
+        </select>
+    </form>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Day</th>
+                <th>Slot Time</th>
+                <th style="text-align: center;">Subject and Teacher</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for day, slots in timetable %}
+                <tr>
+                    <!-- Print Day once with rowspan to cover all slots for that day -->
+                    <td rowspan="{{ slots|length }}">{{ day }}</td>
+                    
+                    {% for slot, assignments in slots.items %}
+                        {% if forloop.first %}
+                            <!-- First row for the day's first slot -->
+                            <td>{{ slot.start_time }} - {{ slot.end_time }}</td>
+                            <td style="text-align: center;">
+                                {% for assignment in assignments %}
+                                    {{ assignment.SubjectID.SubjectName }}<br>
+                                    ({{ assignment.TeacherID.FirstName }} {{ assignment.TeacherID.LastName }})<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% else %}
+                        <!-- Subsequent rows for other slots of the same day -->
+                        <tr>
+                            <td>{{ slot.start_time }} - {{ slot.end_time }}</td>
+                            <td style="text-align: center;">
+                                {% for assignment in assignments %}
+                                    {{ assignment.SubjectID.SubjectName }}<br>
+                                    ({{ assignment.TeacherID.FirstName }} {{ assignment.TeacherID.LastName }})<br>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </tbody>
+        
+        
+    </table>
+    
+    
+    
+    
+    
+    {% endblock %}
+    {% block scripts %}
+    <script src="{% static 'assets/script/loader.js' %}"></script>
+    {% endblock %}
+</body>
+</html>

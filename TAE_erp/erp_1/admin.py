@@ -102,11 +102,7 @@ class ClassTeacherAssignmentAdmin(admin.ModelAdmin):
     list_filter = ('ClassID', 'TeacherID', 'RoleID')
 
 
-@admin.register(Timetable)
-class TimetableAdmin(admin.ModelAdmin):
-    list_display = ('TimetableID', 'ClassID', 'Timetable')
-    search_fields = ('ClassID__ClassName',)
-    list_filter = ('ClassID',)
+
 
 
 @admin.register(Results)

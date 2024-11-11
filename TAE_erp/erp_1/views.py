@@ -1,16 +1,22 @@
 from django.shortcuts import render,redirect,get_object_or_404
 from .models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,Year,Classes,ClassTeacherAssignment
 from supabase import create_client, Client,SupabaseAuthClient
-
 from django.core.serializers import serialize
 from django.shortcuts import render
 from erp_1.decorators import supabase_login_required  # Adjust the import path accordingly
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q
-from .models import Teacher, ClassTeacherAssignment, Student, Attendance
+from .models import Teacher, ClassTeacherAssignment, Student, Attendance,Slots
 from datetime import date
-
+from datetime import timedelta
+from django.utils import timezone
+from collections import defaultdict
+from django.db.models import Case, When, IntegerField
+from django.shortcuts import redirect
+from django.http import HttpResponse
+from .models import Notices
+import supabase
 @supabase_login_required
 def index(request):
     email = request.session.get('teacher_email')
@@ -81,7 +87,7 @@ def index(request):
         }
         return render(request, 'index.html', context)
 
-    return render(request, 'index.html', {'role': role})
+    return render(request, 'index.html', {'teacher': teacher})
 
 
 def login(request):
@@ -99,7 +105,8 @@ def login(request):
 
             if user:
                 request.session['teacher_email'] = email
-                return redirect('index')  # Redirect to the index page after login
+                return redirect('index')
+                 # Redirect to the index page after login
 
         except Exception as e:
             # Handle authentication error
@@ -309,10 +316,6 @@ def greenbook(request):
         'subjects': subjects_list,
     }
     return render(request, 'green.html', context)
-from django.contrib import messages
-from django.shortcuts import render, get_object_or_404, redirect
-from .models import Attendance, Teacher, Subject, Student, ClassTeacherAssignment, Classes
-from django.core.exceptions import ValidationError
 
 @supabase_login_required
 def attendance_form(request):
@@ -389,6 +392,7 @@ def attendance_form(request):
         'is_classteacher': is_classteacher
     }
     return render(request, 'attendance_form.html', context)
+
 @supabase_login_required
 def students(request):
     year = Year.objects.all()
@@ -433,10 +437,7 @@ def students(request):
 
     return render(request, 'students.html', {'year': year, 'department': department,'teacher':teacher})
 
-from django.shortcuts import render, get_object_or_404
-from .models import Teacher, ClassTeacherAssignment, Student, Attendance, Subject, Classes
-from django.db.models import Count, Q
-from django.utils import timezone
+
 
 @supabase_login_required
 def report(request):
@@ -538,6 +539,58 @@ def preacademic(request):
         'classteacher':classteacher
     }
     return render(request,'preacademic.html',context)
+
+def timetable(request): 
+    email = request.session.get('teacher_email')
+    teacher = Teacher.objects.get(Email=email)
+    classes=Classes.objects.filter(DepartmentID=teacher.DepartmentID)
+    selected_timetable_type = request.GET.get('timetable_type')  # Default to 'Master'
+    timetable_entries = None
+    day_order = {
+        'Monday': 1,
+        'Tuesday': 2,
+        'Wednesday': 3,
+        'Thursday': 4,
+        'Friday': 5,
+        'Saturday': 6,
+        'Sunday': 7
+    }
+    
+    # Annotate the timetable entries with a numerical value for sorting
+    timetable_entries = Timetable.objects.filter(ClassID__ClassID=selected_timetable_type).annotate(
+        day_order=Case(
+            *[When(Day=day, then=value) for day, value in day_order.items()],
+            output_field=IntegerField(),
+        )
+    ).order_by('day_order', 'SlotID')
+    
+    # Preprocess timetable entries for unique day and slot ID
+    timetable = defaultdict(lambda: defaultdict(list))  # Nested defaultdict for day -> slot ID -> entries
+    slot_list = set()  # Store unique slots for display in template
+    
+    for entry in timetable_entries:
+        # Group by day and slot
+        timetable[entry.Day][entry.SlotID].append(entry.SubjectAssignmentID)
+        slot_list.add(entry.SlotID)  # Keep track of unique slots
+    
+    # Convert timetable structure for easy access in the template
+    processed_timetable = {
+        day: {
+            slot: assignments for slot, assignments in slots.items()
+        } for day, slots in timetable.items()
+    }
+    print(processed_timetable.items())
+    
+    context = {
+        'timetable': processed_timetable.items(),
+        'classes': classes,
+        'selected_timetable_type': selected_timetable_type,
+        'slot_list': slot_list,
+        'teacher': teacher
+    }
+    
+    return render(request, 'timetable.html', context)
+
 @supabase_login_required
 def notices(request):
     allnotices= Notices.objects.order_by('-date')
@@ -570,10 +623,7 @@ def notices(request):
     return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
 
 
-from django.shortcuts import redirect
-from django.http import HttpResponse
-from .models import Notices
-import supabase
+
 
 @supabase_login_required
 def delete_notice(request, id):
@@ -594,10 +644,7 @@ def delete_notice(request, id):
         return redirect('notices')
     else:
         return redirect('notices')  # or wherever you want to redirect to
-from django.utils import timezone
-from django.db.models import Count, Q
-from django.shortcuts import get_object_or_404, render
-from .models import Teacher, ClassTeacherAssignment, Subject, Attendance
+
 @supabase_login_required
 def logs(request):
     email = request.session.get('teacher_email')
@@ -689,3 +736,267 @@ def logs(request):
 @supabase_login_required
 def history(request):
     return render(request,'history.html')
+
+@supabase_login_required
+def preports(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    context={
+        'teacher':teacher
+    }
+    return render(request,'preports.html',context)
+
+@supabase_login_required
+def custom_report(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    context={
+        'teacher':teacher
+    }
+    return render(request,'preports.html',context)
+
+@supabase_login_required
+def daily_report(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    departments = Department.objects.all()
+    if teacher.RoleID.RoleName=='HOD':
+        selected_department=teacher.DepartmentID.DepartmentID
+        print(selected_department)
+    else:
+        selected_department = request.GET.get('department')
+    
+    selected_class = request.GET.get('class')
+    if selected_department:
+        classes = Classes.objects.filter(DepartmentID=selected_department)
+    else:
+        classes = Classes.objects.all()
+
+    current_date = timezone.now().date()
+    current_date=current_date-timedelta(1)
+
+
+    attendance_data = []
+    students_in_class = []
+    slots=[]
+    if selected_class:
+        slot_ids = Attendance.objects.filter(Date=current_date,ClassID_id=selected_class).values_list('SlotID', flat=True).distinct()
+        slots = Slots.objects.filter(Slotid__in=slot_ids)
+        students_in_class = Student.objects.filter(CurrentClassID_id=selected_class).order_by('RollNumber')
+        attendance_records = Attendance.objects.filter(Date=current_date, ClassID_id=selected_class)
+        
+        # Create a dictionary to track attendance for each slot
+        present_students = {}
+        for slot in slots:
+            slot_key = f"{slot.start_time} - {slot.end_time}"
+            present_students[slot_key] = set(attendance_records.filter(SlotID=slot, Status=True).values_list('StudentID', flat=True))
+
+        # Prepare attendance data as a list
+        for student in students_in_class:
+            student_attendance = {
+                'name': f"{student.FirstName} {student.LastName}",
+                'roll_number': student.RollNumber,
+                'attendance': [],
+                'total_attendance': 0
+            }
+            # Check each slot's attendance
+            for slot in slots:
+                slot_key = f"{slot.start_time} - {slot.end_time}"
+                is_present = student.StudentID in present_students[slot_key]
+                student_attendance['attendance'].append(is_present)
+                if is_present:
+                    student_attendance['total_attendance'] += 1
+            attendance_data.append(student_attendance)
+
+    context = {
+        'departments': departments,
+        'classes': classes,
+        'attendance_data': attendance_data,
+        'students_in_class': students_in_class,
+        'slots': slots,  # Include slots in the context
+        'selected_department': selected_department,
+        'selected_class': selected_class,
+        'teacher':teacher
+    }
+
+    return render(request, 'daily_report.html', context)
+
+
+@supabase_login_required
+def weekly_report(request):
+    # Get teacher's email from session
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    
+    # Get the class or classes based on selection
+    departments = Department.objects.all()
+    if teacher.RoleID.RoleName == 'HOD':
+        selected_department = teacher.DepartmentID.DepartmentID
+        print(selected_department)
+    else:
+        selected_department = request.GET.get('department')
+    
+    selected_class = request.GET.get('class')
+    if selected_department:
+        class_obj = Classes.objects.filter(DepartmentID=selected_department)
+    else:
+        class_obj = Classes.objects.all()
+
+    today = timezone.now().date()
+    start_date = today - timedelta(days=today.weekday())  # Adjust to the previous Monday (0 = Monday)
+
+    # Set the end date to the following Friday
+    end_date = start_date + timedelta(days=4)
+    day_names = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']
+    attendance_data = []
+    
+    if selected_class:
+        if isinstance(class_obj, Classes):
+            attendance_records = Attendance.objects.filter(Date__range=(start_date, end_date), ClassID=class_obj)
+        else:
+            attendance_records = Attendance.objects.filter(Date__range=(start_date, end_date), ClassID__in=class_obj)
+
+        # Collect attendance data for each student in the class
+        students_in_class = Student.objects.filter(CurrentClassID__in=class_obj)
+
+        # Pre-fetch attendance counts per day for each student to minimize DB hits
+        attendance_counts = (
+            attendance_records
+            .values('StudentID', 'Date')
+            .annotate(attended_count=Count('SlotID', filter=Q(Status=True)), conducted_count=Count('SlotID'))
+        )
+
+        # Prepare data structure with weekly attendance
+        for student in students_in_class:
+            student_record = {
+                'roll_number': student.RollNumber,
+                'name': f"{student.FirstName} {student.LastName}",
+                'weekly_attendance': [{'attended': 0, 'conducted': 0} for _ in range(5)],  # Only 5 days
+                'total_attendance': 0,
+            }
+
+            # Map attendance counts for the student for each day
+            student_attendance = {
+                (entry['Date'], entry['StudentID']): entry
+                for entry in attendance_counts
+                if entry['StudentID'] == student.StudentID
+            }
+
+            # Populate weekly attendance data for each day (only for 5 days)
+            for day_offset in range(5):  # Only Monday to Friday
+                day_date = start_date + timedelta(days=day_offset)
+                day_index = day_offset  # Use day_offset directly as index
+            
+                # Retrieve attended and conducted count from the pre-fetched data
+                daily_data = student_attendance.get((day_date, student.StudentID), {})
+                attended = daily_data.get('attended_count', 0)
+                conducted = daily_data.get('conducted_count', 0)
+
+                student_record['weekly_attendance'][day_index] = {
+                    'attended': attended,
+                    'conducted': conducted
+                }
+                student_record['total_attendance'] += attended
+
+            attendance_data.append(student_record)
+
+    context = {
+        'teacher': teacher,
+        'attendance_data': attendance_data,
+        'selected_department': selected_department,
+        'departments': departments,
+        'classes': class_obj,
+        'day_names': day_names,
+        'start_date': start_date,
+        'end_date': end_date,
+        'selected_class': selected_class,
+    }
+    return render(request, 'weekly_report.html', context)
+from django.utils import timezone
+from django.shortcuts import render, get_object_or_404
+from .models import Attendance, Classes, Student, Teacher, Department
+from django.db.models import Count, Q
+from datetime import timedelta
+def monthly_report(request):
+    # Get teacher's email from session
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+
+    # Get all departments
+    departments = Department.objects.all()
+
+    # Determine selected department based on teacher's role
+    if teacher.RoleID.RoleName == 'HOD':
+        selected_department = teacher.DepartmentID.DepartmentID
+    else:
+        selected_department = request.GET.get('department')
+
+    # Get selected class and corresponding classes
+    selected_class = request.GET.get('class')
+    classes = Classes.objects.filter(DepartmentID=selected_department) if selected_department else Classes.objects.all()
+    
+    # Initialize attendance data and subject set
+    attendance_data = []
+    subjects_set = set()
+
+    # Get current month's start and end dates
+    today = timezone.now().date()
+    start_date = today.replace(day=1)  # First day of the current month
+    end_date = (today.replace(day=1) + timedelta(days=31)).replace(day=1) - timedelta(days=1)  # Last day of the month
+    current_month = today.strftime("%B")
+    # Process attendance for the selected class
+    if selected_class:
+        students = Student.objects.filter(CurrentClassID_id=selected_class).order_by('RollNumber')
+
+        for student in students:
+            # Fetch attendance records for the student within the date range
+            student_attendance = Attendance.objects.filter(
+                StudentID=student.StudentID,
+                Date__range=(start_date, end_date)
+            ).values('SubjectID', 'SubjectName').annotate(
+                attended_count=Count('AttendanceID', filter=Q(Status=True)),
+                total_lectures=Count('Date')
+            )
+
+            # Collect subjects and calculate total attended and conducted lectures
+            total_attended = 0
+            total_conducted = 0
+
+            for record in student_attendance:
+                subjects_set.add(record['SubjectName'])
+                total_attended += record['attended_count']
+                total_conducted += record['total_lectures']
+
+            # Calculate average attendance percentage
+            average_percentage = (total_attended / total_conducted) * 100 if total_conducted > 0 else 0
+
+            # Append the student's attendance data
+            attendance_data.append({
+                'student': {
+                    'RollNo': student.RollNumber,
+                    'FirstName': student.FirstName,
+                    'LastName': student.LastName,
+                },
+                'attendance': list(student_attendance),
+                'total_attended': total_attended,
+                'total_conducted': total_conducted,  # Add total conducted lectures
+                'average_percentage': average_percentage,
+            })
+
+    # Sort subjects for display
+    subjects_list = sorted(list(subjects_set))
+
+    # Prepare context for rendering the template
+    context = {
+        'teacher': teacher,
+        'departments': departments,
+        'selected_department': selected_department,
+        'selected_class': selected_class,
+        'classes': classes,
+        'current_month':current_month,
+        'attendance_data': attendance_data,
+        'start_date': start_date,
+        'end_date': end_date,
+        'subjects_list': subjects_list,  # Include subjects list for the template
+    }
+    return render(request, 'monthly_report.html', context)

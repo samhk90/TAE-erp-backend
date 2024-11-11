@@ -71,7 +71,7 @@
 </head>
 
 <body>
-    {% if teacher.RoleID.RoleName == 'Teacher' %}
+    {% if teacher.RoleID.RoleName == 'Teacher' or teacher.RoleID.RoleName == 'HOD'%}
     <!-- SIDEBAR -->
     <section id="sidebar">
         <a href="#" class="brand">
@@ -131,6 +131,8 @@
         </ul>
     </section>
     {% endif %}
+
+
     {% if teacher.RoleID.RoleName == 'Principal' %}
     <!-- SIDEBAR -->
     <section id="sidebar">
@@ -144,6 +146,12 @@
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
+            <li class="{% if request.path == '/preports' %}active{% endif %}">
+                <a href="{% url 'preports' %}">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Reports</span>
+                </a>
+            </li>
 			<li>
 				<a href="logs">
 					<i class='bx bxs-calendar-star'></i>

@@ -4,7 +4,7 @@
 <html lang="en">
 
 <head>
-    <title>TAE</title>
+    <title>TAE Academics - Reports</title>
     {% block style %}
     <style>
         .card-container {
@@ -69,6 +69,37 @@
             margin-top: 10px;
         }
 
+        .report-card-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .report-card {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s;
+        }
+
+        .report-card:hover {
+            background: #e9ecef;
+            transform: translateY(-5px);
+        }
+
+        .report-card h3 {
+            font-size: 18px;
+            color: #343a40;
+        }
+
+        .report-card .icon {
+            font-size: 45px;
+            margin-bottom: 10px;
+            color: #6c757d;
+        }
+
     </style>
     {% endblock %}
 </head>
@@ -78,65 +109,64 @@
     <section id="content">
         <!-- MAIN -->
         {% block content %}
-        {% if teacher.RoleID.RoleName == 'Teacher' %}
+
         <section class="card-container">
-            <a href="{% url 'academics' %}">
+            <a href="{% url 'daily_report' %}">
             <div class="card attendance">
                 <div class="icon">
-                    <i class="bx bx-check-circle"></i>
+                    <i class="bx bx-calendar-check"></i>
                 </div>
-                <h3>Attendance</h3>
-                <p>Monitor and manage attendance records.</p>
+                <h3>Daily Report</h3>
             </div>
         </a>
-        {% if classteacher %}
-            <a href="{% url 'greenbook' %}">
+
+            <a href="{% url 'weekly_report' %}">
                 <div class="card greenbook">
                     <div class="icon">
-                        <i class="bx bx-book"></i>
+                        <i class="bx bx-calendar-week"></i>
                     </div>
-                    <h3>Greenbook</h3>
-                    <p>Access and review the academic Greenbook.</p>
+                    <h3>Weekly Report</h3>
                 </div>
             </a>
-            {% endif %}
-            <a href="{% url 'report' %}">
+
+            <a href="{% url 'monthly_report' %}">
                 <div class="card reports">
                     <div class="icon">
-                        <i class="bx bx-chart"></i>
+                        <i class="bx bx-calendar-event"></i>
                     </div>
-                    <h3>Reports</h3>
-                    <p>Generate academic reports and summaries.</p>
+                    <h3>Monthly Report</h3>
                 </div>
             </a>
 
             <div class="card history">
                 <div class="icon">
-                    <i class="bx bx-history"></i>
+                    <i class="bx bx-book-open"></i>
                 </div>
-                <h3>History</h3>
-                <p>Review the history of academic performance.</p>
+                <h3>Subject-wise Report</h3>
             </div>
 
             <a href="{% url 'timetable' %}">
                 <div class="card calendar">
                     <div class="icon">
-                        <i class="bx bx-calendar"></i>
-                    </div>
-                    <h3>Time Table</h3>
-                    <p>Check Time Table.</p>
+                        <i class="bx bx-building"></i>
+                </div>
+                <h3>Class Report</h3>
                 </div>
             </a>
 
-            <div class="card course-plan">
-                <div class="icon">
-                    <i class="bx bx-task"></i>
+            <a href="{% url 'report' %}">
+                <div class="card course-plan">
+                    <div class="icon">
+                        <i class="bx bx-customize"></i>
+                    </div>
+                    <h3>Custom Report</h3>
                 </div>
-                <h3>Course Plan</h3>
-                <p>Plan and structure your courses.</p>
-            </div>
+            </a>
         </section>
-        {% endif %}
+
+        <!-- New Report Section -->
+
+
 
         {% endblock %}
     </section>

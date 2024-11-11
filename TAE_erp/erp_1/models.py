@@ -28,6 +28,14 @@ class Classes(models.Model):
 
     def __str__(self):
         return self.ClassName
+class Batch(models.Model):
+    Batchid=models.AutoField(primary_key=True)
+    class_id=models.ForeignKey('Classes', on_delete=models.CASCADE,default='none')
+    BatchName=models.CharField(max_length=50, default='Batch')
+class Slots(models.Model):
+    Slotid=models.AutoField(primary_key=True)
+    start_time=models.CharField(max_length=50, default='DEFAULT_TIME')
+    end_time=models.CharField(max_length=50, default='DEFAULT_TIME')
 class Subject(models.Model):
     SubjectID = models.AutoField(primary_key=True)
     SubjectName = models.CharField(max_length=255)
@@ -104,6 +112,7 @@ class Attendance(models.Model):
     Date = models.DateField()
     Timeto= models.CharField(max_length=50, default='DEFAULT_TIME')
     Timefrom= models.CharField(max_length=50, default='DEFAULT_TIME')
+    SlotID = models.ForeignKey('Slots', on_delete=models.CASCADE,default=1)
     Status = models.BooleanField(max_length=50)
 class Notices(models.Model):
     id = models.AutoField(primary_key=True)
@@ -172,10 +181,10 @@ class ClassTeacherAssignment(models.Model):
 class Timetable(models.Model):
     TimetableID = models.AutoField(primary_key=True)
     ClassID = models.ForeignKey('Classes', on_delete=models.CASCADE)
-    Timetable = models.ImageField(null=True, blank=True)
-
-    def __str__(self):
-        return f"Timetable {self.TimetableID} - {self.DepartmentID} - {self.ClassID} - {self.Division}"
+    SlotID = models.ForeignKey('Slots', on_delete=models.CASCADE,default=1)
+    Batch =models.ForeignKey('Batch', on_delete=models.CASCADE,default=2)
+    Day=models.CharField(max_length=255,default='Monday')
+    SubjectAssignmentID=models.ForeignKey('TeacherSubjectAssignment', on_delete=models.CASCADE,default=16)
 
 class Results(models.Model):
     ResultID = models.AutoField(primary_key=True)

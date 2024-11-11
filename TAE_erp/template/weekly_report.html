@@ -1,0 +1,303 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>TAE</title>
+    {% block style %}
+    <link rel="stylesheet" href="{% static '/assets/style/formstyle.css' %}">
+    <style>
+        .container {
+            width: 100%; 
+            height: 100%;
+            display: block;
+            align-items: center;
+            margin: auto;
+        }
+        .uppercontainer{
+            display: flex;
+            justify-content: start;
+            flex-direction: column;
+            padding: 20px;
+            margin-bottom: 20px;
+            margin-top: 10px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .form-container {
+            display: flex;
+            justify-content: start;
+            align-items: center;
+        }
+
+        .form-container form {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+            flex-wrap: wrap;
+            width: 100%;
+        }
+
+        .form-container label {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .form-container input,
+        .form-container select {
+            padding: 8px 12px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 14px;
+            width: 25%;
+        }
+
+        .form-container button {
+            background-color: #3c91e6c2;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .form-container button:hover {
+            background-color: #337ab7;
+        }
+
+        .container {
+            margin-top: 30px;
+            padding: 15px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .table thead th {
+            background-color: #3c91e6c2;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+
+        .download-btn {
+            background-color: #3c91e6c2;
+            border: none;
+            color: white;
+            padding: 12px 24px;
+            font-size: 16px;
+            margin: 10px 0;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .download-btn:hover {
+            background-color: #337ab7;
+        }
+        .vertical-text {
+            writing-mode: vertical-rl; /* Rotates text to be vertical */
+            transform: rotate(180deg); /* Adjusts text direction */
+            white-space: nowrap;
+            padding: 10px;
+        }
+    </style>
+    {% endblock %}
+</head>
+
+<body>
+    {% block content %}
+
+    <section id="mySection">
+        <div class="uppercontainer">
+            <h2>Weekly Attendance Report ({{ start_date }} to {{ end_date }})</h2>
+        <div class="form-container">
+            
+            <form method="GET">
+                
+                {% if teacher.RoleID.RoleName == 'Principal' %}
+                <select name="department" class="dropdown" onchange="this.form.submit()">
+                    <option value="">Select Department</option>
+                    {% for department in departments %}
+                        <option value="{{ department.DepartmentID }}" {% if selected_department == department.DepartmentID|stringformat:"s" %}selected{% endif %}>
+                            {{ department.DepartmentName }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+                <!-- Class Dropdown -->
+                {% if departments %}
+                <select name="class" class="dropdown" onchange="this.form.submit()">
+                    <option value="">Select Class</option>
+                    {% for class in classes %}
+                        <option value="{{ class.ClassID }}" {% if selected_class == class.ClassID|stringformat:"s" %}selected{% endif %}>
+                            {{ class.ClassName }}
+                        </option>
+                    {% endfor %}
+                </select>
+                {% endif %}
+            </form>
+            
+            <button id="downloadBtn" style="width: 30%;" class="btn btn-primary download-btn">Download as CSV</button>
+        </div>
+        </div>
+    
+        <div class="container">
+            
+            <table id="attendanceTable" class="table table-bordered">
+                <thead>
+                    <tr>
+                        <th>Roll Number</th>
+                        <th>Student Name</th>
+                        {% for day in day_names %}
+                            <th>{{ day }}</th>
+                        {% endfor %}
+                        <th>Total Attendance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in attendance_data %}
+                        <tr>
+                            <td>{{ data.roll_number }}</td>
+                            <td>{{ data.name }}</td>
+                            
+                            {% for day_attendance in data.weekly_attendance %}
+                                <td>
+                                    {{ day_attendance.attended }}/{{ day_attendance.conducted }}
+                                </td>
+                            {% endfor %}
+                            
+                            <td>{{ data.total_attendance }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            
+            
+            
+
+            <canvas id="attendanceChart" width="400" height="200"></canvas>
+            
+        </div>
+    </section>
+    
+    {% endblock %}
+
+    {% block scripts %}
+    <script>
+        document.getElementById('downloadBtn').addEventListener('click', function () {
+            var table = document.getElementById('attendanceTable');
+            var rows = Array.from(table.querySelectorAll('tr'));
+
+            var csv = [];
+            rows.forEach(function (row) {
+                var cols = Array.from(row.querySelectorAll('th, td')).map(function (cell) {
+                    return cell.innerText.replace(/\//g, '\\/').replace(/,/g, ''); 
+                });
+                csv.push(cols.join(','));
+            });
+
+            var csvString = csv.join('\n');
+            var blob = new Blob([csvString], { type: 'text/csv' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.setAttribute('hidden', '');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'attendance_data.csv');
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        });
+    </script>
+    <script>
+        function checkClassSelection() {
+            var classSelect = document.getElementById("classSelect").value;
+            if (classSelect === "") {
+                alert("Please select a class.");
+            }
+        }
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        
+
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const table = document.getElementById("attendanceTable");
+                const slotCount = {{ slots|length }};
+                const attendanceData = Array.from(table.querySelectorAll("tbody tr"));
+        
+                // Initialize counts for each slot
+                let slotSummary = Array(slotCount).fill().map(() => ({ present: 0, absent: 0 }));
+        
+                // Calculate present/absent counts for each slot
+                attendanceData.forEach(row => {
+                    Array.from(row.querySelectorAll("td")).slice(2, 2 + slotCount).forEach((cell, index) => {
+                        if (cell.innerText.trim() === "P") {
+                            slotSummary[index].present++;
+                        } else if (cell.innerText.trim() === "A") {
+                            slotSummary[index].absent++;
+                        }
+                    });
+                });
+        
+                // Prepare labels with start and end time for each slot
+                const labels = [
+                    {% for slot in slots %}
+                        "{{ slot.start_time }} - {{ slot.end_time }}",
+                    {% endfor %}
+                ];
+                
+                const presentData = slotSummary.map(summary => summary.present);
+                const absentData = slotSummary.map(summary => summary.absent);
+        
+                // Initialize Chart.js
+                const ctx = document.getElementById('attendanceChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: labels,
+                        datasets: [
+                            {
+                                label: 'Present',
+                                data: presentData,
+                                backgroundColor: 'lightgreen',
+                                borderColor: 'darkgreen',
+                                borderWidth: 1
+                            },
+                            {
+                                label: 'Absent',
+                                data: absentData,
+                                backgroundColor: 'red',
+                                borderColor: 'darkred',
+                                borderWidth: 1
+                            }
+                        ]
+                    },
+                    options: {
+                        scales: {
+                            y: {
+                                beginAtZero: true
+                            }
+                        }
+                    }
+                });
+            });
+        </script>
+        
+    <script src="{% static 'assets/script/loader.js' %}"></script>
+    {% endblock %}
+</body>
+
+</html>

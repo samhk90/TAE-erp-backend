@@ -7,6 +7,7 @@ urlpatterns = [
     path('', views.index, name='index'),
     path('login/', views.login, name='login'),    
     path('attendance_form', views.attendance_form, name='attendance_form'),
+    path('timetable',views.timetable,name='timetable'),
     path('students',views.students,name='students'),
     path('notices',views.notices,name='notices'),
     path('delete_notice/<int:id>/', views.delete_notice, name='delete_notice'),
@@ -18,6 +19,11 @@ urlpatterns = [
     path('history',views.history,name='history'),
     path('report',views.report,name='report'),
     path('preacademic',views.preacademic,name='preacademic'),
+    path('preports',views.preports,name='preports'),
+    path('custom_report',views.custom_report,name='custom_report'),
+    path('daily_report',views.daily_report,name='daily_report'),
+    path('weekly_report',views.weekly_report,name='weekly_report'),
+    path('monthly_report',views.monthly_report,name='monthly_report'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
     
 
