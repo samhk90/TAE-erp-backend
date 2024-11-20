@@ -137,15 +137,17 @@
                     <h3>Monthly Report</h3>
                 </div>
             </a>
-
-            <div class="card history">
-                <div class="icon">
-                    <i class="bx bx-book-open"></i>
+            <a href="{% url 'subjectwise' %}">
+                <div class="card history">
+                    <div class="icon">
+                        <i class="bx bx-book-open"></i>
+                    </div>
+                    <h3>Subject-wise Report</h3>
                 </div>
-                <h3>Subject-wise Report</h3>
-            </div>
+            </a>
+            
 
-            <a href="{% url 'timetable' %}">
+            <a href="{% url 'class_report' %}">
                 <div class="card calendar">
                     <div class="icon">
                         <i class="bx bx-building"></i>

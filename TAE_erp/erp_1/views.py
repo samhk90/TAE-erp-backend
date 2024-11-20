@@ -9,6 +9,7 @@ from django.shortcuts import render, get_object_or_404
 from django.db.models import Count, Q
 from .models import Teacher, ClassTeacherAssignment, Student, Attendance,Slots
 from datetime import date
+
 from datetime import timedelta
 from django.utils import timezone
 from collections import defaultdict
@@ -539,7 +540,7 @@ def preacademic(request):
         'classteacher':classteacher
     }
     return render(request,'preacademic.html',context)
-
+@supabase_login_required
 def timetable(request): 
     email = request.session.get('teacher_email')
     teacher = Teacher.objects.get(Email=email)
@@ -912,30 +913,21 @@ def weekly_report(request):
         'selected_class': selected_class,
     }
     return render(request, 'weekly_report.html', context)
+
 from django.utils import timezone
-from django.shortcuts import render, get_object_or_404
-from .models import Attendance, Classes, Student, Teacher, Department
-from django.db.models import Count, Q
 from datetime import timedelta
+@supabase_login_required
 def monthly_report(request):
-    # Get teacher's email from session
     email = request.session.get('teacher_email')
     teacher = get_object_or_404(Teacher, Email=email)
-
-    # Get all departments
     departments = Department.objects.all()
-
-    # Determine selected department based on teacher's role
     if teacher.RoleID.RoleName == 'HOD':
         selected_department = teacher.DepartmentID.DepartmentID
     else:
         selected_department = request.GET.get('department')
-
-    # Get selected class and corresponding classes
     selected_class = request.GET.get('class')
     classes = Classes.objects.filter(DepartmentID=selected_department) if selected_department else Classes.objects.all()
-    
-    # Initialize attendance data and subject set
+
     attendance_data = []
     subjects_set = set()
 
@@ -1000,3 +992,126 @@ def monthly_report(request):
         'subjects_list': subjects_list,  # Include subjects list for the template
     }
     return render(request, 'monthly_report.html', context)
+
+from django.db.models import Count, F, Q
+@supabase_login_required
+def subjectwise_report(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    departments = Department.objects.all()
+    if teacher.RoleID.RoleName == 'HOD':
+        selected_department = teacher.DepartmentID.DepartmentID
+    else:
+        selected_department = request.GET.get('department')
+    selected_class = request.GET.get('class')
+    classes = Classes.objects.filter(DepartmentID=selected_department) if selected_department else Classes.objects.all()
+    selected_class = request.GET.get('class')
+    if selected_class:
+        selected_subject = request.GET.get('subject')
+        subjects = Subject.objects.filter(CurrentClassID=selected_class)
+    else:
+        selected_subject=None
+        subjects=None
+    report_data = []
+    total_lectures = 0
+    teachert=None
+    if selected_class and selected_subject:
+        teachert=TeacherSubjectAssignment.objects.filter(SubjectID=selected_subject)
+        total_lectures = Attendance.objects.filter(
+            ClassID=selected_class,
+            SubjectID=selected_subject
+        ).values('Date').distinct().count()
+        attendance_data = (
+            Attendance.objects.filter(
+                ClassID=selected_class,
+                SubjectID=selected_subject
+            )
+            .values('StudentID')
+            .annotate(
+                attended_lectures=Count('AttendanceID', filter=Q(Status=True)),
+                student_roll=F('StudentID__RollNumber'),
+                student_first=F('StudentID__FirstName'),
+                student_last=F('StudentID__LastName'),
+            ).order_by('student_roll')
+        )
+        for record in attendance_data:
+            attendance_percentage = (
+                (record['attended_lectures'] / total_lectures * 100)
+                if total_lectures > 0
+                else 0
+            )
+            report_data.append({
+                'student': {
+                    'RollNo': record['student_roll'],
+                    'FirstName': record['student_first'],
+                    'LastName': record['student_last'],
+                },
+                'attended_lectures': record['attended_lectures'],
+                'attendance_percentage': attendance_percentage,
+            })
+            
+
+    context = {
+        'teacher': teacher,
+        'departments':departments,
+        'selected_department':selected_department,
+        'classes': classes,
+        'selected_class': selected_class,
+        'subjects': subjects,
+        'selected_subject': selected_subject,
+        'report_data': report_data,
+        'total_lectures': total_lectures,
+        'teachert':teachert,
+    }
+
+    return render(request, 'subjectwise.html', context)
+
+@supabase_login_required
+def class_report(request):
+    email = request.session.get('teacher_email')
+    teacher = get_object_or_404(Teacher, Email=email)
+    departments = Department.objects.all()
+    if teacher.RoleID.RoleName == 'HOD':
+        selected_department = teacher.DepartmentID.DepartmentID
+    else:
+        selected_department = request.GET.get('department')
+    selected_class = request.GET.get('class')
+    classes = Classes.objects.filter(DepartmentID=selected_department) if selected_department else Classes.objects.all()
+    selected_class = request.GET.get('class')
+    students = Student.objects.filter(CurrentClassID=selected_class).order_by('RollNumber')
+    attendance_data = []
+    subjects_set = set()
+    for student in students:
+        student_attendance = Attendance.objects.filter(StudentID=student.StudentID).values('SubjectID', 'SubjectName').annotate(
+            attended_count=Count('AttendanceID',filter=Q(Status=True)),
+            total_lectures=Count('Date')
+        )
+        for record in student_attendance:
+            subjects_set.add(record['SubjectName'])
+        total_attended = sum([subject['attended_count'] for subject in student_attendance])
+        total_conducted = sum([subject['total_lectures'] for subject in student_attendance])
+        average_percentage = (total_attended / total_conducted) * 100 if total_conducted > 0 else 0
+
+        attendance_data.append({
+            'student': {
+                'RollNo': student.RollNumber,
+                'FirstName': student.FirstName,
+                'LastName': student.LastName,
+            },
+            'attendance': list(student_attendance),
+            'total_attended': total_attended,
+            'average_percentage': average_percentage,
+        })
+    
+    subjects_list = sorted(list(subjects_set))
+    
+    context = {
+        'teacher': teacher,
+        'departments':departments,
+        'selected_department':selected_department,
+        'classes': classes,
+        'selected_class': selected_class,
+        'attendance_data': attendance_data,
+        'subjects': subjects_list,
+    }
+    return render(request, 'class_report.html', context)

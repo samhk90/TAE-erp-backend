@@ -24,6 +24,8 @@ urlpatterns = [
     path('daily_report',views.daily_report,name='daily_report'),
     path('weekly_report',views.weekly_report,name='weekly_report'),
     path('monthly_report',views.monthly_report,name='monthly_report'),
+    path('subjectwise',views.subjectwise_report,name='subjectwise'),
+    path('class_report',views.class_report,name='class_report'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
     
 

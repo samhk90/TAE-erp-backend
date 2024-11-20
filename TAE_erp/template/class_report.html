@@ -121,11 +121,10 @@
 
     <section id="mySection">
         <div class="uppercontainer">
-            <p>Attendance Report for: {{ current_date }}</p>
+            
         <div class="form-container">
             
             <form method="GET">
-                
                 {% if teacher.RoleID.RoleName == 'Principal' %}
                 <select name="department" class="dropdown" onchange="this.form.submit()">
                     <option value="">Select Department</option>
@@ -136,8 +135,6 @@
                     {% endfor %}
                 </select>
                 {% endif %}
-                <!-- Class Dropdown -->
-                {% if departments %}
                 <select name="class" class="dropdown" onchange="this.form.submit()">
                     <option value="">Select Class</option>
                     {% for class in classes %}
@@ -146,43 +143,47 @@
                         </option>
                     {% endfor %}
                 </select>
-                {% endif %}
             </form>
             
             <button id="downloadBtn" style="width: 30%;" class="btn btn-primary download-btn">Download as CSV</button>
         </div>
         </div>
-    
+
         <div class="container">
             <table id="attendanceTable" class="table table-bordered">
                 <thead>
                     <tr>
-                        <th>Roll Number</th>
-                        <th>Student Name</th>
-                        
-                        {% for slot in slots %}
-                            <th class="vertical-text">{{ slot.start_time }} - {{ slot.end_time }}</th>
+                        <th rowspan="2">Roll.No</th>
+                        <th>Name of Student</th>
+                        {% for subject in subjects %}
+                            <th>{{ subject }}</th>
                         {% endfor %}
-                        <th>Total Attendance</th>
+                        
+                        <th>Total Lectures Conducted</th>
+                        <th>%</th>
                     </tr>
+
                 </thead>
                 <tbody>
                     {% for data in attendance_data %}
                         <tr>
-                            <td>{{ data.roll_number }}</td>
-                            <td>{{ data.name }}</td>
-                            
-                            {% for is_present in data.attendance %}
-                            <!-- style="background-color: {% if is_present %}green{% else %}red{% endif %}; color: white;" -->
-                                <td >
-                                    {% if is_present %}
-                                        P
-                                    {% else %}
-                                        A
-                                    {% endif %}
+                            <td>{{ data.student.RollNo }}</td>
+                            <td>{{ data.student.FirstName }} {{ data.student.LastName }}</td>
+                            {% for subject in subjects %}
+                            <td>
+                                    {% for record in data.attendance %}
+                                     {% if record.SubjectName == subject %}
+                                     
+                                            {{ record.attended_count }}\{{ record.total_lectures }}
+                                        {% endif %}
+                                        
+                                    {% endfor %}
                                 </td>
+                                
                             {% endfor %}
-                            <td>{{ data.total_attendance }}</td>
+                            
+                            <td>{{ data.total_attended }}</td>
+                            <td>{{data.average_percentage|floatformat:2}}</td>
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -191,19 +192,8 @@
             
             
             
-            
-            
-            
-            
-            
-            
-            
-            
-            <canvas id="attendanceChart" width="400" height="200"></canvas>
-            
         </div>
     </section>
-    
     {% endblock %}
 
     {% block scripts %}
@@ -240,74 +230,6 @@
             }
         }
         </script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        
-
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const table = document.getElementById("attendanceTable");
-                const slotCount = {{ slots|length }};
-                const attendanceData = Array.from(table.querySelectorAll("tbody tr"));
-        
-                // Initialize counts for each slot
-                let slotSummary = Array(slotCount).fill().map(() => ({ present: 0, absent: 0 }));
-        
-                // Calculate present/absent counts for each slot
-                attendanceData.forEach(row => {
-                    Array.from(row.querySelectorAll("td")).slice(2, 2 + slotCount).forEach((cell, index) => {
-                        if (cell.innerText.trim() === "P") {
-                            slotSummary[index].present++;
-                        } else if (cell.innerText.trim() === "A") {
-                            slotSummary[index].absent++;
-                        }
-                    });
-                });
-        
-                // Prepare labels with start and end time for each slot
-                const labels = [
-                    {% for slot in slots %}
-                        "{{ slot.start_time }} - {{ slot.end_time }}",
-                    {% endfor %}
-                ];
-                
-                const presentData = slotSummary.map(summary => summary.present);
-                const absentData = slotSummary.map(summary => summary.absent);
-        
-                // Initialize Chart.js
-                const ctx = document.getElementById('attendanceChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Present',
-                                data: presentData,
-                                backgroundColor: 'lightgreen',
-                                borderColor: 'darkgreen',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Absent',
-                                data: absentData,
-                                backgroundColor: 'red',
-                                borderColor: 'darkred',
-                                borderWidth: 1
-                            }
-                        ]
-                    },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
-                            }
-                        }
-                    }
-                });
-            });
-        </script>
-        
-    <script src="{% static 'assets/script/loader.js' %}"></script>
     {% endblock %}
 </body>
 
