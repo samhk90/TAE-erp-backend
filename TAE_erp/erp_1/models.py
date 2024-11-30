@@ -1,7 +1,7 @@
 from django.db import models
 import uuid
 from django.db import models
-
+from django.utils import timezone
 
 class Year(models.Model):
     YearID = models.AutoField(primary_key=True)
@@ -11,7 +11,7 @@ class Department(models.Model):
     DepartmentName = models.CharField(max_length=255, unique=True)
 
     def __str__(self):
-        return self.YearName
+        return self.DepartmentName
 
 class Roles(models.Model):
     RoleID = models.AutoField(primary_key=True)
@@ -34,8 +34,17 @@ class Batch(models.Model):
     BatchName=models.CharField(max_length=50, default='Batch')
 class Slots(models.Model):
     Slotid=models.AutoField(primary_key=True)
-    start_time=models.CharField(max_length=50, default='DEFAULT_TIME')
-    end_time=models.CharField(max_length=50, default='DEFAULT_TIME')
+    start_time=models.TimeField()
+    end_time=models.TimeField()
+
+    def __str__(self):
+        return f"{self.start_time.strftime('%I:%M %p')} - {self.end_time.strftime('%I:%M %p')}"
+
+    def get_formatted_start_time(self):
+        return self.start_time.strftime('%I:%M %p')
+
+    def get_formatted_end_time(self):
+        return self.end_time.strftime('%I:%M %p')
 class Subject(models.Model):
     SubjectID = models.AutoField(primary_key=True)
     SubjectName = models.CharField(max_length=255)
@@ -194,3 +203,43 @@ class Results(models.Model):
 
     def __str__(self):
         return f"Result {self.ResultID} - {self.SubjectID} - {self.StudentID} - Marks: {self.Marks}"
+
+class LeaveType(models.Model):
+    LeaveTypeID = models.AutoField(primary_key=True)
+    LeaveTypeName = models.CharField(max_length=100)
+    Description = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return self.LeaveTypeName
+
+class LeaveRequest(models.Model):
+    LeaveRequestID = models.AutoField(primary_key=True)
+    TeacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='leave_requests')
+    LeaveTypeID = models.ForeignKey(LeaveType, on_delete=models.CASCADE)
+    StartDate = models.DateField()
+    EndDate = models.DateField()
+    Reason = models.TextField()
+    Status = models.CharField(
+        max_length=50, 
+        choices=[
+            ('Pending', 'Pending'),
+            ('Approved', 'Approved'),
+            ('Rejected', 'Rejected')
+        ],
+        default='Pending'
+    )
+    RequestedTo = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='leave_approvals')
+    RequestDate = models.DateTimeField(auto_now_add=True)
+    ApprovalDate = models.DateTimeField(null=True, blank=True)
+    Comments = models.TextField(blank=True, null=True)
+
+    def __str__(self):
+        return f"Leave Request {self.LeaveRequestID} - {self.TeacherID}"
+
+    def clean(self):
+        if self.EndDate < self.StartDate:
+            raise models.ValidationError("End date cannot be before start date")
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super().save(*args, **kwargs)

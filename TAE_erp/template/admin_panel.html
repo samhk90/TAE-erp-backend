@@ -1,0 +1,1090 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="/assets/style/progress_bar.css">
+
+	<link rel="shortcut icon" href="./assets/img/tae-logo.png" type="image/x-icon">
+	<!-- Boxicons -->
+	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+	<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+	<!-- My CSS -->
+	<link rel="stylesheet" href="./style.css">
+
+	<title>TAE</title>
+</head>
+
+<body>
+
+
+	
+
+	<!-- CONTENT -->
+	<section id="content">
+		<!-- NAVBAR -->
+		<nav>
+			<div class="intro">
+				<img src="./assets/img/tae-logo.png" height="57px" alt="" srcset="" style="margin-right: 15px;">
+				<h2>Trinity Academy of Engineering</h2>
+			</div>
+
+
+			<a href="#" class="profile">
+				<p> Admin Console</p> <img src="./assets/img/letter-A.png">
+			</a>
+		</nav>
+		<!-- NAVBAR -->
+
+		<!-- MAIN -->
+		<main>
+
+
+			<div id="myModal" class="modal">
+				<div class="modal-content">
+					<span class="close">&times;</span>
+					<h2>Student Registration</h2>
+					<form action="#">
+						<div class="form first">
+							<div class="details personal">
+								<div class="fields">
+
+
+									<div class="input-field">
+										<label>First Name</label>
+										<input type="text" placeholder="Enter first name" required>
+									</div>
+									<div class="input-field">
+										<label>Last Name</label>
+										<input type="text" placeholder="Enter last name" required>
+									</div>
+									<div class="input-field">
+										<label>Father Name</label>
+										<input type="text" placeholder="Enter father name" required>
+									</div>
+
+
+									<div class="input-field">
+										<label>Mother's Name</label>
+										<input type="text" placeholder="Enter last name" required>
+									</div>
+									<div class="input-field">
+										<label>Gender</label>
+										<select required>
+											<option disabled selected>Select gender</option>
+											<option>Male</option>
+											<option>Female</option>
+											<option>Others</option>
+										</select>
+									</div>
+
+									<div class="input-field">
+										<label>Student Contact</label>
+										<input type="number" placeholder="Student contact number" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>Father's Contact No.</label>
+										<input type="number" placeholder="Parent contact number" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>Mother's Contact No.</label>
+										<input type="number" placeholder="Parent contact number" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>Parent's Occupation</label>
+										<input type="text" placeholder="Parent's Occupation"required>
+									</div>
+									<div class="input-field">
+										<label>E-mail ID</label>
+										<input type="email" placeholder="Enter E-mail ID" required>
+									</div>
+									<div class="input-field">
+										<label>Adharcard Number</label>
+										<input type="number" placeholder="Enter your Adhar UID" min="0" required>
+									</div>
+									
+									<div class="input-field">
+										<label>Category</label>
+										<select required>
+											<option disabled selected>Select Category</option>
+											<option>Open/General</option>
+											<option>SC/ST</option>
+											<option>VJ-DT</option>
+											<option>NT-1</option>
+											<option>NT-2</option>
+											<option>NT-3</option>
+											<option>SBC</option>
+											<option>EWS</option>
+											<option>OBC</option>
+											<option>Foreigner</option>
+											<option>Other</option>
+										</select>
+									</div>
+									<div class="input-field">
+										<label>Blood Group</label>
+										<select required>
+											<option disabled selected>Select Blood group</option>
+											<option>A+</option>
+											<option>A-</option>
+											<option>B+</option>
+											<option>B-</option>
+											<option>AB+</option>
+											<option>AB-</option>
+											<option>O+</option>
+											<option>O-</option>
+											<option>Other</option>
+										</select>
+									</div>
+									<div class="input-field">
+										<label>Department</label>
+										<select required>
+											<option disabled selected>Select Department</option>
+											<option>Mechanical Eng.</option>
+											<option>Computer eng.</option>
+											<option>IT Eng.</option>
+											<option>Civil Eng.</option>
+											<option>E&TC Eng.</option>
+											<option>Chemical Eng.</option>
+										</select>
+									</div>
+									<div class="input-field">
+										<label>Temporary Address</label>
+										<textarea name="teamp_address" id="teamp_address"
+											placeholder="Enter your temporary address"></textarea>
+
+									</div>
+									<div class="input-field">
+										<label>Permanent Address</label>
+										<textarea name="per_address" id="per_address"
+											placeholder="Enter your permanent address"></textarea>
+
+									</div>
+									<div class="input-field">
+										<label>State</label>
+										<select required>
+											<option disabled selected>Select State</option>
+											<option value="andhra_pradesh">Andhra Pradesh</option>
+											<option value="arunachal_pradesh">Arunachal Pradesh</option>
+											<option value="assam">Assam</option>
+											<option value="bihar">Bihar</option>
+											<option value="chhattisgarh">Chhattisgarh</option>
+											<option value="goa">Goa</option>
+											<option value="gujarat">Gujarat</option>
+											<option value="haryana">Haryana</option>
+											<option value="himachal_pradesh">Himachal Pradesh</option>
+											<option value="jharkhand">Jharkhand</option>
+											<option value="karnataka">Karnataka</option>
+											<option value="kerala">Kerala</option>
+											<option value="madhya_pradesh">Madhya Pradesh</option>
+											<option value="maharashtra">Maharashtra</option>
+											<option value="manipur">Manipur</option>
+											<option value="meghalaya">Meghalaya</option>
+											<option value="mizoram">Mizoram</option>
+											<option value="nagaland">Nagaland</option>
+											<option value="odisha">Odisha</option>
+											<option value="punjab">Punjab</option>
+											<option value="rajasthan">Rajasthan</option>
+											<option value="sikkim">Sikkim</option>
+											<option value="tamil_nadu">Tamil Nadu</option>
+											<option value="telangana">Telangana</option>
+											<option value="tripura">Tripura</option>
+											<option value="uttar_pradesh">Uttar Pradesh</option>
+											<option value="uttarakhand">Uttarakhand</option>
+											<option value="west_bengal">West Bengal</option>
+										</select>
+									</div>
+
+									<div class="input-field">
+										<label>City</label>
+										<select required>
+											<option disabled selected>Select City</option>
+											<!-- Andhra Pradesh -->
+											<option value="visakhapatnam">Visakhapatnam</option>
+											<option value="vijayawada">Vijayawada</option>
+											<option value="guntur">Guntur</option>
+											<option value="nellore">Nellore</option>
+											<option value="kurnool">Kurnool</option>
+											<option value="kadapa">Kadapa</option>
+											<option value="tirupati">Tirupati</option>
+											<option value="anantapur">Anantapur</option>
+											<option value="rajahmundry">Rajahmundry</option>
+											<option value="eluru">Eluru</option>
+
+											<!-- Arunachal Pradesh -->
+											<option value="itanagar">Itanagar</option>
+											<option value="pasighat">Pasighat</option>
+											<option value="naharlagun">Naharlagun</option>
+											<option value="tawang">Tawang</option>
+											<option value="ziro">Ziro</option>
+
+											<!-- Assam -->
+											<option value="guwahati">Guwahati</option>
+											<option value="silchar">Silchar</option>
+											<option value="dibrugarh">Dibrugarh</option>
+											<option value="jorhat">Jorhat</option>
+											<option value="nagaon">Nagaon</option>
+											<option value="teok">Teok</option>
+											<option value="tinsukia">Tinsukia</option>
+
+											<!-- Bihar -->
+											<option value="patna">Patna</option>
+											<option value="gaya">Gaya</option>
+											<option value="bhagalpur">Bhagalpur</option>
+											<option value="muzaffarpur">Muzaffarpur</option>
+											<option value="purnia">Purnia</option>
+											<option value="darbhanga">Darbhanga</option>
+											<option value="arrah">Arrah</option>
+											<option value="begusarai">Begusarai</option>
+
+											<!-- Chhattisgarh -->
+											<option value="raipur">Raipur</option>
+											<option value="bilaspur">Bilaspur</option>
+											<option value="durg">Durg</option>
+											<option value="bhilai">Bhilai</option>
+											<option value="korba">Korba</option>
+											<option value="raigarh">Raigarh</option>
+											<option value="jagdalpur">Jagdalpur</option>
+
+											<!-- Goa -->
+											<option value="panaji">Panaji</option>
+											<option value="margao">Margao</option>
+											<option value="vasco_da_gama">Vasco da Gama</option>
+											<option value="mapusa">Mapusa</option>
+											<option value="ponda">Ponda</option>
+
+											<!-- Gujarat -->
+											<option value="ahmedabad">Ahmedabad</option>
+											<option value="surat">Surat</option>
+											<option value="vadodara">Vadodara</option>
+											<option value="rajkot">Rajkot</option>
+											<option value="bhavnagar">Bhavnagar</option>
+											<option value="jamnagar">Jamnagar</option>
+											<option value="junagadh">Junagadh</option>
+											<option value="gandhinagar">Gandhinagar</option>
+											<option value="anand">Anand</option>
+
+											<!-- Haryana -->
+											<option value="gurugram">Gurugram</option>
+											<option value="faridabad">Faridabad</option>
+											<option value="panipat">Panipat</option>
+											<option value="ambala">Ambala</option>
+											<option value="yamunanagar">Yamunanagar</option>
+											<option value="rohtak">Rohtak</option>
+											<option value="hisar">Hisar</option>
+
+											<!-- Himachal Pradesh -->
+											<option value="shimla">Shimla</option>
+											<option value="manali">Manali</option>
+											<option value="dharamshala">Dharamshala</option>
+											<option value="solan">Solan</option>
+											<option value="mandi">Mandi</option>
+											<option value="bilaspur_hp">Bilaspur</option>
+
+											<!-- Jharkhand -->
+											<option value="ranchi">Ranchi</option>
+											<option value="jamshedpur">Jamshedpur</option>
+											<option value="dhanbad">Dhanbad</option>
+											<option value="bokaro">Bokaro</option>
+											<option value="deoghar">Deoghar</option>
+											<option value="hazaribagh">Hazaribagh</option>
+											<option value="giridih">Giridih</option>
+
+											<!-- Karnataka -->
+											<option value="bengaluru">Bengaluru</option>
+											<option value="mysuru">Mysuru</option>
+											<option value="mangaluru">Mangaluru</option>
+											<option value="hubballi">Hubballi</option>
+											<option value="belagavi">Belagavi</option>
+											<option value="shivamogga">Shivamogga</option>
+											<option value="davangere">Davangere</option>
+
+											<!-- Kerala -->
+											<option value="thiruvananthapuram">Thiruvananthapuram</option>
+											<option value="kochi">Kochi</option>
+											<option value="kozhikode">Kozhikode</option>
+											<option value="kollam">Kollam</option>
+											<option value="thrissur">Thrissur</option>
+											<option value="alappuzha">Alappuzha</option>
+											<option value="palakkad">Palakkad</option>
+
+											<!-- Madhya Pradesh -->
+											<option value="bhopal">Bhopal</option>
+											<option value="indore">Indore</option>
+											<option value="gwalior">Gwalior</option>
+											<option value="jabalpur">Jabalpur</option>
+											<option value="ujjain">Ujjain</option>
+											<option value="sagar">Sagar</option>
+											<option value="satna">Satna</option>
+
+											<!-- Maharashtra -->
+											<option value="mumbai">Mumbai</option>
+											<option value="pune">Pune</option>
+											<option value="nagpur">Nagpur</option>
+											<option value="nashik">Nashik</option>
+											<option value="aurangabad">Aurangabad</option>
+											<option value="solapur">Solapur</option>
+											<option value="kolhapur">Kolhapur</option>
+
+											<!-- Manipur -->
+											<option value="imphal">Imphal</option>
+											<option value="bishnupur">Bishnupur</option>
+											<option value="churachandpur">Churachandpur</option>
+											<option value="thoubal">Thoubal</option>
+
+											<!-- Meghalaya -->
+											<option value="shillong">Shillong</option>
+											<option value="tura">Tura</option>
+											<option value="nongstoin">Nongstoin</option>
+											<option value="jowai">Jowai</option>
+
+											<!-- Mizoram -->
+											<option value="aizawl">Aizawl</option>
+											<option value="lunglei">Lunglei</option>
+											<option value="champhai">Champhai</option>
+											<option value="kolasib">Kolasib</option>
+
+											<!-- Nagaland -->
+											<option value="kohima">Kohima</option>
+											<option value="dimapur">Dimapur</option>
+											<option value="mokokchung">Mokokchung</option>
+											<option value="tuensang">Tuensang</option>
+
+											<!-- Odisha -->
+											<option value="bhubaneswar">Bhubaneswar</option>
+											<option value="cuttack">Cuttack</option>
+											<option value="rourkela">Rourkela</option>
+											<option value="berhampur">Berhampur</option>
+											<option value="sambalpur">Sambalpur</option>
+											<option value="puri">Puri</option>
+											<option value="balasore">Balasore</option>
+
+											<!-- Punjab -->
+											<option value="chandigarh">Chandigarh</option>
+											<option value="amritsar">Amritsar</option>
+											<option value="ludhiana">Ludhiana</option>
+											<option value="jalandhar">Jalandhar</option>
+											<option value="patiala">Patiala</option>
+											<option value="bathinda">Bathinda</option>
+											<option value="mohali">Mohali</option>
+											<option value="hoshiarpur">Hoshiarpur</option>
+
+											<!-- Rajasthan -->
+											<option value="jaipur">Jaipur</option>
+											<option value="jodhpur">Jodhpur</option>
+											<option value="udaipur">Udaipur</option>
+											<option value="kota">Kota</option>
+											<option value="ajmer">Ajmer</option>
+											<option value="bikaner">Bikaner</option>
+											<option value="bhilwara">Bhilwara</option>
+											<option value="alwar">Alwar</option>
+
+											<!-- Sikkim -->
+											<option value="gangtok">Gangtok</option>
+											<option value="namchi">Namchi</option>
+											<option value="gyezing">Gyezing</option>
+											<option value="mangan">Mangan</option>
+
+											<!-- Tamil Nadu -->
+											<option value="chennai">Chennai</option>
+											<option value="coimbatore">Coimbatore</option>
+											<option value="madurai">Madurai</option>
+											<option value="tiruchirappalli">Tiruchirappalli</option>
+											<option value="salem">Salem</option>
+											<option value="tirunelveli">Tirunelveli</option>
+											<option value="vellore">Vellore</option>
+											<option value="thanjavur">Thanjavur</option>
+
+											<!-- Telangana -->
+											<option value="hyderabad">Hyderabad</option>
+											<option value="warangal">Warangal</option>
+											<option value="nizamabad">Nizamabad</option>
+											<option value="khammam">Khammam</option>
+											<option value="karimnagar">Karimnagar</option>
+											<option value="ramagundam">Ramagundam</option>
+											<option value="mahbubnagar">Mahbubnagar</option>
+
+											<!-- Tripura -->
+											<option value="agartala">Agartala</option>
+											<option value="dharmanagar">Dharmanagar</option>
+											<option value="kailasahar">Kailasahar</option>
+											<option value="udaypur">Udaipur</option>
+
+											<!-- Uttar Pradesh -->
+											<option value="lucknow">Lucknow</option>
+											<option value="kanpur">Kanpur</option>
+											<option value="varanasi">Varanasi</option>
+											<option value="agra">Agra</option>
+											<option value="meerut">Meerut</option>
+											<option value="ghaziabad">Ghaziabad</option>
+											<option value="allahabad">Allahabad</option>
+											<option value="bareilly">Bareilly</option>
+											<option value="aligarh">Aligarh</option>
+											<option value="moradabad">Moradabad</option>
+											<option value="saharanpur">Saharanpur</option>
+											<option value="gorakhpur">Gorakhpur</option>
+											<option value="noida">Noida</option>
+											<option value="faizabad">Faizabad</option>
+											<option value="firozabad">Firozabad</option>
+
+											<!-- Uttarakhand -->
+											<option value="dehradun">Dehradun</option>
+											<option value="haridwar">Haridwar</option>
+											<option value="roorkee">Roorkee</option>
+											<option value="haldwani">Haldwani</option>
+											<option value="nainital">Nainital</option>
+											<option value="rudrapur">Rudrapur</option>
+											<option value="kashipur">Kashipur</option>
+
+											<!-- West Bengal -->
+											<option value="kolkata">Kolkata</option>
+											<option value="darjeeling">Darjeeling</option>
+											<option value="siliguri">Siliguri</option>
+											<option value="asansol">Asansol</option>
+											<option value="durgapur">Durgapur</option>
+											<option value="howrah">Howrah</option>
+											<option value="kharagpur">Kharagpur</option>
+											<option value="haldia">Haldia</option>
+											<option value="baharampur">Baharampur</option>
+											<option value="malda">Malda</option>
+											<option value="other">Other</option>
+
+										</select>
+									</div>
+
+
+									<div class="input-field">
+										<label>Admission Date</label>
+										<input type="date" placeholder="Enter your issued date" required>
+									</div>
+									<div class="input-field">
+										<label>Admission Type</label>
+										<select required>
+											<option disabled selected>Select Admission type</option>
+											<option>Cap Round 1</option>
+											<option>Cap Round 2</option>
+											<option>Cap Round 3</option>
+											<option>Management</option>
+											<option>Other</option>
+										</select>
+									</div>
+									<div class="input-field">
+										<label>Admitting in</label>
+										<select required>
+											<option disabled selected>Select Admission Year</option>
+											<option>First Year</option>
+											<option>Direct Second Year</option>
+											<option>Other</option>
+										</select>
+									</div>
+
+									<div class="input-field">
+										<label>SSC(10<sup>th</sup>) Grand Total Marks</label>
+										<input type="number" placeholder="10'th Total marks" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>SSC(10<sup>th</sup>) Marks Obtained</label>
+										<input type="number" placeholder="10'th obtained marks" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>SSC(10<sup>th</sup>) Percentage</label>
+										<input type="number" placeholder="10'th Obtained percentage" min="0" required>
+									</div>
+
+
+
+
+
+
+									<div class="input-field">
+										<label>HSC(12<sup>th</sup>) Grand Total Marks</label>
+										<input type="number" placeholder="12'th Total marks" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>HSC(12<sup>th</sup>) Marks Obtained</label>
+										<input type="number" placeholder="12'th obtained marks" min="0" required>
+									</div>
+
+									<div class="input-field">
+										<label>HSC(12<sup>th</sup>) Percentage</label>
+										<input type="number" placeholder="12'th Obtained percentage" min="0" required>
+									</div>
+									<div class="input-field">
+										<label>Diploma Percentage</label>
+										<input type="number" placeholder="Diploma Percentage" min="0" required>
+									</div>
+
+									<!-- Add the horizontal rule here -->
+									<hr class="divider">
+
+									<h3>HSC Exam Marks</h3>
+
+									<div class="input-field">
+										<label>Name of the Institute (HSC)</label>
+										<input type="text" placeholder="HSC Institute name" required>
+									</div>
+									<div class="input-field">
+										<label>Name of the Board(HSC)</label>
+										<input type="text" placeholder="HSC board name" required>
+									</div>
+									<div class="input-field">
+										<label>Exam Seat No.</label>
+										<input type="text" placeholder="Exam Seat No." required>
+									</div>
+
+									<div class="input-field">
+										<label>Physics</label>
+										<div class="marks-container">
+											<input type="number" placeholder="Marks obtained" min="0" max="100"
+												required>
+											<input type="number" placeholder="Out of" min="0" max="100" required>
+										</div>
+									</div>
+
+									<div class="input-field">
+										<label>Chemistry</label>
+										<div class="marks-container">
+											<input type="number" placeholder="Marks obtained" min="0" max="100"
+												required>
+											<input type="number" placeholder="Out of" min="0" max="100" required>
+										</div>
+									</div>
+
+									<div class="input-field">
+										<label>Mathematics</label>
+										<div class="marks-container">
+											<input type="number" placeholder="Marks obtained" min="0" max="100"
+												required>
+											<input type="number" placeholder="Out of" min="0" max="100" required>
+										</div>
+									</div>
+
+									<div class="input-field">
+										<label>PCM Total</label>
+										<div class="marks-container">
+											<input type="number" placeholder="Marks obtained" min="0" max="100"
+												required>
+											<input type="number" placeholder="Out of" min="0" max="100" required>
+										</div>
+									</div>
+
+
+									<div class="input-field">
+										<label>Year of Passing</label>
+										<input type="number" placeholder="Exam Seat No." min="2020" max="2050" required>
+									</div>
+
+
+
+									<hr class="divider">
+
+									<h3>MC-CET(Optional for DSY Admission)</h3>
+
+									<div class="input-field">
+										<label>CET Roll No.</label>
+										<input type="text" placeholder="CET Roll No.">
+									</div>
+									<div class="input-field">
+										<label>CET Score</label>
+										<input type="text" placeholder="CET Score">
+									</div>
+									<hr class="divider">
+
+									<h3>JEE Exam (Optional for DSY Admission)</h3>
+
+									<div class="input-field">
+										<label>JEE Roll No.</label>
+										<input type="text" placeholder="JEE Roll no.">
+									</div>
+									<div class="input-field">
+										<label>JEE Score</label>
+										<input type="text" placeholder="JEE Score">
+									</div>
+
+									<hr class="divider">
+									<h3>Certificates - Original and a photocopy submitted to the institute</h3>
+
+									<div class="checkbox-grid">
+										<div class="checkbox-column">
+											<label><input type="checkbox" name="certificate">DTE Allotment
+												Letter</label><br>
+											<label><input type="checkbox" name="certificate">10th Std. Mark
+												Sheet</label><br>
+											<label><input type="checkbox" name="certificate"> College Leaving
+												Certificate</label><br>
+											<label><input type="checkbox" name="certificate">Migration Certificate if
+												applicable</label><br>
+											<label><input type="checkbox" name="certificate">Education Gap Affidavit(if
+												applicable)</label><br>
+											<label><input type="checkbox" name="certificate">Income
+												Certificate</label><br>
+											<label><input type="checkbox" name="certificate">Passport Size
+												Photo</label><br>
+										</div>
+										<div class="checkbox-column2">
+											<label><input type="checkbox" name="certificate"> MH-CET / JEE Score
+												Card</label><br>
+											<label><input type="checkbox" name="certificate">12th Std. Mark
+												Sheet</label><br>
+											<label><input type="checkbox" name="certificate">Nationality Domicile
+												Certificate</label><br>
+											<label><input type="checkbox" name="certificate">Cast Certificate & Non
+												Creamy Layer</label><br>
+											<label><input type="checkbox" name="certificate">Xerox copy of Adhar Card
+												Link Bank Passbook</label><br>
+											<label><input type="checkbox" name="certificate">Any other(FIR for Duplicate
+												doc, EBC, Defence Cert,etc)</label><br>
+
+										</div>
+										
+
+									</div>
+									<hr class="divider">
+
+									<h3>Adminssion Fees Payment</h3>
+
+									<div class="input-field">
+										<label>Total Fees</label>
+										<input type="number" placeholder="Total Fees aplicable">
+									</div>
+									<div class="input-field">
+										<label>Fees Payment</label>
+										<input type="number" placeholder="Paying while time of admission">
+									</div>
+									<hr class="divider">
+
+									
+
+								</div>
+
+							</div>
+							<div class="submit-button">
+								<button type="submit">Admit</button>
+							</div>
+						</div>
+
+					</form>
+				</div>
+			</div>
+
+
+
+
+
+
+
+
+
+
+			<!-- Modal 2 for faculties Registration -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	
+			
+			
+<div class="dashboard">
+
+				<div class="dashboard-content">
+					<div class="dashboard-cards">
+						<a href="#" id="openModal">
+							<div class="card">
+								<img src="./assets/img/add_icon.png" alt="Add Application Icon">
+								<h3>Student Registration</h3>
+							</div>
+						</a>
+						<a href="./faculty-registration.html">
+							<div class="card">
+								<img src="./assets/img/identities.png" alt="Add Application Icon">
+								<h3>Faculty Registration</h3>
+							</div>
+						</a>
+						<a href="./time-table.html">
+							<div class="card">
+								<img src="./assets/img/pngwing.com.png" alt="Add Application Icon">
+								<h3>Time Table</h3>
+							</div>
+						</a>
+						<a href="./leave.html">
+							<div class="card">
+								<img src="./assets/img/pngwing.com (6).png" alt="Add Application Icon">
+								<h3>Leave Records</h3>
+							</div>
+						</a>
+						<a href="./student_balance-fees.html">
+							<div class="card">
+								<img src="./assets/img/pngwing.com (7).png" alt="Add Application Icon">
+								<h3>Balance fees</h3>
+							</div>
+						</a>
+						<a href="./roles.html">
+							<div class="card">
+								<img src="./assets/img/role.png" alt="Add Application Icon">
+								<h3>Roles Assign.</h3>
+							</div>
+						</a>
+						<a href="./subjects.html">
+							<div class="card">
+								<img src="./assets/img/sub2.png" alt="Add Application Icon">
+								<h3>Subject Assign.</h3>
+							</div>
+						</a>
+						<a href="./student_record.html">
+							<div class="card">
+								<img src="./assets/img/students.png" alt="Add Application Icon">
+								<h3>Students Identities</h3>
+							</div>
+						</a>
+
+						<a href="./faculty-records.html">
+							<div class="card">
+								<img src="./assets/img/faculty.png" alt="Add Application Icon">
+								<h3>Faculty Identities</h3>
+							</div>
+						</a>
+						<a href="./faculty-records.html">
+							<div class="card">
+								<img src="./assets/img/s" alt="Add Application Icon">
+								<h3>Settings</h3>
+							</div>
+						</a>
+						<a href="./faculty-records.html">
+							<div class="card">
+								<img src="./assets/img/faculty.png" alt="Add Application Icon">
+								<h3>Faculty Identities</h3>
+							</div>
+						</a>
+						
+					</div>
+				</div>
+			</div>
+		</main>
+		<!-- MAIN -->
+
+
+	</section>
+
+
+
+	<style>
+		.dashboard-content {
+			align-items: center;
+			justify-content: center;
+			padding: 10px 20px;
+			border-radius: 8px;
+			display: flex;
+			justify-content: center;
+		}
+
+		/* Platform Intro */
+		.platform-intro {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			align-items: center;
+			max-width: auto;
+			padding: 20px;
+			text-align: center;
+		}
+
+		.dashboard-cards {
+			width: 100%;
+			display: flex;
+			justify-content:space-evenly;
+			align-items: center;
+			margin-top: 60px;
+		}
+
+		.card {
+			background-color: #fff;
+			text-align: center;
+			width: 300px;
+			color: #060714;
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+			border: 1px solid transparent;
+			padding: 10px;
+			border-radius: 8px;
+			box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+			&:hover {
+				border: 1px solid rgb(0, 98, 255);
+			}
+		}
+
+		.card img {
+			width: 50px;
+			height: 50px;
+			margin-bottom: 15px;
+
+		}
+
+		.card h3 {
+			font-size: 20px;
+			margin: 10px 0;
+		}
+
+		.card p {
+			font-size: 14px;
+			color: #666;
+		}
+
+		.dashboard-cards {
+			display: grid;
+			grid-template-columns: repeat(4, 1fr);
+			grid-gap: 25px;
+		}
+
+		/* Modal Styles */
+		.modal {
+			display: none;
+			position: fixed;
+			z-index: 1;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			overflow: auto;
+			background-color: rgba(0, 0, 0, 0.4);
+		}
+
+		.modal-content {
+			background-color: #fefefe;
+			margin: 5% auto;
+			padding: 20px;
+			border: 1px solid #888;
+			width: 80%;
+			font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+			/* Can adjust the width */
+			border-radius: 8px;
+			box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+		}
+
+		.close {
+			color: #aaa;
+			float: right;
+			font-size: 28px;
+			font-weight: bold;
+		}
+
+		.close:hover,
+		.close:focus {
+			color: red;
+			text-decoration: none;
+			cursor: pointer;
+		}
+
+		button {
+			padding: 10px 20px;
+			background-color: #007bff;
+			color: white;
+			border: none;
+			cursor: pointer;
+			border-radius: 5px;
+		}
+
+		button:hover {
+			background-color: #0056b3;
+		}
+
+
+
+
+
+		form {
+			position: relative;
+			margin-top: 16px;
+			min-height: 2850px;
+			background-color: #fff;
+			overflow: hidden;
+		}
+
+		.form {
+			position: absolute;
+			background-color: #fff;
+			transition: 0.3s ease;
+		}
+
+		.fields {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			flex-wrap: wrap;
+		}
+
+		form .fields .input-field {
+			display: flex;
+			width: calc(100% / 2 - 18px);
+			flex-direction: column;
+			margin: 4px 0;
+		}
+
+		.input-field label {
+			font-size: 14px;
+			font-weight: 600;
+			color: #2e2e2e;
+		}
+
+		.input-field input,
+		textarea,
+		select {
+			outline: none;
+			font-size: 14px;
+			font-weight: 400;
+			color: #333;
+			border-radius: 5px;
+			border: 1px solid #aaa;
+			padding: 0 15px;
+			height: 42px;
+			margin: 8px 0;
+		}
+
+		#register,
+		#search {
+			padding: 5px 10px;
+			border: none;
+			background-color: #3C91E6;
+			color: white;
+			font-weight: 500;
+			border-radius: 5px;
+			cursor: pointer;
+			font-size: 16px;
+		}
+
+		#search {
+			margin-left: 20px;
+		}
+
+
+		form input {
+			height: 30px;
+			margin-left: 25px;
+		}
+
+
+		input[type="number"]::-webkit-outer-spin-button,
+		input[type="number"]::-webkit-inner-spin-button {
+			-webkit-appearance: none;
+			margin: 0;
+		}
+
+
+		form input {
+			border: none;
+			border-bottom: 1px solid black;
+			text-align: center;
+		}
+
+		h3 {
+			width: 100%;
+			margin: 20px 0;
+			font-size: 18px;
+			font-weight: 600;
+			color: #2e2e2e;
+		}
+
+		hr.divider {
+			border: none;
+			border-top: 2px solid #ccc;
+			margin: 20px 0;
+			width: 100%;
+		}
+
+
+		.marks-container {
+			display: flex;
+			justify-content: space-between;
+			gap: 10px;
+		}
+
+		.marks-container input {
+			width: calc(50% - 5px);
+			height: 42px;
+			margin: 8px 0;
+		}
+
+
+
+		.submit-button {
+			width: 100%;
+			margin-top: 20px;
+		}
+
+		.submit-button button {
+			width: 100%;
+			padding: 10px;
+			border: none;
+			background-color: #3C91E6;
+			color: white;
+			font-size: 20px;
+			font-weight: 500;
+			border-radius: 5px;
+			cursor: pointer;
+			transition: background-color 0.3s ease;
+		}
+
+		.submit-button button:hover {
+			background-color: #2a7dc6;
+		}
+
+		.checkbox-grid {
+			display: grid;
+			grid-template-columns: repeat(2, 1fr);
+			width: 100%;
+		}
+
+		.checkbox-column {
+			display: flex;
+			flex-direction: column;
+			margin-right: 20px;
+		}
+
+		label {
+			display: flex;
+			align-items: center;
+			margin-bottom: 5px;
+		}
+
+		input[type="checkbox"] {
+			margin-right: 8px;
+		}
+	</style>
+	<!-- CONTENT -->
+
+	<script>
+		var modal = document.getElementById("myModal");
+		var openModal = document.getElementById("openModal");
+		var closeBtn = document.getElementsByClassName("close")[0];
+		openModal.onclick = function (event) {
+			event.preventDefault();
+			modal.style.display = "block";
+		}
+
+		closeBtn.onclick = function () {
+			modal.style.display = "none";
+		}
+		window.onclick = function (event) {
+			if (event.target == modal) {
+				modal.style.display = "none";
+			}
+		}
+
+
+	</script>
+</body>
+
+</html>

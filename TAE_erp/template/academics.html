@@ -7,6 +7,7 @@
 
 	<title>TAE</title>
 	{% block style %}
+	
     <style>
         
 		.loader {
@@ -51,6 +52,35 @@
 			margin-top: 10px;
 			font-size: 16px;
 			color: #333;
+		}
+		.alert-container {
+			margin: 20px 0;
+		}
+		
+		.alert {
+			padding: 10px;
+			border-radius: 5px;
+			margin-bottom: 10px;
+		}
+		
+		.alert-success {
+			background-color: #4CAF50;
+			color: white;
+		}
+		
+		.alert-error {
+			background-color: #f44336;
+			color: white;
+		}
+		
+		.alert-info {
+			background-color: #2196F3;
+			color: white;
+		}
+		
+		.alert-warning {
+			background-color: #ff9800;
+			color: white;
 		}
 		
 			</style>
@@ -163,6 +193,62 @@
 			cursor: pointer;
 		  }
 	</style>
+	<style>
+		/* Style for the message box container */
+.message-box {
+    position: absolute; /* Position relative to parent element */
+    top: 10px; /* Space from the top of the parent container */
+    left: 50%; /* Center horizontally */
+    transform: translateX(-50%); /* Adjust centering */
+    max-width: 80%; /* Limit the width */
+    z-index: 9999; /* Ensure it's on top */
+    text-align: center;
+    padding: 10px;
+}
+
+/* Style for individual message box */
+.message {
+    background-color: #f02c32; /* Dark red background */
+    color: white; /* White text */
+    border: 1px solid #7a1417; /* Darker red border */
+    padding: 20px; /* Make the message box bigger */
+    margin-bottom: 15px; /* Space between messages */
+    border-radius: 8px; /* Rounded corners */
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 18px; /* Larger text */
+    font-weight: bold;
+}
+
+/* Success message style */
+.message.alert-success {
+    background-color: #28a745; /* Green background for success */
+    border-color: #1e7e34;
+}
+
+/* Info message style */
+.message.alert-info {
+    background-color: #17a2b8; /* Info blue background */
+    border-color: #117a8b;
+}
+
+/* Style for the close button */
+.message .close-btn {
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 200px;
+}
+
+.message .close-btn:hover {
+    color: #aaa;
+}
+
+	</style>
 	{% endblock %}
 </head>
 
@@ -171,7 +257,16 @@
 
 	<!-- CONTENT -->
 	<section id="content">
-
+		{% if messages %}
+		<div class="alert-container">
+			{% for message in messages %}
+				<div class="alert alert-{{ message.tags }}">
+					{{ message }}
+				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+	
 <!-- Loader -->
 
 		<!-- MAIN -->
@@ -182,35 +277,23 @@
 				<p>Loading...</p>
 			</div>
 		</div>
-
-			<section class="main-course">
-				<form method="post">
-					{% csrf_token %}
-				<div class="box2">
-					
-					
-					<div class="class-batch">
-						<select name="class" required>
-							<option value="">Select Class</option>
-							{% for class in classes %}
-								<option value="{{ class.ClassID }}">{{ class.ClassName }}</option>
-							{% endfor %}
-						</select>
-					</div>
-					<div class="class-branch" >
-						<select name="batch" required id="batch&class">
-							<option value="">Batch</option>
-							<option value="All">All</option>
-							<option value="1">1</option>
-							<option value="2">2</option>
-							<option value="3">3</option>
-							
-						</select>
-						
-					</div>
-					<button class="btn btn-primary">Get Subjects</button>
-					</form>
+		{% if messages %}
+		<div id="message-box" class="message-box">
+			{% for message in messages %}
+				<div class="message alert-{{ message.tags }}">
+					<span class="message-content">{{ message }}</span>
+					<button class="close-btn" onclick="closeMessage()">X</button>
 				</div>
+			{% endfor %}
+		</div>
+	{% endif %}
+	
+	
+	
+	
+	
+			<section class="main-course">
+			<h2> Subject</h2>
 				<div class="course-box">
 					{% if subjects %}
 					{% for subject in subjects %}
@@ -223,7 +306,7 @@
 							<!-- <p>8 lectures conducted</p> -->
 							<input style="display: none;" type="hidden" name="sub" value="{{ subject.SubjectID }}">
 							<input style="display: none;" type="hidden" name="id" value="{{subject.CurrentClassID_id}}">
-							<a href="{% url 'attendance_form' %}?sub={{ subject.SubjectID }}&class={{ selected_class }}&batch={{batch}}">
+							<a href="{% url 'academics:attendance_form' %}?sub={{ subject.SubjectID }}&class={{ subject.CurrentClassID_id }}&batch={{batch}}">
 								<button>Take Attendance</button>
 							</a>
 						</div>
@@ -232,10 +315,7 @@
 				
 				</div>
 				{% endfor %}
-				{% else %}
-				<div style="padding: 50px;">
-					<h3>Please select Class and Batch</h3>
-			</div>{% endif %}
+				{% endif %}
 				</div>
 				
 			</section>
@@ -245,9 +325,16 @@
 	</section>
 	<!-- CONTENT -->
 
-
+	
+	
 	{% block scripts %}
 	<script src="{% static 'assets/script/loader.js'%}"></script>
+	<script>
+		function closeMessage() {
+			var messageBox = document.getElementById("message-box");
+			messageBox.style.display = "none";
+		}
+	</script>
 	{% endblock %}
 </body>
 

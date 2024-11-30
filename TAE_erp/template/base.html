@@ -3,20 +3,19 @@
 <html lang="en">
 
 <head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
-	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
-	<!-- My CSS -->
-    <!-- <link rel="stylesheet" href="{%static '/assets/style/formstyle.css' %}"> -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
+    <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    <!-- My CSS -->
     <link rel="stylesheet" href="{% static 'assets/style/history.css' %}">
     <link rel="stylesheet" href="{% static 'assets/style/students.css' %}">
-    <!-- <link rel="stylesheet" href="{% static 'assets/style/dailylog.css' %}"> -->
     <link rel="stylesheet" href="{% static 'assets/style/notice.css' %}">
-	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
-	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
     <style>
+        /* Global Loader Styles */
         .loader {
             position: fixed;
             top: 0;
@@ -24,13 +23,13 @@
             width: 100%;
             height: 100%;
             background: rgba(0, 0, 0, 0.5);
-            display: flex;
+            backdrop-filter: blur(5px);
+            display: none;
             align-items: center;
             justify-content: center;
             z-index: 10000;
-            display: none; /* Initially hidden */
         }
-    
+
         .loader-box {
             background: #fff;
             padding: 20px;
@@ -38,7 +37,7 @@
             text-align: center;
             box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
         }
-    
+
         .spinner {
             border: 8px solid #f3f3f3;
             border-top: 8px solid #3498db;
@@ -46,27 +45,23 @@
             width: 60px;
             height: 60px;
             animation: spin 1s linear infinite;
+            margin: 0 auto;
         }
-    
+
         @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-    
-            100% {
-                transform: rotate(360deg);
-            }
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
-    
+
         .loader-box p {
             margin-top: 10px;
             font-size: 14px;
             color: #333;
         }
     </style>
-{% block style %}
+    {% block style %}
 
-{% endblock %}
+    {% endblock %}
     <title>TAE</title>
 </head>
 
@@ -79,37 +74,37 @@
         </a>
         <ul class="side-menu top">
             <li class="{% if request.path == '/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-dashboard'></i>
                     <span class="text">Dashboard</span>
                 </a>
             </li>
             <li class="{% if request.path == '/preacademic' or request.path == '/academics' or request.path == '/greenbook' or request.path == '/report' or request.path == '/attendance_form' %}active{% endif %}">
-                <a href="{% url 'preacademic' %}">
+                <a href="{% url 'academics:preacademic' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Academics</span>
                 </a>
             </li>
             <li class="{% if request.path == '/notices' %}active{% endif %}">
-                <a href="{% url 'notices' %}">
+                <a href="{% url 'erp_1:notices' %}">
                     <i class='bx bxs-doughnut-chart'></i>
                     <span class="text">Notices</span>
                 </a>
             </li>
             <li class="{% if request.path == '/leaves' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Leaves</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
-                <a href="{% url 'logs' %}">
+            <li class="{% if request.path == '/logs' %}active{% endif %}">
+                <a href="{% url 'erp_1:logs' %}">
                     <i class='bx bx-calendar-check'></i>
                     <span class="text">Daily Logs</span>
                 </a>
             </li>
             <li class="{% if request.path == 'students' %}active{% endif %}">
-                <a href="{% url 'students' %}">
+                <a href="{% url 'erp_1:students' %}">
                     <i class='bx bxs-group'></i>
                     <span class="text">Student Info</span>
                 </a>
@@ -117,13 +112,13 @@
         </ul>
         <ul class="side-menu">
             <li class="{% if request.path == '/settings/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-cog'></i>
                     <span class="text">Settings</span>
                 </a>
             </li>
             <li>
-                <a href="{% url 'logout' %}" class="logout">
+                <a href="{% url 'erp_1:logout' %}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="text">Logout</span>
                 </a>
@@ -147,22 +142,25 @@
 				</a>
 			</li>
             <li class="{% if request.path == '/preports' %}active{% endif %}">
-                <a href="{% url 'preports' %}">
+                <a href="{% url 'erp_1:preports' %}">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Reports</span>
                 </a>
             </li>
-			<li>
-				<a href="logs">
-					<i class='bx bxs-calendar-star'></i>
-					<span class="text">Daily Logs</span>
-				</a>
-			</li>
-			<li>
-				<a href="notices">
-					<i class='bx bxs-doughnut-chart'></i>
-					<span class="text">Notices</span>
-				</a>
+            <li class="{% if request.path == '/preports' %}active{% endif %}">
+                <a href="{% url 'erp_1:logs' %}">
+                    <i class='bx bxs-calendar-star'></i>
+                    <span class="text">Daily Logs</span>
+                </a>
+            </li>
+
+				
+                <li class="{% if request.path == '/preports' %}active{% endif %}">
+                    <a href="{% url 'erp_1:notices' %}">
+                        <i class='bx bxs-doughnut-chart'></i>
+                        <span class="text">Notices</span>
+                    </a>
+                </li>
 			<!-- </li>
 			<li>
 				<a href="timetable">
@@ -184,8 +182,8 @@
 				</a>
 			</li> -->
 
-			<li>
-				<a href="students">
+			<li class="{% if request.path == '/preports' %}active{% endif %}">
+				<a href="{% url 'erp_1:students' %}">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
 				</a>
@@ -207,7 +205,13 @@
 		</ul>
 	</section>
     {% endif %}
-    <!-- SIDEBAR -->
+    <!-- Global Loader -->
+    <div id="loader" class="loader">
+        <div class="loader-box">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
 
     <!-- CONTENT -->
     <section id="content">
@@ -222,81 +226,63 @@
             </a>
         </nav>
         <!-- NAVBAR -->
-        <div id="loader" class="loader">
-            <div class="loader-box">
-                <div class="spinner"></div>
-                <p>Loading...</p>
-            </div>
-        </div>
         <!-- MAIN -->
         <main>
-                <!-- Loader -->
-
             {% block content %}
             {% endblock %}
         </main>
     </section>
     <!-- CONTENT -->
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            var loader = document.getElementById('loader');
-    
-            // Function to show the loader
+        document.addEventListener("DOMContentLoaded", function() {
+            const loader = document.getElementById('loader');
+
+            // Function to show loader
             function showLoader() {
-                if (loader) {
-                    loader.style.display = 'flex';
-                }
+                loader.style.display = 'flex';
             }
-            
-            // Function to hide the loader
+
+            // Function to hide loader
             function hideLoader() {
-                if (loader) {
-                    loader.style.display = 'none';
-                }
+                loader.style.display = 'none';
             }
-    
-            // Show loader on form submit
-            var forms = document.querySelectorAll('form');
-            forms.forEach(function (form) {
-                form.addEventListener('submit', function () {
+
+            // Show loader on all link clicks (except logout and anchors with no-loader class)
+            document.addEventListener('click', function(e) {
+                const target = e.target.closest('a');
+                if (target && 
+                    !target.classList.contains('no-loader') && 
+                    !target.classList.contains('logout') && 
+                    target.getAttribute('href') !== '#') {
+                    showLoader();
+                }
+            });
+
+            // Show loader on all form submissions
+            document.querySelectorAll('form').forEach(form => {
+                form.addEventListener('submit', function() {
                     showLoader();
                 });
             });
-    
-            // Show loader on link click
-            var links = document.querySelectorAll('a[href]');
-            links.forEach(function (link) {
-                link.addEventListener('click', function (e) {
-                    // Only show loader if the link is not an anchor or a modal trigger
-                    if (!link.hasAttribute('target') && !link.href.includes('#')) {
-                        showLoader();
-                    }
-                });
-            });
-            showLoader();
-            // Hide loader once the page is fully loaded
-            window.addEventListener('load', function () {
+
+            // Hide loader when page is fully loaded
+            window.addEventListener('load', function() {
                 hideLoader();
             });
-    
-            // Ensure loader is hidden when page is loaded from cache
-            window.addEventListener('pageshow', function (event) {
+
+            // Hide loader when back/forward buttons are used
+            window.addEventListener('pageshow', function(event) {
                 if (event.persisted) {
                     hideLoader();
-                } else {
-                    hideLoader(); // Ensure loader is hidden once the page is loaded
                 }
             });
-    
-            // Hide loader when the user navigates away
-            window.addEventListener('pagehide', function () {
+
+            // Optional: Add error handling to hide loader if something goes wrong
+            window.addEventListener('error', function() {
                 hideLoader();
             });
         });
     </script>
-    
-
-    
     {% block scripts %}
 
     {% endblock %}

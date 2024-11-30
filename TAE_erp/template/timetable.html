@@ -5,6 +5,53 @@
 <head>
 
     {% block style %}
+    <!-- <style>
+        
+		.loader {
+			position: fixed;
+			left: 0;
+			top: 0;
+			width: 100%;
+			height: 100%;
+			background: rgba(0, 0, 0, 0.4); /* Dark semi-transparent background */
+			backdrop-filter: blur(5px); /* Blurs the background */
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			z-index: 9999;
+			display: none; /* Hidden by default */
+		}
+		
+		.loader-box {
+			background: #fff; /* White background for the loader box */
+			border-radius: 10px; /* Rounded corners for the loader box */
+			padding: 20px;
+			box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Shadow effect */
+			text-align: center;
+		}
+		
+		.spinner {
+			border: 12px solid #f3f3f3; /* Light grey */
+			border-top: 12px solid #3498db; /* Blue */
+			border-radius: 50%;
+			width: 80px;
+			height: 80px;
+			margin: 0 auto;
+			animation: spin 1s linear infinite;
+		}
+		
+		@keyframes spin {
+			0% { transform: rotate(0deg); }
+			100% { transform: rotate(360deg); }
+		}
+		
+		.loader-box p {
+			margin-top: 10px;
+			font-size: 16px;
+			color: #333;
+		}
+		
+			</style> -->
     <style>
         /* Basic styles for the dropdown */
         .dropdown {
@@ -36,7 +83,14 @@
     {% endblock %}
 </head>
 <body>
+    <div id="loader" class="loader">
+        <div class="loader-box">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
     {% block content %}
+
     {% for class in classes %}
     {% if class.ClassID == selected_timetable_type%}
     <h1>Timetable for {{class.ClassName}}</h1>
@@ -44,7 +98,7 @@
     {% endfor %}
     
     <!-- Dropdown for selecting timetable type -->
-    <form method="GET">
+    <form method="GET" onsubmit="showloader()">
         <select name="timetable_type" class="dropdown" onchange="this.form.submit()" required>
             <option value="">Select Class</option>
             <!-- <option value="Master" {% if selected_timetable_type == 'Master' %}selected{% endif %}>Master Timetable</option> -->
@@ -56,6 +110,13 @@
             <option value="Individual" {% if selected_timetable_type == 'Individual' %}selected{% endif %}>Individual Timetable</option> -->
         </select>
     </form>
+    <div id="loader" class="loader">
+        <div class="loader-box">
+            <div class="spinner"></div>
+            <p>Loading...</p>
+        </div>
+    </div>
+    </div>
     <table border="1">
         <thead>
             <tr>
@@ -108,6 +169,12 @@
     {% endblock %}
     {% block scripts %}
     <script src="{% static 'assets/script/loader.js' %}"></script>
+    <script>
+        function showLoader() {
+            loader.style.display = 'flex';
+        }
+    </script>
+    
     {% endblock %}
 </body>
 </html>

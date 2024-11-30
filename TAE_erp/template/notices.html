@@ -117,18 +117,10 @@ th{
 {% block content %}
 			<div class="head-title">
 				<div class="left">
-					<h1>Notice</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a href="#">Notices</a>
-						</li>
-
-
-					</ul>
+					<h1>Notices</h1>
 				</div>
 			</div>
 			<section class="main-course">
-				<h1>My Notices</h1>
 				<table class="content-table">
 					<thead>
 						<tr>
@@ -156,7 +148,7 @@ th{
 										<!-- <a href="#" onclick="deleteItem('{{notice.id}}', '{{notice.attachment}}', '{{notice.ClassID.ClassID}}')">
 											<i class="fa-solid fa-trash fa-shake" style="color: red;"></i> Delete
 										</a> -->
-										<form method="POST" action="{% url 'delete_notice' notice.id %}">
+										<form method="POST" action="{% url 'erp_1:delete_notice' notice.id %}">
 											{% csrf_token %}
 											<input type="hidden" style="display: none;"  name="notice_id" value="{{ notice.id }}">
 											<button class="btn1" type="submit" onclick="deleteItem('{{notice.id}}', '{{notice.attachment}}', '{{notice.ClassID.ClassID}}')">

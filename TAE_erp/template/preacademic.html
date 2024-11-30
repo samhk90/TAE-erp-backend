@@ -76,11 +76,12 @@
 <body>
     <!-- CONTENT -->
     <section id="content">
+        
         <!-- MAIN -->
         {% block content %}
         {% if teacher.RoleID.RoleName == 'Teacher' %}
         <section class="card-container">
-            <a href="{% url 'academics' %}">
+            <a href="{% url 'academics:pre_attendance' %}">
             <div class="card attendance">
                 <div class="icon">
                     <i class="bx bx-check-circle"></i>
@@ -90,7 +91,7 @@
             </div>
         </a>
         {% if classteacher %}
-            <a href="{% url 'greenbook' %}">
+            <a href="{% url 'academics:greenbook' %}">
                 <div class="card greenbook">
                     <div class="icon">
                         <i class="bx bx-book"></i>
@@ -100,12 +101,12 @@
                 </div>
             </a>
             {% endif %}
-            <a href="{% url 'report' %}">
+            <a href="{% url 'academics:report' %}">
                 <div class="card reports">
                     <div class="icon">
                         <i class="bx bx-chart"></i>
                     </div>
-                    <h3>Reports</h3>
+                    <h3>Report</h3>
                     <p>Generate academic reports and summaries.</p>
                 </div>
             </a>
@@ -118,7 +119,7 @@
                 <p>Review the history of academic performance.</p>
             </div>
 
-            <a href="{% url 'timetable' %}">
+            <a href="{% url 'academics:timetable' %}">
                 <div class="card calendar">
                     <div class="icon">
                         <i class="bx bx-calendar"></i>

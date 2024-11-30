@@ -184,10 +184,14 @@
                 </tbody>
             </table>
             
-            
-            
-
-            <canvas id="attendanceChart" width="400" height="200"></canvas>
+            {% if daily_aggregates %}
+            <div style="margin-top: 30px; padding: 20px; background-color: white; border-radius: 8px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);">
+                <h3 style="margin-bottom: 20px; color: #333;">Weekly Attendance Trend</h3>
+                <div style="height: 400px;">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
+            </div>
+            {% endif %}
             
         </div>
     </section>
@@ -195,6 +199,8 @@
     {% endblock %}
 
     {% block scripts %}
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <script>
         document.getElementById('downloadBtn').addEventListener('click', function () {
             var table = document.getElementById('attendanceTable');
@@ -220,81 +226,104 @@
             document.body.removeChild(a);
         });
     </script>
-    <script>
-        function checkClassSelection() {
-            var classSelect = document.getElementById("classSelect").value;
-            if (classSelect === "") {
-                alert("Please select a class.");
-            }
-        }
-        </script>
-        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-        
 
-        <script>
-            document.addEventListener("DOMContentLoaded", function () {
-                const table = document.getElementById("attendanceTable");
-                const slotCount = {{ slots|length }};
-                const attendanceData = Array.from(table.querySelectorAll("tbody tr"));
-        
-                // Initialize counts for each slot
-                let slotSummary = Array(slotCount).fill().map(() => ({ present: 0, absent: 0 }));
-        
-                // Calculate present/absent counts for each slot
-                attendanceData.forEach(row => {
-                    Array.from(row.querySelectorAll("td")).slice(2, 2 + slotCount).forEach((cell, index) => {
-                        if (cell.innerText.trim() === "P") {
-                            slotSummary[index].present++;
-                        } else if (cell.innerText.trim() === "A") {
-                            slotSummary[index].absent++;
-                        }
-                    });
-                });
-        
-                // Prepare labels with start and end time for each slot
-                const labels = [
-                    {% for slot in slots %}
-                        "{{ slot.start_time }} - {{ slot.end_time }}",
-                    {% endfor %}
-                ];
-                
-                const presentData = slotSummary.map(summary => summary.present);
-                const absentData = slotSummary.map(summary => summary.absent);
-        
-                // Initialize Chart.js
-                const ctx = document.getElementById('attendanceChart').getContext('2d');
-                new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: labels,
-                        datasets: [
-                            {
-                                label: 'Present',
-                                data: presentData,
-                                backgroundColor: 'lightgreen',
-                                borderColor: 'darkgreen',
-                                borderWidth: 1
-                            },
-                            {
-                                label: 'Absent',
-                                data: absentData,
-                                backgroundColor: 'red',
-                                borderColor: 'darkred',
-                                borderWidth: 1
+    {% if daily_aggregates %}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var ctx = document.getElementById('attendanceChart').getContext('2d');
+            var chartData = {
+                labels: [{% for day in daily_aggregates %}'{{ day.date }}'{% if not forloop.last %}, {% endif %}{% endfor %}],
+                datasets: [{
+                    label: 'Students Present',
+                    data: [{% for day in daily_aggregates %}{{ day.present }}{% if not forloop.last %}, {% endif %}{% endfor %}],
+                    borderColor: '#3c91e6',
+                    backgroundColor: 'rgba(60, 145, 230, 0.1)',
+                    borderWidth: 2,
+                    fill: true,
+                    tension: 0.4
+                }]
+            };
+
+            var chartOptions = {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Number of Students Present',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
                             }
-                        ]
+                        },
+                        ticks: {
+                            stepSize: 1,
+                            font: {
+                                size: 12
+                            }
+                        }
                     },
-                    options: {
-                        scales: {
-                            y: {
-                                beginAtZero: true
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Days of the Week',
+                            font: {
+                                size: 14,
+                                weight: 'bold'
+                            }
+                        },
+                        ticks: {
+                            font: {
+                                size: 12
                             }
                         }
                     }
-                });
+                },
+                plugins: {
+                    title: {
+                        display: true,
+                        text: 'Weekly Attendance Trend',
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: 20
+                    },
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                var dayIndex = context.dataIndex;
+                                var dailyData = [
+                                    {% for day in daily_aggregates %}
+                                    {
+                                        present: {{ day.present }},
+                                        total: {{ day.total }}
+                                    }{% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                                ];
+                                var present = dailyData[dayIndex].present;
+                                var total = dailyData[dayIndex].total;
+                                return `Present: ${present} out of ${total} students`;
+                            }
+                        }
+                    }
+                }
+            };
+
+            new Chart(ctx, {
+                type: 'line',
+                data: chartData,
+                options: chartOptions
             });
-        </script>
-        
+        });
+    </script>
+    {% endif %}
     <script src="{% static 'assets/script/loader.js' %}"></script>
     {% endblock %}
 </body>

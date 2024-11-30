@@ -503,6 +503,36 @@ body {
 	border-radius: 4px;
 	cursor: pointer;
 }
+.alert-container {
+    margin: 20px 0;
+}
+
+.alert {
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 10px;
+}
+
+.alert-success {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.alert-error {
+    background-color: #f44336;
+    color: white;
+}
+
+.alert-info {
+    background-color: #2196F3;
+    color: white;
+}
+
+.alert-warning {
+    background-color: #ff9800;
+    color: white;
+}
+
 
 	</style>
 </head>
@@ -517,38 +547,37 @@ body {
         </a>
         <ul class="side-menu top">
             <li class="{% if request.path == '/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-dashboard'></i>
                     <span class="text">Dashboard</span>
                 </a>
             </li>
             <li class="{% if request.path == '/preacademic' or request.path == '/academics' or request.path == '/greenbook' or request.path == '/report' or request.path == '/attendance_form' %}active{% endif %}">
-                <a href="{% url 'preacademic' %}">
+                <a href="{% url 'academics:preacademic' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Academics</span>
                 </a>
             </li>
             <li class="{% if request.path == '/notices' %}active{% endif %}">
-                <a href="{% url 'notices' %}">
+                <a href="{% url 'erp_1:notices' %}">
                     <i class='bx bxs-doughnut-chart'></i>
                     <span class="text">Notices</span>
                 </a>
             </li>
             <li class="{% if request.path == '/leaves' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Leaves</span>
                 </a>
             </li>
-
             <li class="{% if request.path == '/dailylogs' %}active{% endif %}">
-                <a href="{% url 'logs' %}">
+                <a href="{% url 'erp_1:logs' %}">
                     <i class='bx bx-calendar-check'></i>
                     <span class="text">Daily Logs</span>
                 </a>
             </li>
             <li class="{% if request.path == 'students' %}active{% endif %}">
-                <a href="{% url 'students' %}">
+                <a href="{% url 'erp_1:students' %}">
                     <i class='bx bxs-group'></i>
                     <span class="text">Student Info</span>
                 </a>
@@ -556,13 +585,13 @@ body {
         </ul>
         <ul class="side-menu">
             <li class="{% if request.path == '/settings/' %}active{% endif %}">
-                <a href="{% url 'index' %}">
+                <a href="{% url 'erp_1:index' %}">
                     <i class='bx bxs-cog'></i>
                     <span class="text">Settings</span>
                 </a>
             </li>
             <li>
-                <a href="{% url 'logout' %}" class="logout">
+                <a href="{% url 'erp_1:logout' %}" class="logout">
                     <i class='bx bxs-log-out-circle'></i>
                     <span class="text">Logout</span>
                 </a>
@@ -597,11 +626,10 @@ body {
 		<!-- MAIN -->
 		<main>
 
+		
 			<div class="card">
 				<h2>Attendance Search</h2>
 				<div class="container">
-					<form  method="post" >
-						{% csrf_token %}
 						<div class="row">
 							<div class="column">
 								<label for="load_type"> <b>Load Type:</b> {%if subject.SubjectType %}Therotical{% else %}
@@ -630,43 +658,51 @@ body {
 								<label for="course"><b>Class:</b> {{selected_class.ClassName}}</label>
 								
 							</div>
+							{%if subject.SubjectType %}
 							<div class="column">
-								<label for="course"><b>Batch:</b> {{batch}}</label>
-								
+								<label for="course"><b>Batch: None</label>
 							</div>
+							{% else %}
+							<div class="column">
+								<form  method="GET">
+									<input type="hidden" name="sub" value="{{ request.GET.sub }}">
+									<input type="hidden" name="class" value="{{ request.GET.class }}">
+								<label for="course"><b>Batch: </label>
+									
+								<select name="batch" class="dropdown" onchange="this.form.submit()">
+									
+									<option value="">Select Class</option>
+									{% if batch %}<option selected value="{{batch}}">{{batch}}</option>{% endif %}
+									<option value="1">1</option>
+									<option value="2">2</option>
+									<option value="3">3</option>
+								</select>
+							</form>
+							</div>
+							{% endif %}
 						</div>
 						
+					<form  method="post" >
+						{% csrf_token %}
 						<div class="row">
+							
 							<div class="column">
 								<label for="batch">Date :</label>
-								<input type="date" name="date" id="date" required>
+								<input type="text" name="date" id="date" value="{{date}}" disabled>
 							</div>
 							<div class="column">
 								<label for="from_time">From:</label>
-								<select id="from_time" name="from_time" required>
-									<option value="">Select Time</option>
-									<option value="09:15 am">09:15 am</option>
-									<option value="10:15 am">10:15 am</option>
-									<option value="12:00 pm">12:00 pm</option>
-									<option value="01:00 pm">01:00 pm</option>
-									<option value="02:15 pm">02:15 pm</option>
-									<option value="03:15 pm">03:15 pm</option>
-								</select>
+								<input type="text"   disabled value="{{slot.start_time}}">
+								
+								<input type="text" name='start'  hidden value="{{slot.start_time}}">
 							</div>
 							<div class="column">
 								<label for="to_time">To:</label>
-								<select id="to_time" name="to_time" required>
-									<option value="">Select Time</option>
-									<option value="10:15 am">10:15 am</option>
-									<option value="11:15 am">11:15 am</option>
-									<option value="01:00 pm">01:00 pm</option>
-									<option value="02:00 pm">02:00 pm</option>
-									<option value="03:15 pm">03:15 pm</option>
-									<option value="04:15 pm">04:15 pm</option>
-								</select>
+								<input type="text"   disabled value="{{slot.end_time}}">
+								<input type="text" name='end'  hidden value="{{slot.end_time}}">
 							</div>
 						</div>         
-
+						<input type="text" name="slot" value="{{slot.Slotid}}" hidden>
 		  
 			</div>
 				<div class="card">
@@ -703,6 +739,7 @@ body {
 
 	</section>
 	<!-- CONTENT -->
+
 
 
 	<script src="assets/script/script.js"></script>

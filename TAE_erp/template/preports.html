@@ -111,7 +111,7 @@
         {% block content %}
 
         <section class="card-container">
-            <a href="{% url 'daily_report' %}">
+            <a href="{% url 'erp_1:daily_report' %}">
             <div class="card attendance">
                 <div class="icon">
                     <i class="bx bx-calendar-check"></i>
@@ -120,7 +120,7 @@
             </div>
         </a>
 
-            <a href="{% url 'weekly_report' %}">
+            <a href="{% url 'erp_1:weekly_report' %}">
                 <div class="card greenbook">
                     <div class="icon">
                         <i class="bx bx-calendar-week"></i>
@@ -129,7 +129,7 @@
                 </div>
             </a>
 
-            <a href="{% url 'monthly_report' %}">
+            <a href="{% url 'erp_1:monthly_report' %}">
                 <div class="card reports">
                     <div class="icon">
                         <i class="bx bx-calendar-event"></i>
@@ -137,7 +137,7 @@
                     <h3>Monthly Report</h3>
                 </div>
             </a>
-            <a href="{% url 'subjectwise' %}">
+            <a href="{% url 'erp_1:subjectwise' %}">
                 <div class="card history">
                     <div class="icon">
                         <i class="bx bx-book-open"></i>
@@ -147,7 +147,7 @@
             </a>
             
 
-            <a href="{% url 'class_report' %}">
+            <a href="{% url 'erp_1:class_report' %}">
                 <div class="card calendar">
                     <div class="icon">
                         <i class="bx bx-building"></i>
@@ -156,7 +156,7 @@
                 </div>
             </a>
 
-            <a href="{% url 'report' %}">
+            <a href="{% url 'academics:report' %}">
                 <div class="card course-plan">
                     <div class="icon">
                         <i class="bx bx-customize"></i>
