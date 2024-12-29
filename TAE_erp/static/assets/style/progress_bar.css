@@ -49,14 +49,14 @@
     height: 100%;
     width: 100%;
     background: #fff;
-    -webkit-border-radius: 100%;
+  border-radius: 100%;
     clip: rect(0px, 100px, 100px, 50px);
   }
   .circle .bar .progress{
     position: absolute;
     height: 100%;
     width: 100%;
-    -webkit-border-radius: 100%;
+    border-radius: 100%;
     clip: rect(0px, 50px, 100px, 0px);
   }
   .circle .bar .progress, .dot span{

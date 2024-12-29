@@ -1,0 +1,46 @@
+.card {
+  display: flex;
+  width: 100%;
+  gap: 20px;
+  font-size: 13px;
+  background-color: white;
+  padding: 20px;
+  margin-top:20px;
+  border-radius: 8px;
+}
+.present, .absent {
+  width: 50%;
+}
+
+
+
+table{
+  width: 100%; 
+  border-spacing: 0;
+  box-shadow: 0 2px 15px rgba(64,64,64,.7);
+  border-radius: 06px 06px 0 0;
+  overflow: hidden;
+ 
+ }
+ td , th{
+  padding: 12px 10px;
+  text-align: center;
+ 
+ }
+ .card h3{
+  margin-bottom: 10px;
+ }
+ td{
+  border-bottom: 1px solid rgb(234, 232, 232);
+
+ }
+ tr:hover{
+  background-color: rgb(234, 232, 232);
+}
+ th{
+  background-color: #0f85e0;
+  color: #fafafa;
+  font-family: 'Open Sans',Sans-serif;
+  font-weight: 200;
+  font-weight: 600;
+ }

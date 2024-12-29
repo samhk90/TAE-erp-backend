@@ -6,49 +6,125 @@ from django.shortcuts import render
 from erp_1.decorators import supabase_login_required
 from django.contrib import messages
 from django.shortcuts import render, get_object_or_404
-from django.db.models import Count, Q, F
-from .models import Teacher, ClassTeacherAssignment, Student, Attendance,Slots
-from datetime import date
-
-from datetime import timedelta
+from django.db.models import Count, Q, F, FloatField, Case, When
+from .models import Teacher, ClassTeacherAssignment, Student, Attendance,Slots,LeaveRequest,LeaveType,TempTimetable
+from datetime import datetime, date, timedelta  # Update this import line
 from django.utils import timezone
+from django.http import JsonResponse
+
 from collections import defaultdict
 from django.db.models import Case, When, IntegerField
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from .models import Notices
 import supabase
+import logging
+from django.conf import settings
+from django.db import DatabaseError
+logger = logging.getLogger(__name__)
+
 @supabase_login_required
 def index(request):
-    email = request.session.get('teacher_email')
-    today = date.today()
-    timefrom = "09:15 am"
-    timeto = "10:15 am"
     try:
-        teacher = Teacher.objects.select_related('RoleID', 'DepartmentID').get(Email=email)
+        email = request.session.get('teacher_email')
+        if not email:
+            return render(request, 'error.html', {
+                'error_title': 'Session Expired',
+                'error_message': 'Please log in again to continue.',
+                'return_url': 'login',
+                'return_text': 'Login Page'
+            })
+
+        today = date.today()
+        timefrom = "09:15 am"
+        timeto = "10:15 am"
+
+        # Optimize teacher query with select_related
+        try:
+            teacher = (
+                Teacher.objects.select_related('RoleID', 'DepartmentID')
+                .get(Email=email)
+            )
+        except Teacher.DoesNotExist:
+            return render(request, 'error.html', {
+                'error_title': 'User Not Found',
+                'error_message': 'Teacher account not found.',
+                'return_url': 'login',
+                'return_text': 'Login Page'
+            })
+
         role = teacher.RoleID.RoleName
-    except Teacher.DoesNotExist:
-        return render(request, 'index.html', {'error_message': 'Teacher not found'})
-    if role == 'Teacher':
-        department = teacher.DepartmentID
-        attendance_records = Attendance.objects.filter(
-            ClassID__DepartmentID=department, Date=today, Timefrom=timefrom, Timeto=timeto
-        ).distinct()
-        if not attendance_records.exists():
-            timeto = '11:15 am'
-            attendance_records = Attendance.objects.filter(
-                ClassID__DepartmentID=department, Date=today, Timefrom=timefrom, Timeto=timeto
-            ).distinct()
-        attendance_summary = attendance_records.values('ClassID__DepartmentID').annotate(
-            present_count=Count('Status', filter=Q(Status=True)),
-            absent_count=Count('Status', filter=Q(Status=False))
-        ).order_by('AttendanceID').first()
 
-        present_count = attendance_summary['present_count'] if attendance_summary else 0
-        absent_count = attendance_summary['absent_count'] if attendance_summary else 0
-        total_count = Student.objects.filter(CurrentClassID__DepartmentID=department).count()
+        if role == 'Teacher' or role == 'HOD':
+            try:
+                # Add ordering to the aggregation query
+                attendance_data = (
+                    Attendance.objects.filter(
+                        ClassID__DepartmentID=teacher.DepartmentID,
+                        Date=today
+                    ).filter(
+                        Q(Timefrom=timefrom, Timeto=timeto) |
+                        Q(Timefrom=timefrom, Timeto='11:15 am')
+                    ).values('ClassID__DepartmentID')
+                    .annotate(
+                        present_count=Count('Status', filter=Q(Status=True)),
+                        absent_count=Count('Status', filter=Q(Status=False))
+                    ).order_by('ClassID__DepartmentID')  # Add ordering
+                    .first()
+                )
 
-        attendance_percentage = (present_count / total_count) * 100 if total_count > 0 else 0
+                total_count = Student.objects.filter(
+                    CurrentClassID__DepartmentID=teacher.DepartmentID
+                ).count()
+
+                present_count = attendance_data['present_count'] if attendance_data else 0
+                absent_count = attendance_data['absent_count'] if attendance_data else 0
+                attendance_percentage = (present_count / total_count * 100) if total_count > 0 else 0
+                
+            except DatabaseError as e:
+                logger.error(f'Database error in index view: {str(e)}')
+                return render(request, 'error.html', {
+                    'error_title': 'Database Error',
+                    'error_message': 'Unable to fetch attendance data.',
+                    'error_details': str(e) if settings.DEBUG else None,
+                    'return_url': '/',
+                    'return_text': 'Try Again'
+                })
+
+        elif role == 'Principal':
+            try:
+                # Add ordering to the principal's aggregation query
+                attendance_data = (
+                    Attendance.objects.filter(
+                        Date=today
+                    ).filter(
+                        Q(Timefrom=timefrom, Timeto=timeto) |
+                        Q(Timefrom=timefrom, Timeto='11:15 am')
+                    ).values('ClassID__DepartmentID')
+                    .annotate(
+                        present_count=Count('Status', filter=Q(Status=True)),
+                        absent_count=Count('Status', filter=Q(Status=False))
+                    ).order_by('ClassID__DepartmentID')  # Add ordering
+                    .first()
+                )
+
+                total_count = Student.objects.count()
+                present_count = attendance_data['present_count'] if attendance_data else 0
+                absent_count = attendance_data['absent_count'] if attendance_data else 0
+                attendance_percentage = (present_count / total_count * 100) if total_count > 0 else 0
+
+            except DatabaseError as e:
+                logger.error(f'Database error in index view: {str(e)}')
+                return render(request, 'error.html', {
+                    'error_title': 'Database Error',
+                    'error_message': 'Unable to fetch attendance data.',
+                    'error_details': str(e) if settings.DEBUG else None,
+                    'return_url': '/',
+                    'return_text': 'Try Again'
+                })
+        else:
+            # For other roles, just show basic interface
+            return render(request, 'index.html', {'teacher': teacher})
 
         context = {
             'teacher': teacher,
@@ -57,38 +133,18 @@ def index(request):
             'total': total_count,
             'attendance_percentage': attendance_percentage,
         }
+        
         return render(request, 'index.html', context)
 
-    elif role == 'Principal':
-        attendance_records = Attendance.objects.filter(
-             Date=today, Timefrom=timefrom, Timeto=timeto
-        ).distinct()
-        if not attendance_records.exists():
-            timeto = '11:15 am'
-            attendance_records = Attendance.objects.filter(
-                 Date=today, Timefrom=timefrom, Timeto=timeto
-            ).distinct()
-        attendance_summary = attendance_records.values('ClassID__DepartmentID').annotate(
-            present_count=Count('Status', filter=Q(Status=True)),
-            absent_count=Count('Status', filter=Q(Status=False))
-        ).order_by('AttendanceID').first()
-
-        present_count = attendance_summary['present_count'] if attendance_summary else 0
-        absent_count = attendance_summary['absent_count'] if attendance_summary else 0
-        total_count = Student.objects.all().count()
-
-        attendance_percentage = (present_count / total_count) * 100 if total_count > 0 else 0
-
-        context = {
-            'teacher': teacher,
-            'present': present_count,
-            'absent': absent_count,
-            'total': total_count,
-            'attendance_percentage': attendance_percentage,
-        }
-        return render(request, 'index.html', context)
-
-    return render(request, 'index.html', {'teacher': teacher})
+    except Exception as e:
+        logger.error(f'Unexpected error in index view: {str(e)}')
+        return render(request, 'error.html', {
+            'error_title': 'System Error',
+            'error_message': 'An unexpected error occurred.',
+            'error_details': str(e) if settings.DEBUG else None,
+            'return_url': '/',
+            'return_text': 'Home'
+        })
 
 
 def login(request):
@@ -156,17 +212,13 @@ def download_csv_template(request):
 @supabase_login_required
 def student(request):
     if request.method == 'POST':
-        # Check if the request is a CSV file upload
         if 'csv_file' in request.FILES:
             csv_file = request.FILES['csv_file']
-
-            # Check if the uploaded file is a CSV file
             if not csv_file.name.endswith('.csv'):
                 messages.error(request, 'Please upload a CSV file.')
                 return render(request, 'student_form.html')
 
             try:
-                # Read the CSV file
                 decoded_file = csv_file.read().decode('utf-8').splitlines()
                 reader = csv.DictReader(decoded_file)
                 url: str = "https://gipdgkwmxmmykyaliwhr.supabase.co"
@@ -175,7 +227,6 @@ def student(request):
                 res = supabase.auth.sign_out()
                 
                 for row in reader:
-                    # Extract student data from each row
                     firstname = row['firstname']
                     lastname = row['lastname']
                     email = row['email']
@@ -185,7 +236,6 @@ def student(request):
                     classid=row['classid']
                     
                     try:
-                        # Sign up user with Supabase
                         sign_up_response = supabase.auth.sign_up({
                             'email': email,
                             'password': password,
@@ -228,202 +278,202 @@ def student(request):
 
 @supabase_login_required
 def students(request):
-    year = Year.objects.all()
-    department = Department.objects.all()
-    email = request.session.get('teacher_email')
-    teacher = get_object_or_404(Teacher, Email=email)
-    if request.method == 'POST':
-        yearid = request.POST.get('year')
-        departmentid = request.POST.get('department')
-        currentclass = get_object_or_404(Classes, DepartmentID=departmentid, YearID=yearid)
-        currentclassid = currentclass.ClassID
-        students = Student.objects.filter(CurrentClassID=currentclassid).order_by('RollNumber')
-
-        students_data = []
-        subjects_set = set()
-
-        for student in students:
-            student_attendance = Attendance.objects.filter(StudentID=student.StudentID).values('SubjectID', 'SubjectName').annotate(
-                attended_count=Count('AttendanceID', filter=Q(Status=True)),
-                total_lectures=Count('Date')
+    try:
+        # Get teacher info with prefetch
+        email = request.session.get('teacher_email')
+        teacher = get_object_or_404(Teacher.objects.select_related('RoleID', 'DepartmentID'), Email=email)
+        
+        # Fetch all years and departments in single query
+        year_list = Year.objects.all().order_by('YearID')
+        department_list = Department.objects.all().order_by('DepartmentName')
+        
+        if request.method == 'POST':
+            yearid = request.POST.get('year')
+            departmentid = request.POST.get('department')
+            
+            # Get class info with a single optimized query
+            current_class = get_object_or_404(
+                Classes.objects.select_related('DepartmentID', 'YearID'),
+                DepartmentID=departmentid, 
+                YearID=yearid
             )
 
-            total_attended = sum([subject['attended_count'] for subject in student_attendance])
-            total_conducted = sum([subject['total_lectures'] for subject in student_attendance])
-            average_percentage = (total_attended / total_conducted) * 100 if total_conducted > 0 else 0
+            # Optimize student query with select_related
+            students = Student.objects.filter(
+                CurrentClassID=current_class.ClassID
+            ).select_related('CurrentClassID').order_by('RollNumber')
 
-            students_data.append({
-                'student': student,
-                'attendance': list(student_attendance),
-                'total_attended': total_attended,
-                'average_percentage': average_percentage,
-            })
+            if not students.exists():
+                messages.warning(request, 'No students found in this class.')
+                return render(request, 'students.html', {
+                    'year': year_list,
+                    'department': department_list,
+                    'teacher': teacher
+                })
+
+
+
+            context = {
+                'year': year_list,
+                'department': department_list,
+                'students_data': students,
+                'teacher': teacher,
+                'selected_year': yearid,
+                'selected_department': departmentid,
+                'current_class': current_class
+            }
+
+            return render(request, 'students.html', context)
+
+        return render(request, 'students.html', {
+            'year': year_list,
+            'department': department_list,
+            'teacher': teacher
+        })
+
+    except Exception as e:
+        logger.error(f'Error in students view: {str(e)}')
+        messages.error(request, 'An error occurred while fetching student data')
+        return redirect('erp_1:index')
+
+@supabase_login_required
+def custom_report(request):
+    try:
+        email = request.session.get('teacher_email')
+        teacher = get_object_or_404(Teacher.objects.select_related('RoleID', 'DepartmentID'), Email=email)
+        role = teacher.RoleID.RoleName
+        
+        # Handle departments based on role
+        if role == 'HOD':
+            departments = [teacher.DepartmentID]
+            selected_department = teacher.DepartmentID.DepartmentID
+        elif role == 'Principal':
+            departments = Department.objects.all()
+            selected_department = request.GET.get('department')
+        else:  # Regular teacher
+            # Get departments from teacher's assigned subjects
+            assigned_dept_ids = TeacherSubjectAssignment.objects.filter(
+                TeacherID=teacher
+            ).values_list('SubjectID__CurrentClassID__DepartmentID', flat=True).distinct()
+            departments = Department.objects.filter(DepartmentID__in=assigned_dept_ids)
+            selected_department = request.GET.get('department')
+
+        # Get classes based on department and role
+        if selected_department:
+            if role == 'Teacher':
+                # Filter classes by teacher's assignments
+                class_ids = TeacherSubjectAssignment.objects.filter(
+                    TeacherID=teacher,
+                    SubjectID__CurrentClassID__DepartmentID=selected_department
+                ).values_list('SubjectID__CurrentClassID', flat=True).distinct()
+                classes = Classes.objects.filter(ClassID__in=class_ids)
+            else:
+                classes = Classes.objects.filter(DepartmentID=selected_department)
+        else:
+            classes = Classes.objects.none()
+
+        # Get subjects and handle selected class
+        selected_class = request.GET.get('class')
+        subjects = []
+        if selected_class:
+            if role == 'Teacher':
+                subjects = Subject.objects.filter(
+                    teachersubjectassignment__TeacherID=teacher,
+                    CurrentClassID=selected_class
+                ).distinct()
+            else:
+                subjects = Subject.objects.filter(CurrentClassID=selected_class)
+
+        selected_subject = request.GET.get('subject')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
+        
+        attendance_data = []
+        if all([selected_class, selected_subject, start_date, end_date]):
+            try:
+                start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+                end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d').date()
+                
+                # Get students and their attendance records
+                students = Student.objects.filter(
+                    CurrentClassID=selected_class
+                ).order_by('RollNumber')
+
+                # Optimize attendance query with annotations
+                attendance_records = (
+                    Attendance.objects.filter(
+                        StudentID__in=students.values_list('StudentID', flat=True),
+                        SubjectID=selected_subject,
+                        Date__range=(start_date, end_date)
+                    ).values('StudentID')
+                    .annotate(
+                        attended_count=Count('AttendanceID', filter=Q(Status=True)),
+                        total_lectures=Count('AttendanceID'),
+                        attendance_percentage=Case(
+                            When(total_lectures__gt=0, 
+                                 then=100.0 * Count('AttendanceID', filter=Q(Status=True)) / Count('AttendanceID')),
+                            default=0.0,
+                            output_field=FloatField(),
+                        )
+                    )
+                )
+
+                # Create lookup dictionary for O(1) access
+                attendance_lookup = {
+                    record['StudentID']: record for record in attendance_records
+                }
+
+                # Prepare attendance data
+                for student in students:
+                    record = attendance_lookup.get(student.StudentID, {
+                        'attended_count': 0,
+                        'total_lectures': 0,
+                        'attendance_percentage': 0
+                    })
+
+                    attendance_data.append({
+                        'student': {
+                            'RollNo': student.RollNumber,
+                            'FirstName': student.FirstName,
+                            'LastName': student.LastName,
+                        },
+                        'attendance': [{
+                            'attended_count': record['attended_count'],
+                            'total_lectures': record['total_lectures']
+                        }],
+                        'total_attended': record['attended_count'],
+                        'average_percentage': record['attendance_percentage']
+                    })
+
+            except ValueError as e:
+                messages.error(request, 'Invalid date format')
+                logger.error(f'Date parsing error in custom_report: {str(e)}')
+                return render(request, 'attendance_report.html', {
+                    'teacher': teacher,
+                    'departments': departments,
+                    'classes': classes,
+                    'subjects': subjects,
+                })
 
         context = {
-            'year': year,
-            'department': department,
-            'students_data': students_data,
-            'teacher':teacher
+            'teacher': teacher,
+            'departments': departments,
+            'classes': classes,
+            'subjects': subjects,
+            'selected_department': selected_department,
+            'selected_class': selected_class,
+            'selected_subject': selected_subject,
+            'attendance_data': attendance_data,
+            'start_date': start_date if 'start_date' in locals() else None,
+            'end_date': end_date if 'end_date' in locals() else None,
         }
 
-        return render(request, 'students.html', context)
+        return render(request, 'attendance_report.html', context)
 
-    return render(request, 'students.html', {'year': year, 'department': department,'teacher':teacher})
-
-
-
-# @supabase_login_required
-# def report(request):
-#     email = request.session.get('teacher_email')
-#     teacher = get_object_or_404(Teacher, Email=email)
-#     assignments = TeacherSubjectAssignment.objects.filter(TeacherID=teacher.Teacherid)
-#     subject_ids = [assignment.SubjectID.SubjectID for assignment in assignments]
-
-#         # Filter subjects based on the selected class and the subject IDs from the assignments
-#     subjects = Subject.objects.filter(SubjectID__in=subject_ids)
-#     class_ids = Subject.objects.filter(SubjectID__in=subject_ids).values_list('CurrentClassID', flat=True).distinct()
-        
-#         # Fetch the classes using the class IDs
-#     assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
-#     if request.method == 'POST':
-#         start_date = request.POST.get('start_date')
-#         end_date = request.POST.get('end_date')
-#         selected_subject = request.POST.get('subject')
-#         selected_class = request.POST.get('class')
-#         selected_class=Classes.objects.get(ClassID=selected_class)
-#     # Get students in the assigned class
-#         students = Student.objects.filter(CurrentClassID=selected_class).order_by('RollNumber')
-        
-#     # Initialize attendance data list
-#         attendance_data = []
-#         subjects_set = set()
-#         if start_date and end_date:
-#             start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
-#             end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d').date()
-#         else:
-#             start_date = None
-#             end_date = None
-
-#         attendance_data = []
-#         subjects_set = set()
-#         for student in students:
-#             student_attendance = Attendance.objects.filter(
-#         StudentID=student.StudentID,
-#         SubjectID=selected_subject,
-#         Date__range=(start_date, end_date)  # Filter by date range
-#     ).values('SubjectID', 'SubjectName').annotate(
-#         attended_count=Count('AttendanceID', filter=Q(Status=True)),
-#         total_lectures=Count('Date')
-#     )
-#             for record in student_attendance:
-#                 subjects_set.add(record['SubjectName'])
-#             total_attended = sum([subject['attended_count'] for subject in student_attendance])
-#             total_conducted = sum([subject['total_lectures'] for subject in student_attendance])
-#             average_percentage = (total_attended / total_conducted) * 100 if total_conducted > 0 else 0
-
-#             attendance_data.append({
-#             'student': {
-#                 'RollNo': student.RollNumber,
-#                 'FirstName': student.FirstName,
-#                 'LastName': student.LastName,
-#             },
-#             'attendance': list(student_attendance),
-#             'total_attended': total_attended,
-#             'average_percentage': average_percentage,
-#         })
-    
-    
-#         subjects_list = sorted(list(subjects_set))
-#         context = {
-#         'teacher': teacher,
-#         'attendance_data': attendance_data,
-#         'subjects': subjects,
-#         'classes': assigned_classes,
-#         'start_date': start_date,
-#         'end_date': end_date,
-#         'selected_subject': selected_subject,
-#         'selected_class': selected_class,
-#     }
-#         return render(request, 'attendance_report.html', context)
-#     # Render the template with the context data
-#     context = {
-#         'teacher': teacher,
-#         'subjects': subjects,
-#         'classes': assigned_classes,
-#     }
-#     return render(request, 'attendance_report.html', context)
-
-# @supabase_login_required
-# def preacademic(request):
-#     email=request.session.get('teacher_email')
-#     teacher=Teacher.objects.get(Email=email)
-#     classteacher = False
-
-#     try:
-#         assignment = ClassTeacherAssignment.objects.get(TeacherID=teacher.Teacherid)
-#         role = assignment.RoleID
-#         if role.RoleName == 'Classteacher':
-#             classteacher = True
-#     except ClassTeacherAssignment.DoesNotExist:
-#         # Handle case when no assignment is found, defaulting to classteacher=False
-#         classteacher = False
-#     context={
-#         'teacher': teacher,
-#         'classteacher':classteacher
-#     }
-#     return render(request,'preacademic.html',context)
-
-# @supabase_login_required
-# def timetable(request): 
-#     email = request.session.get('teacher_email')
-#     teacher = Teacher.objects.get(Email=email)
-#     classes=Classes.objects.filter(DepartmentID=teacher.DepartmentID)
-#     selected_timetable_type = request.GET.get('timetable_type')  # Default to 'Master'
-#     timetable_entries = None
-#     day_order = {
-#         'Monday': 1,
-#         'Tuesday': 2,
-#         'Wednesday': 3,
-#         'Thursday': 4,
-#         'Friday': 5,
-#         'Saturday': 6,
-#         'Sunday': 7
-#     }
-    
-#     # Annotate the timetable entries with a numerical value for sorting
-#     timetable_entries = Timetable.objects.filter(ClassID__ClassID=selected_timetable_type).annotate(
-#         day_order=Case(
-#             *[When(Day=day, then=value) for day, value in day_order.items()],
-#             output_field=IntegerField(),
-#         )
-#     ).order_by('day_order', 'SlotID')
-    
-#     # Preprocess timetable entries for unique day and slot ID
-#     timetable = defaultdict(lambda: defaultdict(list))  # Nested defaultdict for day -> slot ID -> entries
-#     slot_list = set()  # Store unique slots for display in template
-    
-#     for entry in timetable_entries:
-#         # Group by day and slot
-#         timetable[entry.Day][entry.SlotID].append(entry.SubjectAssignmentID)
-#         slot_list.add(entry.SlotID)  # Keep track of unique slots
-    
-#     # Convert timetable structure for easy access in the template
-#     processed_timetable = {
-#         day: {
-#             slot: assignments for slot, assignments in slots.items()
-#         } for day, slots in timetable.items()
-#     }
-#     print(processed_timetable.items())
-    
-#     context = {
-#         'timetable': processed_timetable.items(),
-#         'classes': classes,
-#         'selected_timetable_type': selected_timetable_type,
-#         'slot_list': slot_list,
-#         'teacher': teacher
-#     }
-    
-#     return render(request, 'timetable.html', context)
+    except Exception as e:
+        logger.error(f'Error in custom_report: {str(e)}')
+        messages.error(request, 'An error occurred while generating the report')
+        return redirect('erp_1:preports')
 
 @supabase_login_required
 def notices(request):
@@ -580,14 +630,7 @@ def preports(request):
     }
     return render(request,'preports.html',context)
 
-@supabase_login_required
-def custom_report(request):
-    email = request.session.get('teacher_email')
-    teacher = get_object_or_404(Teacher, Email=email)
-    context={
-        'teacher':teacher
-    }
-    return render(request,'preports.html',context)
+
 
 @supabase_login_required
 def daily_report(request):
@@ -1004,3 +1047,187 @@ def subjectwise_report(request):
     }
 
     return render(request, 'subjectwise.html', context)
+import json
+@supabase_login_required
+def leaves(request):
+    try:
+        email = request.session.get('teacher_email')
+        teacher = get_object_or_404(Teacher.objects.select_related('RoleID', 'DepartmentID'), Email=email)
+        role = teacher.RoleID.RoleName
+        
+        # Get teachers for approver dropdown
+        teachers = []
+        if role != 'HOD':
+            teachers = Teacher.objects.filter(
+                Q(DepartmentID=teacher.DepartmentID, RoleID__RoleName='HOD') |
+                Q(RoleID__RoleName='Principal')
+            )
+        else:
+            teachers = Teacher.objects.filter(RoleID__RoleName='Principal')
+
+        if request.method == 'POST':
+            try:
+                data = request.POST
+                leave_type_id = data.get('leaveType')
+                start_date = data.get('startDate')
+                end_date = data.get('endDate')
+                requested_to_id = data.get('requestedTo')
+                reason = data.get('reason')
+                
+                # Enhanced validation with specific error messages
+                missing_fields = []
+                if not leave_type_id:
+                    missing_fields.append('Leave Type')
+                if not start_date:
+                    missing_fields.append('Start Date')
+                if not end_date:
+                    missing_fields.append('End Date')
+                if not requested_to_id:
+                    missing_fields.append('Requested To')
+                if not reason:
+                    missing_fields.append('Reason')
+
+                if missing_fields:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'Please fill in the following required fields: {", ".join(missing_fields)}'
+                    }, status=400)
+
+                # Additional date validation
+                try:
+                    # Convert string dates to datetime objects using datetime.strptime
+                    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
+                    end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
+                    today = timezone.localdate()
+                    
+                    if start_date_obj > end_date_obj:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': 'End date cannot be earlier than start date'
+                        }, status=400)
+                    
+                    if start_date_obj < today:
+                        return JsonResponse({
+                            'status': 'error',
+                            'message': 'Start date cannot be in the past'
+                        }, status=400)
+                except ValueError as e:
+                    return JsonResponse({
+                        'status': 'error',
+                        'message': f'Invalid date format: {str(e)}'
+                    }, status=400)
+
+                # Create leave request after validation passes
+                leave_request = LeaveRequest.objects.create(
+                    TeacherID=teacher,
+                    LeaveTypeID_id=leave_type_id,
+                    StartDate=start_date_obj,  # Use the parsed date object
+                    EndDate=end_date_obj,      # Use the parsed date object
+                    RequestedTo_id=requested_to_id,
+                    Reason=reason,
+                    Status='Pending'
+                )
+
+                # Handle time slots if provided
+                slots_data = request.POST.getlist('slots[]', [])
+                if slots_data:
+                    for slot in slots_data:
+                        try:
+                            slot_data = json.loads(slot)
+                            TempTimetable.objects.create(
+                                LeaveRequestID=leave_request,
+                                ClassID_id=slot_data['class'],
+                                Date=slot_data['date'],
+                                SlotID_id=slot_data['time_slot'],
+                                ReplacementTeacherID_id=slot_data['replacement_teacher']
+                            )
+                        except (json.JSONDecodeError, KeyError) as e:
+                            # Log the error but don't fail the request
+                            logger.warning(f'Error processing slot data: {str(e)}')
+                            continue
+
+                return JsonResponse({
+                    'status': 'success',
+                    'message': 'Leave request submitted successfully'
+                })
+
+            except Exception as e:
+                logger.error(f'Error submitting leave request: {str(e)}')
+                return JsonResponse({
+                    'status': 'error',
+                    'message': f'Error submitting leave request: {str(e)}'
+                }, status=500)
+
+        # Get pending leaves for admin users
+        pending_leaves = None
+        if role in ['HOD', 'Principal']:
+            pending_leaves = LeaveRequest.objects.filter(Status='Pending')
+            if role == 'HOD':
+                pending_leaves = pending_leaves.filter(TeacherID__DepartmentID=teacher.DepartmentID)
+
+        # Get leave history and stats
+        leave_history = LeaveRequest.objects.filter(TeacherID=teacher).order_by('-RequestDate')
+        stats = {
+            'approved': leave_history.filter(Status='Approved').count(),
+            'pending': leave_history.filter(Status='Pending').count(),
+            'rejected': leave_history.filter(Status='Rejected').count()
+        }
+
+        context = {
+            'teacher': teacher,
+            'is_admin': role in ['HOD', 'Principal'],
+            'leave_types': LeaveType.objects.all(),
+            'teachers': teachers,
+            'pending_leaves': pending_leaves,
+            'leave_history': leave_history,
+            'stats': stats,
+        }
+
+        return render(request, 'leaves.html', context)
+
+    except Exception as e:
+        logger.error(f'Error in leaves view: {str(e)}')
+        return JsonResponse({
+            'status': 'error',
+            'message': 'An error occurred while processing your request'
+        }, status=500)
+
+@supabase_login_required
+def leave_action(request, leave_id):
+    """Handle leave approval/rejection"""
+    if request.method == 'POST':
+        try:
+            email = request.session.get('teacher_email')
+            teacher = get_object_or_404(Teacher.objects.select_related('RoleID'), Email=email)
+            
+            if teacher.RoleID.RoleName not in ['HOD', 'Principal']:
+                return JsonResponse({'error': 'Unauthorized'}, status=403)
+            
+            leave_request = get_object_or_404(LeaveRequest, id=leave_id)
+            action = request.POST.get('action')
+            
+            if action == 'approve':
+                leave_request.Status = 'Approved'
+            elif action == 'reject':
+                leave_request.Status = 'Rejected'
+            
+            leave_request.ActionDate = timezone.now()
+            leave_request.ActionBy = teacher
+            leave_request.save()
+            
+            return JsonResponse({'status': 'success'})
+            
+        except Exception as e:
+            logger.error(f'Error in leave_action: {str(e)}')
+            return JsonResponse({'error': str(e)}, status=500)
+    
+    return JsonResponse({'error': 'Invalid request'}, status=400)
+
+def handler404(request, exception):
+    context = {
+        'error_title': '404 Not Found',
+        'error_message': 'The page you are looking for does not exist.',
+        'return_url': '/',
+        'return_text': 'Return to Home'
+    }
+    return render(request, 'error.html', context, status=404)

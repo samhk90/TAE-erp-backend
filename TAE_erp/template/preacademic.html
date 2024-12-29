@@ -79,7 +79,7 @@
         
         <!-- MAIN -->
         {% block content %}
-        {% if teacher.RoleID.RoleName == 'Teacher' %}
+        {% if teacher.RoleID.RoleName == 'Teacher' or teacher.RoleID.RoleName == 'HOD' %}
         <section class="card-container">
             <a href="{% url 'academics:pre_attendance' %}">
             <div class="card attendance">

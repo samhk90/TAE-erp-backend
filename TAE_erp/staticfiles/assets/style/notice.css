@@ -1,0 +1,171 @@
+.content-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.main-course h1{
+    margin-top: 25px;
+    font-weight: 600;
+}
+
+.content-table thead tr {
+    background-color: #3C91E6;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 5px;
+    text-align: center;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #3C91E6;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: 500;
+    color: #3C91E6;
+}
+
+
+/* Floating button */
+.wrapper {
+    position: fixed; 
+    /* top: 0;  */
+    left: 190px; /* Adjust the position as needed */
+    bottom: 18px;
+    /* z-index: 1000; Ensure the wrapper is on top */
+}
+
+.wrapper #toggle {
+    display: none;
+}
+
+.wrapper #ltoggle {
+    position: relative;
+    width: 2.5em;
+    height: 2.5em;
+    background-color: #5488df;
+    border-radius: 50%;
+    display: block;
+    margin: 0 auto;
+    cursor: pointer;
+    transform: rotate(0deg) scale(1.5);
+    box-shadow: -3px -3px 20px rgba(0, 0, 0, 0.1),
+    3px 3px 10px rgba(0, 0, 0, 0.1);
+    transition: all 200ms ease-in-out;
+    z-index: 1001; /* Ensure the label is on top */
+}
+
+.wrapper #ltoggle::before,
+.wrapper #ltoggle::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: .2em;
+    height: 1.3em;
+    background-color: #fff;
+}
+
+.wrapper #ltoggle::before{
+    transform: translate(-50%, -50%);
+}
+
+.wrapper #ltoggle::after {
+    transform: translate(-50%, -50%) rotate(90deg);
+}
+
+.wrapper .nav {
+    position:absolute;
+    top: 50%;
+    left: 50%;
+    padding: 1em 1em;
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    box-shadow: -3px -3px 20px rgba(0, 0, 0, 0.1),
+    3px 3px 10px rgba(0, 0, 0, 0.1);
+    opacity: 0;
+    transition: left 0ms ease-in-out 0ms,
+    top 500ms ease-in-out,
+    opacity 300ms ease-in-out;
+    z-index: 1000; 
+}
+
+
+.wrapper #toggle:checked ~ .nav {
+    left: 0;
+    top: -26.6em; /* Adjust this value to control the menu's position upwards */
+    opacity: 1;
+    transition: left 0ms ease-in-out 0ms,
+    top 500ms ease-in-out,
+    opacity 300ms ease-in-out;
+}
+
+.wrapper #toggle:checked + label {
+    transform: rotate(135deg);
+    box-shadow: none;
+}
+
+
+
+.wrapper .nav form {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.wrapper .nav form div {
+    display: flex;
+    flex-direction: column;
+}
+
+.wrapper .nav form label {
+    margin-bottom: 0.5em;
+    font-size:14px;
+    color: #5488df;
+    font-weight: 700;
+    font-family: 'Courier New', Courier, monospace;
+}
+
+.wrapper .nav form input,select{
+    padding: 0.5em;
+    /* text-align: center; */
+    border: 1px solid #ccc;
+    border-radius: 0.3em;
+    font-size: 13px;
+}
+
+.wrapper .nav form button {
+    padding: 0.7em;
+    background-color: #5488df;
+    color: #fff;
+    border: none;
+    border-radius: 0.3em;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.wrapper .nav form button:hover {
+    background-color: #466bbf;
+}
+

@@ -144,10 +144,12 @@ th{
 								<div class="dropdown">
 									<button class="dropdown-button" onclick="toggleDropdown(this)">...</button>
 									<div class="dropdown-content">
-										<a href="https://gipdgkwmxmmykyaliwhr.supabase.co/storage/v1/object/public/noticebucket/public/{{notice.ClassID.ClassID}}/{{notice.attachment}}" target="_blank"><i class="fa-solid fa-eye" style="color: rgb(6, 208, 6);"></i> View</a>
-										<!-- <a href="#" onclick="deleteItem('{{notice.id}}', '{{notice.attachment}}', '{{notice.ClassID.ClassID}}')">
-											<i class="fa-solid fa-trash fa-shake" style="color: red;"></i> Delete
-										</a> -->
+										<a href="https://gipdgkwmxmmykyaliwhr.supabase.co/storage/v1/object/public/noticebucket/public/{{notice.ClassID.ClassID}}/{{notice.attachment}}" 
+										   target="_blank"
+										   rel="noopener noreferrer"
+										   onclick="handleViewClick(event, this.href)">
+											<i class="fa-solid fa-eye" style="color: rgb(6, 208, 6);"></i> View
+										</a>
 										<form method="POST" action="{% url 'erp_1:delete_notice' notice.id %}">
 											{% csrf_token %}
 											<input type="hidden" style="display: none;"  name="notice_id" value="{{ notice.id }}">
@@ -303,6 +305,22 @@ th{
 					alert('Please upload the image before publishing.');
 				}
 			});
+			function handleViewClick(event, url) {
+				// Prevent the default anchor behavior
+				event.preventDefault();
+				
+				// Create a new window/tab
+				const newWindow = window.open(url, '_blank', 'noopener,noreferrer');
+				
+				// If popup was blocked, fallback to direct URL
+				if (!newWindow || newWindow.closed || typeof newWindow.closed == 'undefined') {
+					window.location.href = url;
+				}
+				
+				// Optional: Close dropdown after click
+				const dropdowns = document.querySelectorAll('.dropdown-content');
+				dropdowns.forEach(d => d.classList.remove('show'));
+			}
 		});
 	</script>
 	{% endblock %}

@@ -1,0 +1,125 @@
+body{
+    background-color: #f4f4f4;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+}
+:root{
+    --main:#622ebf;
+    --secondary:#7b49d3;
+    --light:#8348e782;
+    
+}
+#navtext{
+    color: white;
+
+}
+#navtext:hover{
+    border-bottom: solid 2px white;
+}
+.mybtn{
+    background:transparent !important;
+    border: solid 2px white  !important;
+    color: white !important;
+    font-size: larger;
+    transition: all 0.5s ease-in;
+}
+.mybtn:hover{
+    background: white !important;
+    color: var(--main) !important;
+
+}
+.otherbtn{
+    background: var(--light) !important;
+    color: white !important;
+    border: none !important;
+    font-size: larger;
+    transition: all 0.5s ease-in;
+}
+.otherbtn:hover{
+    background: white !important;
+    color: var(--main) !important;
+}
+.header{
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1001%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c567.775C104.697%2c556.047%2c208.138%2c512.892%2c280.266%2c436.102C345.825%2c366.306%2c331.838%2c256.798%2c373.213%2c170.441C415.735%2c81.69%2c519.235%2c22.676%2c525.404%2c-75.542C531.823%2c-177.737%2c464.263%2c-267.599%2c406.015%2c-351.814C341.923%2c-444.478%2c283.308%2c-567.907%2c172.147%2c-586.278C59.724%2c-604.858%2c-20.497%2c-474.204%2c-129.278%2c-440.28C-235.274%2c-407.225%2c-378.199%2c-474.614%2c-451.98%2c-391.643C-525.547%2c-308.912%2c-470.366%2c-176.764%2c-461.754%2c-66.39C-454.923%2c21.161%2c-427.581%2c100.483%2c-406.921%2c185.835C-380.617%2c294.504%2c-405.27%2c427.244%2c-323.748%2c503.762C-241.882%2c580.603%2c-111.581%2c580.274%2c0%2c567.775' fill='%234e2599'%3e%3c/path%3e%3cpath d='M1440 848.927C1503.836 855.4970000000001 1567.614 873.486 1628.567 853.415 1699.23 830.1469999999999 1781.845 797.672 1807.606 727.88 1833.491 657.751 1773.143 587.054 1753.507 514.925 1736.684 453.129 1740.001 384.69100000000003 1700.462 334.308 1660.087 282.86 1596.843 257.735 1534.993 236.483 1470.717 214.39800000000002 1404.701 202.75 1337.068 209.44600000000003 1258.2640000000001 217.248 1161.988 214.60199999999998 1114.667 278.097 1066.963 342.105 1116.038 433.032 1111.055 512.705 1106.597 583.984 1053.106 658.343 1086.953 721.231 1120.9560000000001 784.409 1207.363 792.6030000000001 1274.8319999999999 817.006 1328.654 836.473 1383.067 843.067 1440 848.927' fill='%237b49d3'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1001'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+    background-attachment: fixed;
+    background-size: cover;
+    background-position: center;
+    margin: 0 auto;
+    display: block;
+}
+#nav{
+    background: transparent;
+}
+.banner1{
+    /* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1003%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(244%2c 244%2c 244%2c 1)'%3e%3c/rect%3e%3cpath d='M0%2c567.775C104.697%2c556.047%2c208.138%2c512.892%2c280.266%2c436.102C345.825%2c366.306%2c331.838%2c256.798%2c373.213%2c170.441C415.735%2c81.69%2c519.235%2c22.676%2c525.404%2c-75.542C531.823%2c-177.737%2c464.263%2c-267.599%2c406.015%2c-351.814C341.923%2c-444.478%2c283.308%2c-567.907%2c172.147%2c-586.278C59.724%2c-604.858%2c-20.497%2c-474.204%2c-129.278%2c-440.28C-235.274%2c-407.225%2c-378.199%2c-474.614%2c-451.98%2c-391.643C-525.547%2c-308.912%2c-470.366%2c-176.764%2c-461.754%2c-66.39C-454.923%2c21.161%2c-427.581%2c100.483%2c-406.921%2c185.835C-380.617%2c294.504%2c-405.27%2c427.244%2c-323.748%2c503.762C-241.882%2c580.603%2c-111.581%2c580.274%2c0%2c567.775' fill='%23c3c3c3'%3e%3c/path%3e%3cpath d='M1440 848.927C1503.836 855.4970000000001 1567.614 873.486 1628.567 853.415 1699.23 830.1469999999999 1781.845 797.672 1807.606 727.88 1833.491 657.751 1773.143 587.054 1753.507 514.925 1736.684 453.129 1740.001 384.69100000000003 1700.462 334.308 1660.087 282.86 1596.843 257.735 1534.993 236.483 1470.717 214.39800000000002 1404.701 202.75 1337.068 209.44600000000003 1258.2640000000001 217.248 1161.988 214.60199999999998 1114.667 278.097 1066.963 342.105 1116.038 433.032 1111.055 512.705 1106.597 583.984 1053.106 658.343 1086.953 721.231 1120.9560000000001 784.409 1207.363 792.6030000000001 1274.8319999999999 817.006 1328.654 836.473 1383.067 843.067 1440 848.927' fill='white'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1003'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e") ;
+     */
+background: transparent;
+    width: 100%;
+    height:100%;
+    background-size: cover;
+    background-position: center center;
+    background-repeat: no-repeat;
+    padding: 20px;
+    color: #f4f4f4;
+}
+
+.bg{
+background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' version='1.1' xmlns:xlink='http://www.w3.org/1999/xlink' xmlns:svgjs='http://svgjs.dev/svgjs' width='1440' height='560' preserveAspectRatio='none' viewBox='0 0 1440 560'%3e%3cg mask='url(%26quot%3b%23SvgjsMask1004%26quot%3b)' fill='none'%3e%3crect width='1440' height='560' x='0' y='0' fill='rgba(255%2c 255%2c 255%2c 1)'%3e%3c/rect%3e%3cpath d='M748.8 372.79L785.78 372.79L785.78 409.77L748.8 409.77z' stroke='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M941.92 240.19 a49.49 49.49 0 1 0 98.98 0 a49.49 49.49 0 1 0 -98.98 0z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M206.74 520.48a29.85 29.85 0 1 0 40.38-43.98z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M25.7 501.34L58.91 501.34L58.91 529.03L25.7 529.03z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M936.64 309.94 a45.13 45.13 0 1 0 90.26 0 a45.13 45.13 0 1 0 -90.26 0z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M288.99 553.48L343.1 553.48L343.1 591.64L288.99 591.64z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M1458.12 164.91a36.05 36.05 0 1 0-71.08-12.08z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M973.47 164.99L1013.56 164.99L1013.56 191.49L973.47 191.49z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M698.99 508.99L746.5 508.99L746.5 556.5L698.99 556.5z' fill='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M717.77 46.26 a27.87 27.87 0 1 0 55.74 0 a27.87 27.87 0 1 0 -55.74 0z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M1215.92 51.74L1217.41 51.74L1217.41 86.03L1215.92 86.03z' stroke='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M676.89 105.2L699.34 105.2L699.34 153.45L676.89 153.45z' stroke='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M1221.52 291.06L1228.26 291.06L1228.26 297.8L1221.52 297.8z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M631.72 20.08L668.88 20.08L668.88 57.59L631.72 57.59z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M842.88 111.88L879.88 111.88L879.88 149.3L842.88 149.3z' stroke='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M1290.67 222.31 a25.47 25.47 0 1 0 50.94 0 a25.47 25.47 0 1 0 -50.94 0z' fill='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M1434.94 459.62a19.04 19.04 0 1 0 7.91-37.25z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M1240.28 208.87L1264.81 208.87L1264.81 214.19L1240.28 214.19z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M658.04 264.24a5.93 5.93 0 1 0-7.16-9.45z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M316.52 98.83 a54.97 54.97 0 1 0 109.94 0 a54.97 54.97 0 1 0 -109.94 0z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M880.18 181.36 a31.66 31.66 0 1 0 63.32 0 a31.66 31.66 0 1 0 -63.32 0z' fill='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M96.02 439.04 a26.36 26.36 0 1 0 52.72 0 a26.36 26.36 0 1 0 -52.72 0z' stroke='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M531.43 75.28a38.94 38.94 0 1 0 77.78-3.96z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M617.45 288.21 a47.34 47.34 0 1 0 94.68 0 a47.34 47.34 0 1 0 -94.68 0z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M570.78 211.34a22.26 22.26 0 1 0-28.96-33.8z' stroke='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M206.79 371.96 a47.93 47.93 0 1 0 95.86 0 a47.93 47.93 0 1 0 -95.86 0z' fill='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M596.01 55.18 a1.28 1.28 0 1 0 2.56 0 a1.28 1.28 0 1 0 -2.56 0z' stroke='rgba(123%2c 73%2c 211%2c 1)'%3e%3c/path%3e%3cpath d='M183.35 551.61L222.67 551.61L222.67 590.93L183.35 590.93z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M34.02 202.99L59.35 202.99L59.35 240.72L34.02 240.72z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M245.37 111.16L280.05 111.16L280.05 146.49L245.37 146.49z' fill='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3cpath d='M1339.39 580.74a55.93 55.93 0 1 0 8.36-111.55z' fill='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M857.78 366.49a44.59 44.59 0 1 0 88.44-11.46z' stroke='rgba(131%2c 72%2c 231%2c 0.5098039215686274)'%3e%3c/path%3e%3cpath d='M379.15 540.32 a53.95 53.95 0 1 0 107.9 0 a53.95 53.95 0 1 0 -107.9 0z' stroke='rgba(98%2c 46%2c 191%2c 1)'%3e%3c/path%3e%3c/g%3e%3cdefs%3e%3cmask id='SvgjsMask1004'%3e%3crect width='1440' height='560' fill='white'%3e%3c/rect%3e%3c/mask%3e%3c/defs%3e%3c/svg%3e");
+    background-size: cover;
+    /* background-attachment: fixed; */
+    background-position: center;
+}
+.card1{
+    background: white;
+    padding: 20px;
+    width: 300px;
+    height: 250px;;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    transition: all 0.1s ease-in;
+}
+.card1:hover{
+    border: solid 2px var(--main);
+    background-color:#f4f4f44c;
+}
+.cardicon{
+    font-size: 25px !important;
+    background-color: var(--main) !important;
+    padding:5px 5px 5px 5px;
+    border-radius:50%;
+    color:white;
+}
+.card2{
+    background: white;
+    padding: 20px;
+    width: 300px;
+    height: 150px;;
+    border-radius: 10px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.2);
+    transition: all 0.1s ease-in;
+}
+.card2:hover{
+    border: solid 2px var(--main);
+    background-color:var(--main);
+    color: #f4f4f4;
+}
+.card2:hover .cardicon {
+    background-color: white !important ;
+    color: var(--main) !important;
+}
+
+
+
+
+
+  
+ 
+  
+ 
+
+
+

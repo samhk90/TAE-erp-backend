@@ -1,0 +1,104 @@
+
+.main-content{
+  margin-left: 270px;
+  transition: all .5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  margin-top: 200px;
+}
+
+.flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+header{
+  padding: 15px 30px;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+}
+
+header h3{
+  color: #555;
+  cursor: pointer;
+}
+
+.card {
+    background-color: #ffffff; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 20px;
+    margin: 2px auto; 
+    max-width: 1500px; 
+}
+
+
+main{
+  padding: 30px 20px;
+  margin-top: 15px;
+}
+
+.cards{
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  grid-gap: 20px;
+  /* border-radius: 20px; */
+}
+
+
+.customers,.projects{
+  border-radius: 10px;
+  box-shadow: 0 0 8px rgba(0,0,0,0.07);
+}
+.projects{
+  flex-basis: 100%;
+}
+.customers{
+  flex-basis: 37%;
+}
+
+.card-header{
+  padding: 15px 20px;
+  border-bottom: 0.5px solid #8390a2;
+}
+
+#seeall{
+  border: none;
+  outline: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  background-color: #006eff;
+  color: #fff;
+  cursor: pointer;
+}
+table{
+  width: 100%;
+  height: 100%;
+  padding: 15px 20px;
+  font-size: 15px;
+  border-collapse: collapse;
+}
+
+thead{
+  border-bottom: .5px solid #8390a2;
+}
+
+tr,td,th{
+  padding: 8px 20px;
+  text-align: center;
+}
+
+thead :is(tr,td,th){
+  padding: 5px 20px;
+  font-weight: 600;
+  text-align: center;
+}
+
+select{
+  border: none;
+  height: 25px;
+  justify-content: end;
+  width: 15px;
+  font-size: 15px;
+  font-style: italic;
+}
+

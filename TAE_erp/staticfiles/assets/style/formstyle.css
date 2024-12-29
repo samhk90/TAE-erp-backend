@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@400;500;600;700&display=swap');
+
+
+input{
+    font-family: 'Lato', sans-serif;
+    padding-left: 100px;
+    
+}
+h2{
+    /* padding: 20px; */
+    text-align: left;
+    color: black;
+}
+.card{
+    border-radius: 10px;
+}
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+input[type="date"],
+select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+/* CSS for arranging fields in rows of three */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 10px;
+}
+
+.column {
+    flex: 33.33%;
+    padding: 0 10px;
+    box-sizing: border-box;
+}
+
+/* CSS for styling the table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: center;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+/* Styles for card */
+.card {
+    background-color: #ffffff; 
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    transition: 0.3s;
+    padding: 20px;
+    margin: 20px auto; 
+    max-width: 1500px; 
+}
+
+.view {
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    background-color: #007bff;
+    color: #ffffff; 
+    border: none;
+    padding: 5px 1px; 
+    border-radius: 5px;
+}
+
+
+#checkAllButton, #uncheckAllButton, .attendance-button{
+    border: none;
+    background-color: transparent;
+    background-color: #007bff;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    font-weight: 500;
+}

@@ -1,0 +1,107 @@
+
+.card{
+    background-color: white;
+    border-radius: 10px;
+    margin: 20px 0;
+    padding-top: 5px;
+    width: 100%;
+}
+
+.content-table {
+    width: 98.8%;
+    border-collapse: collapse;
+    margin: 25px 10px;
+    font-size: 0.9em;
+    min-width: 400px;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+}
+
+.content-table thead tr {
+    background-color: #3C91E6;
+    color: white;
+    text-align: center;
+    font-weight: bold;
+}
+
+.content-table th{
+    padding: 12px 2px;
+    text-align: center;    
+}
+
+.content-table td{
+    padding: 12px 1px;
+    text-align: center;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #3C91E6;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: 500;
+    color: #3C91E6;
+}
+
+#printButton{
+    color: #3C91E6;
+    font-weight: 600;
+}
+
+.hidden {
+    display: none;
+}
+
+h5{
+    margin-left: 12px;
+    /* padding: 5px; */
+    font-size: 15px;
+    font-style: italic;
+}
+
+.searchForm{
+    display: flex;
+    gap: 10px;
+    margin: 22px;
+    padding-left: 20px;
+    
+}
+
+/* 
+input[type="text"]{
+    width: 200px;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+} */
+
+.submit{
+    padding: 0 8px;
+    margin-left: 12px;
+    background-color: #3C91E6;
+    border: none;
+    font-weight: 550;
+    border-radius: 5px;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+input:focus,
+select:focus,
+textarea:focus,
+a:focus {
+  outline: none; /* Remove the default outline */
+}
+button:focus {
+    outline: none; /* Remove the default outline */
+}

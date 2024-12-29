@@ -112,6 +112,36 @@
             white-space: nowrap;
             padding: 10px;
         }
+        
+        .back-btn {
+            background-color: transparent;
+            color: #3c91e6;
+            border: 2px solid #3c91e6;
+            padding: 0.5rem 1.7rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: #3c91e6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(60, 145, 230, 0.2);
+            text-decoration: none;
+        }
+
+        .back-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-btn i {
+            margin-right: 0.2rem;
+        }
     </style>
     {% endblock %}
 </head>
@@ -120,6 +150,9 @@
     {% block content %}
 
     <section id="mySection">
+        <a href="{% url 'erp_1:preports' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
         <div class="uppercontainer">
             <h2>Weekly Attendance Report ({{ start_date }} to {{ end_date }})</h2>
         <div class="form-container">

@@ -1,0 +1,85 @@
+.card {
+    position: relative;
+    width: 97%;
+    border-radius: 6px;
+    padding: 30px 10px;
+    margin: 10px 10px 0;
+    background-color: #fff;
+    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
+}
+
+.content-table {
+    width:100%;
+    border-collapse: collapse;
+    font-size: 0.9em;
+    border-radius: 5px 5px 0 0;
+    overflow: hidden;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.15);
+    /* table-layout: fixed; */
+}
+
+.content-table thead tr {
+    background-color: #3C91E6;
+    color: #ffffff;
+    text-align: center;
+    font-weight: bold;
+}
+
+.content-table th,
+.content-table td {
+    padding: 12px 5px;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.content-table tbody tr {
+    border-bottom: 1px solid #dddddd;
+    /* display: flex; */
+}
+
+.content-table tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.content-table tbody tr:last-of-type {
+    border-bottom: 2px solid #3C91E6;
+}
+
+.content-table tbody tr.active-row {
+    font-weight: 500;
+    color: #3C91E6;
+}
+
+.faculty-member {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    padding-left: 10px;
+}
+
+.profile-img {
+    border-radius: 50%;
+    margin-right: 10px; 
+    width: 45px;
+    height: 45px;
+}
+
+.card .main-course .content-table form select{
+    background: none;
+    border: none;
+    border-bottom: 1px solid black;
+
+}
+.profile-img {
+    border-radius: 50%;
+    margin-right: 10px; 
+    width: 45px;
+    height: 45px;
+}
+.card .main-course .content-table #subsum{
+    background: transparent;
+    border: none;
+    color:#3C91E6;
+    font-weight: 700;
+    cursor: pointer;
+}

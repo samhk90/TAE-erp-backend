@@ -6,13 +6,13 @@
 <head>
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<link rel="stylesheet" href="{% static '/assets/style/progress_bar.css' %}">
+	<link rel="stylesheet" href="{% static 'assets/style/progress_bar.css' %}">
 	<link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 	<!-- My CSS -->
 	<link rel="stylesheet" href="{% static 'assets/style/style.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/style/mac.css' %}">
-	<!-- <link rel="stylesheet" href="assets/style/progressbar.css"> -->
+	<link rel="stylesheet" href="{% static 'assets/style/progress_bar.css' %}">
 
 	{% block style %}
 	<style>
@@ -451,7 +451,7 @@
 			color: black;
 		}
 	</style>
-
+	
 	{% endblock %}
 	<title>TAE</title>
 </head>
@@ -471,11 +471,6 @@
 			<div class="head-title">
 				<div class="left">
 					<h1>Dashboard</h1>
-					<ul class="breadcrumb">
-						<li>
-							<a class="active" href="/">Home</a>
-						</li>
-					</ul>
 				</div>
 			</div>
 
@@ -628,7 +623,7 @@
 
 
 				</li>
-
+<!-- 
 				<li>
 					<p class="title">My Attendance
 						<hr>
@@ -766,9 +761,96 @@
 
 
 					</div>
-				</li>
+				</li> -->
 			</ul>
+			<style>
+				.attend {
+					display: flex;
+					justify-content: space-between;
+					gap: 20px;
+					padding: 20px 0px;
+				}
 
+				.attendance,
+				.leave-balance {
+					flex: 1;
+					background-color: #F9F9F9;
+					border-radius: 8px;
+					padding: 15px;
+					box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+				}
+
+				.attendance .title,
+				.leave-balance .title {
+					font-size: 18px;
+					margin-bottom: 10px;
+				}
+
+				.attendance .icons,
+				.leave-balance .icons {
+					display: flex;
+					justify-content: space-around;
+				}
+
+				.count {
+					display: flex;
+					flex-direction: column;
+					align-items: center;
+					justify-content: center;
+					width: 100px;
+					height: 100px;
+					border-radius: 8px;
+					padding: 10px;
+					text-align: center;
+				}
+
+				.count h3 {
+					margin: 0;
+					font-size: 16px;
+				}
+			</style>
+			<div class="attend">
+
+				<div class="attendance">
+					<p class="title">My Attendance
+						<hr>
+					</p>
+					<div class="icons" style="padding: 15px;">
+						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green ;">
+							<h3>8 <br> Present</h3>
+						</div>
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4) ;">
+							<h3>8 <br> Absent
+							</h3>
+						</div>
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4) ;">
+							<h3>8 <br> Half day
+							</h3>
+						</div>
+
+					</div>
+
+				</div>
+				<div class="leave-balance">
+					<p class="title">Balance leaves
+						<hr>
+					</p>
+					<div class="icons" style="padding: 15px;">
+						<div class="count" style="background-color: rgba(5, 255, 5, 0.358);color:green ;">
+							<h3>12<br> Total</h3>
+						</div>
+						<div class="count" style="background-color: rgba(255, 77, 0, 0.406);color:rgb(110, 4, 4) ;">
+							<h3>3 <br>Used
+							</h3>
+						</div>
+						<div class="count" style="background-color: rgba(0, 191, 255, 0.596);color: blue;">
+							<h3>9 <br> Remain
+							</h3>
+						</div>
+					</div>
+
+				</div>
+			</div>
 		<!-- MAIN -->
 		{% endblock %}
 	</section>
@@ -779,7 +861,40 @@
 	<!-- <script src="{% static 'script.js'%}"></script>  -->
 
 	{% block scripts %}
-	<script src="{% static 'assets/script/script.js'%}"></script> 
+	<script src="{% static 'assets/script/script.js'%}"></script>
+	<script>
+		const number = document.getElementById("num");
+
+// Get the `randomNum` value from the heading tag
+const heading = document.getElementById("randomNumHeading");
+console.log(number.innerHTML);
+const randomNum = parseInt(number.innerHTML);
+
+let counter = 0;
+const time = 2000 / randomNum;
+
+const interval = setInterval(() => {
+    if (counter === randomNum) {
+        clearInterval(interval);
+        number.innerHTML = randomNum + "%";
+    } else {
+        counter += 1;
+        number.innerHTML = counter + "%";
+    }
+}, time);
+
+const css = window.document.styleSheets[0];
+
+const stroke = 440 - (440 * (randomNum / 100));
+css.insertRule(`
+@keyframes anim {
+    100% {
+        stroke-dashoffset: ${stroke};
+    }
+}
+`, css.cssRules.length);
+	</script>
+
 	<script>
 
 // Index page announcement modal script
@@ -889,10 +1004,6 @@ document.addEventListener('click', function (event) {
 
 
 	</script>
-
-
-
-
 	<script>
 
 
@@ -969,10 +1080,6 @@ document.addEventListener('click', function (event) {
 
 
 	</script>
-
-
-
-
 	<script>
 		var holidayDeleteBtn = document.getElementById('holiday_deleteButton');
 

@@ -1,0 +1,1229 @@
+{% extends 'base.html' %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+
+
+	<title>TAE</title>
+	{% block style %}
+    <style>
+        #sub-heading {
+           font-size: 18px;
+           color: #666;
+       }
+
+       #form-heading {
+           font-size: 18px;
+           color: #666;
+       }
+
+       .form-container {
+           max-width: 100%;
+           margin: 0 auto;
+       }
+
+       #leave-table {
+           width: 100%;
+           border-collapse: collapse;
+           margin-top: 20px;
+           border-radius: 10px;
+           overflow: hidden;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+       }
+
+       #leave-table th, #leave-table td {
+           border: 1px solid #ddd;
+           padding: 10px;
+           text-align: center;
+       }
+
+       #leave-table th {
+           background-color: #3C91E6;
+           color: white;
+       }
+
+       #start-date, #end-date, #comments, #reason {
+           width: 100%;
+           padding: 8px;
+           margin: 5px 0;
+           box-sizing: border-box;
+           text-align: center;
+           border-radius: 5px;
+           height: 40px; 
+           border: 1px solid #ccc;
+       }
+       #reasoncontainer{
+           width: 100%;
+       }
+        #reason{
+           width: 100%;
+           padding: 8px;
+           margin: 5px 0;
+           border-radius: 10px;
+           text-align: center;
+           height: 40px;
+       } 
+
+       .submit-button {
+           padding: 8px 12px;
+           border-radius: 4px;
+           background-color: #007BFF;
+           font-size: 16px;
+           color: white;
+           border: none;
+           cursor: pointer;
+       }
+       .status-approved, .approvedh2 {
+           color: green;
+           font-weight: bold;
+       }
+       .status-pending, .pendingh2 {
+           color: orange;
+           font-weight: bold;
+       }
+       .status-rejected, .rejectedh2 {
+           color: red;
+           font-weight: bold;
+       }
+       .leave-info , .approved, .pending, .rejected{
+                           display: flex;
+                           justify-content: space-evenly;
+                       }
+                       .approved{
+                           color: green;
+                       }
+                       .pending{
+                           color: orange;
+                       }
+                       .rejected{
+                           color: red;
+                       }
+                       .count{
+                           padding-left: 10px;
+                       }
+       .btn-create {
+           background: #3C91E6;
+           padding: 20px 20px;
+           margin: 20px;
+           color: #fff;
+           border: none;
+           border-radius: 5px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 8px;
+           font-size: large;
+       }
+
+       .modal {
+           display: none;
+           position: fixed;
+           z-index: 1000;
+           left: 5em;
+           top: 0;
+           width: 100%;
+           height: 100vh;
+           background-color: rgba(0,0,0,0.5);
+           backdrop-filter: blur(5px);
+           transition: all 0.3s ease;
+       }
+
+       .modal-content {
+           background: linear-gradient(to right bottom, #ffffff, #f8f9fa);
+           margin: 2vh auto;
+           padding: 30px;
+           border-radius: 16px;
+           width: 90%;
+           max-width: 1200px; /* Increased from 800px */
+           max-height: 96vh;
+           overflow-y: auto;
+           position: relative;
+           box-shadow: 0 10px 30px rgba(0,0,0,0.18);
+           transform: translateY(20px);
+           opacity: 0;
+           transition: all 0.3s ease;
+       }
+
+       .modal.show .modal-content {
+           transform: translateY(0);
+           opacity: 1;
+       }
+
+       .modal-header {
+           position: relative;
+           margin-bottom: 30px;
+           padding-bottom: 15px;
+           border-bottom: 2px solid #e9ecef;
+       }
+
+       .modal-header h2 {
+           font-size: 1.8rem;
+           color: #2d3436;
+           margin: 0;
+       }
+
+       .close {
+           position: absolute;
+           right: 0;
+           top: 0;
+           font-size: 24px;
+           color: #a4b0be;
+           transition: color 0.3s ease;
+           background: none;
+           border: none;
+           width: 32px;
+           height: 32px;
+           border-radius: 50%;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+       }
+
+       .close:hover {
+           color: #ff6b6b;
+           background-color: #fff1f1;
+       }
+
+       .form-group {
+           margin-bottom: 24px;
+           position: relative;
+       }
+
+       .form-group label {
+           display: block;
+           margin-bottom: 8px;
+           font-weight: 500;
+           color: #2d3436;
+           font-size: 0.95rem;
+       }
+
+       .form-group input,
+       .form-group select,
+       .form-group textarea {
+           width: 100%;
+           padding: 12px 16px;
+           border: 2px solid #e9ecef;
+           border-radius: 8px;
+           font-size: 1rem;
+           transition: all 0.3s ease;
+           background-color: #fff;
+       }
+
+       .form-group input:focus,
+       .form-group select:focus,
+       .form-group textarea:focus {
+           border-color: #3C91E6;
+           box-shadow: 0 0 0 4px rgba(60, 145, 230, 0.1);
+           outline: none;
+       }
+
+       .form-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+           gap: 20px;
+           margin-bottom: 30px;
+       }
+
+       .temp-slots-section {
+           background-color: #f8f9fa;
+           border-radius: 12px;
+           padding: 20px;
+           margin-top: 30px;
+           text-align: center; /* Center align contents */
+       }
+
+       .slots-container {
+           display: flex;
+           flex-direction: column;
+           gap: 15px;
+           margin-bottom: 15px;
+       }
+
+       .slot-inputs {
+           display: grid;
+           grid-template-columns: repeat(4, 1fr) auto;
+           gap: 15px;
+           background-color: #fff;
+           padding: 20px;
+           border-radius: 8px;
+           box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+           align-items: center;
+       }
+
+       .btn-delete {
+           background: #fff1f1;
+           color: #ff6b6b;
+           border: none;
+           padding: 12px;
+           border-radius: 6px;
+           cursor: pointer;
+           transition: all 0.2s ease;
+           height: 42px;
+           width: 42px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+       }
+
+       .slot-inputs select,
+       .slot-inputs input {
+           width: 100%;
+           padding: 10px;
+           border: 1px solid #e9ecef;
+           border-radius: 6px;
+           font-size: 0.9rem;
+       }
+
+       .btn-add-slot {
+           margin-top: 15px;
+       }
+
+       .slots-list {
+           margin-top: 20px;
+       }
+
+       .slots-list li {
+           background: white;
+           padding: 15px;
+           margin-bottom: 10px;
+           border-radius: 8px;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+           transition: transform 0.2s ease;
+           border-left: 4px solid #3C91E6;
+       }
+
+       .slots-list li:hover {
+           transform: translateX(5px);
+       }
+
+       .btn-delete {
+           background: #fff1f1;
+           color: #ff6b6b;
+           border: none;
+           padding: 8px;
+           border-radius: 6px;
+           cursor: pointer;
+           transition: all 0.2s ease;
+       }
+
+       .btn-delete:hover {
+           background: #ff6b6b;
+           color: white;
+       }
+
+       .btn-add-slot {
+           background: #3C91E6;
+           color: white;
+           border: none;
+           padding: 12px 20px;
+           border-radius: 8px;
+           cursor: pointer;
+           font-weight: 500;
+           transition: all 0.2s ease;
+           width: auto; /* Changed from 100% */
+           min-width: 200px; /* Set minimum width */
+           margin: 20px auto 0; /* Center the button */
+           display: block; /* Allow margin auto to work */
+       }
+
+       .btn-add-slot:hover {
+           background: #2980b9;
+           transform: translateY(-2px);
+           box-shadow: 0 4px 12px rgba(60, 145, 230, 0.2);
+       }
+
+       .submit-btn {
+           background: #3C91E6;
+           color: white;
+           padding: 16px;
+           border: none;
+           border-radius: 8px;
+           font-size: 1rem;
+           font-weight: 600;
+           width: 100%;
+           margin-top: 30px;
+           cursor: pointer;
+           transition: all 0.3s ease;
+       }
+
+       .submit-btn:hover {
+           background: #2980b9;
+           transform: translateY(-2px);
+       }
+
+       /* Custom scrollbar */
+       .modal-content::-webkit-scrollbar {
+           width: 8px;
+       }
+
+       .modal-content::-webkit-scrollbar-track {
+           background: #f1f1f1;
+           border-radius: 4px;
+       }
+
+       .modal-content::-webkit-scrollbar-thumb {
+           background: #c1c1c1;
+           border-radius: 4px;
+       }
+
+       .modal-content::-webkit-scrollbar-thumb:hover {
+           background: #a8a8a8;
+       }
+
+       @media (max-width: 768px) {
+           .modal-content {
+               margin: 0;
+               height: 100vh;
+               max-height: 100vh;
+               border-radius: 0;
+               width: 100%;
+           }
+           
+           .form-grid {
+               grid-template-columns: 1fr;
+           }
+       }
+
+       .dashboard-cards {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+           gap: 24px;
+           padding: 20px;
+           margin-bottom: 30px;
+       }
+
+       .stat-card {
+           background: white;
+           padding: 24px;
+           border-radius: 16px;
+           display: flex;
+           align-items: center;
+           gap: 20px;
+           box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+           transition: all 0.3s ease;
+           position: relative;
+           overflow: hidden;
+       }
+
+       .stat-card::before {
+           content: '';
+           position: absolute;
+           top: 0;
+           left: 0;
+           width: 100%;
+           height: 100%;
+           background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0));
+           pointer-events: none;
+       }
+
+       .stat-card:hover {
+           transform: translateY(-5px);
+           box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+       }
+
+       .stat-icon {
+           width: 64px;
+           height: 64px;
+           display: flex;
+           align-items: center;
+           justify-content: center;
+           border-radius: 12px;
+           font-size: 32px;
+       }
+
+       .approved-icon {
+           background: rgba(46, 213, 115, 0.15);
+           color: #2ed573;
+       }
+
+       .pending-icon {
+           background: rgba(255, 171, 0, 0.15);
+           color: #ffab00;
+       }
+
+       .rejected-icon {
+           background: rgba(255, 71, 87, 0.15);
+           color: #ff4757;
+       }
+
+       .stat-details {
+           flex: 1;
+       }
+
+       .stat-details h3 {
+           margin: 0 0 8px 0;
+           font-size: 16px;
+           color: #6c757d;
+       }
+
+       .stat-details .count {
+           font-size: 28px;
+           font-weight: 700;
+           margin: 0;
+           line-height: 1;
+       }
+
+       .stat-card:nth-child(1) .count {
+           color: #2ed573;
+       }
+
+       .stat-card:nth-child(2) .count {
+           color: #ffab00;
+       }
+
+       .stat-card:nth-child(3) .count {
+           color: #ff4757;
+       }
+
+       @media (max-width: 768px) {
+           .dashboard-cards {
+               grid-template-columns: 1fr;
+               padding: 15px;
+           }
+
+           .stat-card {
+               padding: 20px;
+           }
+
+           .stat-icon {
+               width: 48px;
+               height: 48px;
+               font-size: 24px;
+           }
+
+           .stat-details .count {
+               font-size: 24px;
+           }
+       }
+
+       @media (max-width: 1200px) {
+           .slot-inputs {
+               grid-template-columns: repeat(2, 1fr);
+           }
+       }
+
+       @media (max-width: 768px) {
+           .slot-inputs {
+               grid-template-columns: 1fr;
+           }
+           
+           .modal-content {
+               width: 100%;
+               margin: 0;
+               border-radius: 0;
+           }
+       }
+
+       /* Update textarea styling */
+       #reasoncontainer {
+           grid-column: 1 / -1; /* Make container span full width */
+       }
+
+       #reason {
+           width: 100%;
+           min-height: 120px !important; /* Increase minimum height */
+           height: auto !important; /* Allow auto expansion */
+           resize: vertical; /* Allow vertical resizing */
+           padding: 12px 16px;
+           margin: 5px 0;
+           border-radius: 10px;
+           text-align: left; /* Align text to left for better readability */
+           line-height: 1.5; /* Improve line spacing */
+       }
+
+       /* Update form grid to accommodate larger textarea */
+       .form-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+           gap: 20px;
+           margin-bottom: 30px;
+       }
+
+       .leave-sections {
+           display: grid;
+           gap: 2rem;
+           padding: 20px;
+       }
+
+       .section-card {
+           background: white;
+           border-radius: 12px;
+           padding: 20px;
+           box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+       }
+
+       .section-title {
+           font-size: 1.2rem;
+           color: #2d3436;
+           margin-bottom: 1rem;
+       }
+
+       .requests-table {
+           width: 100%;
+           border-collapse: collapse;
+       }
+
+       .requests-table th,
+       .requests-table td {
+           padding: 12px;
+           text-align: left;
+           border-bottom: 1px solid #eee;
+       }
+
+       .status-badge {
+           padding: 6px 12px;
+           border-radius: 20px;
+           font-size: 0.85rem;
+           font-weight: 500;
+       }
+
+       .status-badge.pending {
+           background: rgba(255, 171, 0, 0.15);
+           color: #ffab00;
+       }
+
+       .btn-view {
+           background: none;
+           border: none;
+           color: #3C91E6;
+           font-size: 1.2rem;
+           cursor: pointer;
+           padding: 4px;
+           border-radius: 4px;
+           transition: all 0.2s ease;
+       }
+
+       .btn-view:hover {
+           background: rgba(60, 145, 230, 0.1);
+           transform: scale(1.1);
+       }
+
+       .view-leave-content {
+           max-width: 800px;
+       }
+
+       .detail-grid {
+           display: grid;
+           grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+           gap: 20px;
+           margin-bottom: 30px;
+       }
+
+       .detail-item {
+           padding: 10px;
+       }
+
+       .detail-item label {
+           display: block;
+           color: #666;
+           margin-bottom: 5px;
+           font-size: 0.9rem;
+       }
+
+       .detail-item p {
+           margin: 0;
+           font-size: 1rem;
+           color: #2d3436;
+       }
+
+       .full-width {
+           grid-column: 1 / -1;
+       }
+
+       .time-slots-details {
+           border-top: 1px solid #eee;
+           padding-top: 20px;
+       }
+
+       .slots-table {
+           width: 100%;
+           margin-top: 15px;
+           border-collapse: collapse;
+       }
+
+       .slots-table th,
+       .slots-table td {
+           padding: 10px;
+           border: 1px solid #eee;
+           text-align: left;
+       }
+
+       .leave-navigation {
+           display: flex;
+           gap: 1rem;
+           padding: 0 20px;
+           margin-bottom: 1rem;
+       }
+
+       .nav-tab {
+           padding: 12px 24px;
+           border: none;
+           background: white;
+           border-radius: 8px;
+           cursor: pointer;
+           font-size: 1rem;
+           color: #666;
+           transition: all 0.3s ease;
+           box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+           position: relative;
+       }
+
+       .nav-tab.active::after {
+           content: '';
+           position: absolute;
+           bottom: -2px;
+           left: 0;
+           width: 100%;
+           height: 3px;
+           background: #3C91E6;
+           border-radius: 3px;
+       }
+
+       .nav-tab.active {
+           background: #3C91E6;
+           color: white;
+           font-weight: 500;
+       }
+
+       .nav-tab:hover:not(.active) {
+           background: #f8f9fa;
+           transform: translateY(-2px);
+       }
+
+       .leave-section {
+           display: none;
+           opacity: 0;
+           transition: opacity 0.3s ease;
+       }
+
+       .leave-section.active {
+           display: block;
+           opacity: 1;
+           animation: fadeIn 0.3s ease;
+       }
+
+       @keyframes fadeIn {
+           from { opacity: 0; }
+           to { opacity: 1; }
+       }
+
+       .action-buttons {
+           position: absolute;
+           right: 50px;
+           top: 50%;
+           transform: translateY(-50%);
+       }
+
+       .btn-accept {
+           background: #2ed573;
+           color: white;
+           border: none;
+           padding: 8px 16px;
+           border-radius: 6px;
+           cursor: pointer;
+           display: flex;
+           align-items: center;
+           gap: 8px;
+           font-size: 0.9rem;
+           font-weight: 500;
+           transition: all 0.2s ease;
+       }
+
+       .btn-accept:hover {
+           background: #26af5f;
+           transform: translateY(-2px);
+           box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);
+       }
+
+       .modal-header {
+           display: flex;
+           align-items: center;
+           justify-content: space-between;
+       }
+   </style>
+	{% endblock %}
+</head>
+
+<body>
+
+
+
+
+
+	<!-- CONTENT -->
+	<section id="content">
+
+
+		<!-- MAIN -->
+{% block content %}
+<div class="head-title">
+    <div class="left">
+        <h1>Leaves</h1>
+    </div>
+
+    <button id="createLeaveBtn" class="btn-create">
+        <i class='bx bx-plus'></i>
+        <span class="text">Create Leave Request</span>
+    </button>
+
+</div>
+
+<div class="dashboard-cards">
+    <div class="stat-card">
+        <div class="stat-icon approved-icon">
+            <i class='bx bx-check-circle'></i>
+        </div>
+        <div class="stat-details">
+            <h3>Approved Leaves</h3>
+            <p class="count">{{ stats.approved }}</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon pending-icon">
+            <i class='bx bx-time'></i>
+        </div>
+        <div class="stat-details">
+            <h3>Pending Leaves</h3>
+            <p class="count">{{ stats.pending }}</p>
+        </div>
+    </div>
+    <div class="stat-card">
+        <div class="stat-icon rejected-icon">
+            <i class='bx bx-x-circle'></i>
+        </div>
+        <div class="stat-details">
+            <h3>Rejected Leaves</h3>
+            <p class="count">{{ stats.rejected }}</p>
+        </div>
+    </div>
+</div>
+
+{% if is_admin %}
+<div class="leave-navigation">
+    <button class="nav-tab {% if is_admin %}active{% endif %}" data-tab="requests">Leave Requests</button>
+    <button class="nav-tab {% if not is_admin %}active{% endif %}" data-tab="history">Leave History</button>
+</div>
+{% endif %}
+
+
+<div class="leave-sections">
+    <div class="section-card leave-section {% if is_admin %}active{% endif %}" data-tab="requests">
+        <h2 class="section-title">Leave Requests</h2>
+        {% if is_admin %}
+        <!-- Admin view - pending requests -->
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>Teacher</th>
+                    <th>Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in pending_leaves %}
+                <tr>
+                    <td>{{ leave.TeacherID.FirstName }} {{ leave.TeacherID.LastName }}</td>
+                    <td>{{ leave.LeaveTypeID.Name }}</td>
+                    <td>{{ leave.StartDate }}</td>
+                    <td>{{ leave.EndDate }}</td>
+                    <td><span class="status-badge pending">{{ leave.Status }}</span></td>
+                    <td>
+                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.id }}')">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+    </div>
+
+    <div class="section-card leave-section {% if not is_admin %}active{% endif %}" data-tab="history">
+        <h2 class="section-title">Leave History</h2>
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leave_history %}
+                <tr>
+                    <td>{{ leave.LeaveTypeID.Name }}</td>
+                    <td>{{ leave.StartDate }}</td>
+                    <td>{{ leave.EndDate }}</td>
+                    <td><span class="status-badge {{ leave.Status|lower }}">{{ leave.Status }}</span></td>
+                    <td>
+                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.id }}')">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<!-- Leave Request Modal -->
+<div id="leaveModal" class="modal">
+    <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="modal-header">
+            <h2>Create Leave Request</h2>
+        </div>
+        <form id="leaveRequestForm" method="POST">
+            {% csrf_token %}
+            <div class="form-grid">
+                <div class="form-group">
+                    <label for="leaveType">Leave Type*</label>
+                    <select id="leaveType" name="leaveType" required>
+                        <option value="">Select Leave Type</option>
+                        {% for type in leave_types %}
+                        <option value="{{ type.LeaveTypeID }}">{{ type.LeaveTypeName }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date*</label>
+                    <input type="date" id="startDate" name="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date*</label>
+                    <input type="date" id="endDate" name="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="requestedTo">Request To*</label>
+                    <select id="requestedTo" name="requestedTo" required>
+                        <option value="">Select Approver</option>
+                        {% for t in teachers %}
+                            <option value="{{ t.Teacherid }}">
+                                {% if t.RoleID.RoleName == 'HOD' %}
+                                    HOD - {{ t.FirstName }} {{ t.LastName }}
+                                {% else %}
+                                    Principal - {{ t.FirstName }} {{ t.LastName }}
+                                {% endif %}
+                                ({{ t.DepartmentID.DepartmentName }})
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group" id="reasoncontainer">
+                    <label for="reason">Reason*</label>
+                    <textarea id="reason" name="reason" required></textarea>
+                </div>
+            </div>
+
+            <!-- New Temporary Time Slot Section -->
+            <div class="temp-slots-section">
+                <h3>Temporary Time Slots</h3>
+                <div class="slots-container">
+                    <div class="slot-inputs">
+                        <select class="class-select">
+                            <option value="">Select Class</option>
+                            <option value="FE">FE</option>
+                            <option value="SE">SE</option>
+                            <option value="TE">TE</option>
+                        </select>
+                        <input type="date" class="slot-date" />
+                        <select class="time-slot">
+                            <option value="">Select Slots</option>
+                            <option value="1">9:00 - 10:00</option>
+                            <option value="2">10:00 - 11:00</option>
+                            <option value="3">11:00 - 12:00</option>
+                        </select>
+                        <select class="replacement-teacher">
+                            <option value="">Select Teacher</option>
+                            <option value="1">Teacher 1</option>
+                            <option value="2">Teacher 2</option>
+                            <option value="3">Teacher 3</option>
+                        </select>
+                        <button type="button" class="btn-delete" onclick="removeSlotRow(this)">
+                            <i class='bx bx-trash'></i>
+                        </button>
+                    </div>
+                </div>
+            <button type="button" id="addSlotBtn" class="btn-add-slot">
+                        <i class='bx bx-plus'></i> Add Another Slot
+                    </button>
+
+            </div>
+
+            <button type="submit" class="submit-btn">Submit Request</button>
+        </form>
+    </div>
+</div>
+
+ <!-- Update the view leave modal content -->
+<div id="viewLeaveModal" class="modal">
+    <div class="modal-content view-leave-content">
+        <span class="close" onclick="closeViewModal()">&times;</span>
+        <div class="modal-header">
+            <h2>Leave Request Details</h2>
+            <div class="action-buttons">
+                <button class="btn-accept" onclick="acceptLeave()">
+                    <i class='bx bx-check'></i> Accept Leave
+                </button>
+            </div>
+        </div>
+        <div class="leave-details">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Request ID</label>
+                    <p>#REQ001</p>
+                </div>
+                <div class="detail-item">
+                    <label>Leave Type</label>
+                    <p>Medical Leave</p>
+                </div>
+                <div class="detail-item">
+                    <label>From Date</label>
+                    <p>2024-02-15</p>
+                </div>
+                <div class="detail-item">
+                    <label>To Date</label>
+                    <p>2024-02-17</p>
+                </div>
+                <div class="detail-item">
+                    <label>Status</label>
+                    <p><span class="status-badge pending">Pending</span></p>
+                </div>
+                <div class="detail-item full-width">
+                    <label>Reason</label>
+                    <p>Medical appointment and recovery period needed.</p>
+                </div>
+            </div>
+            <div class="time-slots-details">
+                <h3>Temporary Time Slots</h3>
+                <table class="slots-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Class</th>
+                            <th>Time Slot</th>
+                            <th>Replacement Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2024-02-15</td>
+                            <td>FE-A</td>
+                            <td>9:00 - 10:00</td>
+                            <td>Prof. Smith</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+
+	</section>
+	{% block scripts %}
+	<script>
+        // Modal functionality
+        const modal = document.getElementById("leaveModal");
+        const btn = document.getElementById("createLeaveBtn");
+        const span = document.getElementsByClassName("close")[0];
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.leave-section');
+    
+        // Initialize navigation
+        function initNavigation() {
+            // Find first tab and section
+            const firstTab = document.querySelector('.nav-tab');
+            const firstSection = document.querySelector('.leave-section');
+            
+            if (firstTab && firstSection) {
+                firstTab.classList.add('active');
+                firstSection.classList.add('active');
+                firstSection.style.display = 'block';
+            }
+            
+            navTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const targetTab = tab.dataset.tab;
+                    
+                    // Remove active class from all tabs and sections
+                    navTabs.forEach(t => t.classList.remove('active'));
+                    sections.forEach(s => {
+                        s.classList.remove('active');
+                        s.style.display = 'none';
+                    });
+                    
+                    // Add active class to clicked tab and show corresponding section
+                    tab.classList.add('active');
+                    const activeSection = document.querySelector(`.leave-section[data-tab="${targetTab}"]`);
+                    if (activeSection) {
+                        activeSection.style.display = 'block';
+                        setTimeout(() => activeSection.classList.add('active'), 50);
+                    }
+                });
+            });
+        }
+    
+        // Modal functions
+        btn.onclick = function() {
+            modal.style.display = "block";
+            setTimeout(() => modal.classList.add("show"), 10);
+        }
+    
+        span.onclick = function() {
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+    
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.classList.remove("show");
+                setTimeout(() => modal.style.display = "none", 300);
+            }
+            if (event.target.classList.contains('modal')) {
+                closeViewModal();
+            }
+        }
+    
+        // Form submission handler
+        document.getElementById('leaveRequestForm').onsubmit = function(e) {
+            e.preventDefault();
+            
+            // Disable submit button to prevent double submission
+            const submitBtn = this.querySelector('.submit-btn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            // Get form data
+            const formData = new FormData(this);
+
+            // Add CSRF token
+            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
+
+            // Get slots data if any
+            const slots = [];
+            document.querySelectorAll('.slot-inputs').forEach(slotRow => {
+                const slotClass = slotRow.querySelector('.class-select').value;
+                const slotDate = slotRow.querySelector('.slot-date').value;
+                const timeSlot = slotRow.querySelector('.time-slot').value;
+                const replacementTeacher = slotRow.querySelector('.replacement-teacher').value;
+
+                if (slotClass && slotDate && timeSlot && replacementTeacher) {
+                    slots.push({
+                        class: slotClass,
+                        date: slotDate,
+                        time_slot: timeSlot,
+                        replacement_teacher: replacementTeacher
+                    });
+                }
+            });
+
+            if (slots.length > 0) {
+                formData.append('slots', JSON.stringify(slots));
+            }
+
+            // Submit form
+            fetch(window.location.href, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    // Show success message
+                    alert(data.message || 'Leave request submitted successfully');
+                    modal.classList.remove('show');
+                    setTimeout(() => {
+                        modal.style.display = 'none';
+                        window.location.reload();
+                    }, 300);
+                } else {
+                    // Show error message
+                    alert(data.message || 'Error submitting leave request');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('An error occurred while submitting the leave request');
+            })
+            .finally(() => {
+                // Reset button state
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Request';
+            });
+        };
+    
+        // Slot management
+        document.getElementById('addSlotBtn').addEventListener('click', function() {
+            const slotsContainer = document.querySelector('.slots-container');
+            const newRow = document.querySelector('.slot-inputs').cloneNode(true);
+            
+            newRow.querySelectorAll('select, input').forEach(input => {
+                input.value = '';
+            });
+            
+            slotsContainer.appendChild(newRow);
+        });
+    
+        function removeSlotRow(button) {
+            const slotsContainer = document.querySelector('.slots-container');
+            const row = button.closest('.slot-inputs');
+            
+            if (slotsContainer.children.length > 1) {
+                row.remove();
+            }
+        }
+    
+        // View leave details functions
+        function viewLeaveDetails(id) {
+            const viewModal = document.getElementById('viewLeaveModal');
+            viewModal.style.display = 'block';
+            setTimeout(() => viewModal.classList.add('show'), 10);
+        }
+    
+        function closeViewModal() {
+            const viewModal = document.getElementById('viewLeaveModal');
+            viewModal.classList.remove('show');
+            setTimeout(() => viewModal.style.display = 'none', 300);
+        }
+    
+        function acceptLeave() {
+            alert('Leave request accepted!');
+            closeViewModal();
+        }
+    
+        // Input animations
+        const formInputs = document.querySelectorAll('.form-group input, .form-group select, .form-group textarea');
+        formInputs.forEach(input => {
+            input.addEventListener('focus', function() {
+                this.parentElement.classList.add('focused');
+            });
+            input.addEventListener('blur', function() {
+                if (!this.value) {
+                    this.parentElement.classList.remove('focused');
+                }
+            });
+        });
+    
+        // Initialize navigation on page load
+        initNavigation();
+    </script>
+    
+	{% endblock %}
+</body>
+
+</html>

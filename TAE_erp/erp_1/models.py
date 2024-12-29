@@ -203,14 +203,10 @@ class Results(models.Model):
 
     def __str__(self):
         return f"Result {self.ResultID} - {self.SubjectID} - {self.StudentID} - Marks: {self.Marks}"
-
 class LeaveType(models.Model):
     LeaveTypeID = models.AutoField(primary_key=True)
     LeaveTypeName = models.CharField(max_length=100)
     Description = models.TextField(blank=True, null=True)
-
-    def __str__(self):
-        return self.LeaveTypeName
 
 class LeaveRequest(models.Model):
     LeaveRequestID = models.AutoField(primary_key=True)
@@ -219,27 +215,16 @@ class LeaveRequest(models.Model):
     StartDate = models.DateField()
     EndDate = models.DateField()
     Reason = models.TextField()
-    Status = models.CharField(
-        max_length=50, 
-        choices=[
-            ('Pending', 'Pending'),
-            ('Approved', 'Approved'),
-            ('Rejected', 'Rejected')
-        ],
-        default='Pending'
-    )
+    Status = models.CharField(max_length=50, default='Pending')
     RequestedTo = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='leave_approvals')
     RequestDate = models.DateTimeField(auto_now_add=True)
     ApprovalDate = models.DateTimeField(null=True, blank=True)
-    Comments = models.TextField(blank=True, null=True)
 
-    def __str__(self):
-        return f"Leave Request {self.LeaveRequestID} - {self.TeacherID}"
-
-    def clean(self):
-        if self.EndDate < self.StartDate:
-            raise models.ValidationError("End date cannot be before start date")
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super().save(*args, **kwargs)
+class TempTimetable(models.Model):
+    TimeSlotID = models.AutoField(primary_key=True)
+    TeacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    ClassID = models.ForeignKey(Classes, on_delete=models.CASCADE)
+    Day = models.CharField(max_length=50)
+    StartTime = models.TimeField()
+    EndTime = models.TimeField()
+    SlotID = models.ForeignKey(Slots, on_delete=models.CASCADE)

@@ -1,0 +1,1315 @@
+Watching for file changes with StatReloader
+Error in custom_report: name 'FloatField' is not defined
+Internal Server Error: /custom_report
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 355, in custom_report
+    output_field=FloatField(),
+                 ^^^^^^^^^^
+NameError: name 'FloatField' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 415, in custom_report
+    return redirect('preacademic')
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 180, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\resolvers.py", line 851, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'preacademic' not found. 'preacademic' is not a valid view function or pattern name.
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in custom_report: name 'FloatField' is not defined
+Internal Server Error: /custom_report
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 355, in custom_report
+    output_field=FloatField(),
+                 ^^^^^^^^^^
+NameError: name 'FloatField' is not defined
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 415, in custom_report
+    return redirect('preports')
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 180, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\resolvers.py", line 851, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'preports' not found. 'preports' is not a valid view function or pattern name.
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in custom_report: name 'FloatField' is not defined
+Error in custom_report: name 'FloatField' is not defined
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /academics/preacademic
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 180, in translate_token
+    op = OPERATORS[token]
+         ~~~~~~~~~^^^^^^^
+KeyError: "request.path=='/index'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\academics\views.py", line 42, in preacademic
+    return render(request, 'preacademic.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 961, in do_if
+    nodelist = parser.parse(("elif", "else", "endif"))
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 960, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 893, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 171, in __init__
+    mapped_tokens.append(self.translate_token(token))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 182, in translate_token
+    return self.create_var(token)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 896, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 597, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 698, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '=='/index'' from 'request.path=='/index''
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\academics\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in custom_report: 'Department' object is not iterable
+Error in custom_report: 'Department' object is not iterable
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\academics\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in custom_report: 'Department' object is not iterable
+Error in custom_report: 'Department' object is not iterable
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\academics\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in custom_report: Could not parse the remainder: '=='/custom_report'' from 'request.path=='/custom_report''
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'preacademics' not found. 'preacademics' is not a valid view function or pattern name.
+Error in custom_report: Reverse for 'pre_academics' not found. 'pre_academics' is not a valid view function or pattern name.
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Internal Server Error: /notices
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 180, in translate_token
+    op = OPERATORS[token]
+         ~~~~~~~~~^^^^^^^
+KeyError: "request.path!='notices'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 460, in notices
+    return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 960, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 893, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 171, in __init__
+    mapped_tokens.append(self.translate_token(token))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 182, in translate_token
+    return self.create_var(token)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 896, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 597, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 698, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '!='notices'' from 'request.path!='notices''
+Internal Server Error: /notices
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 180, in translate_token
+    op = OPERATORS[token]
+         ~~~~~~~~~^^^^^^^
+KeyError: "request.path=='notices'"
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 460, in notices
+    return render(request, 'notices.html',{'notice': allnotices,'teacher':teacher,'classes':classes})
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 134, in render
+    compiled_parent = self.get_parent(context)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 131, in get_parent
+    return self.find_template(parent, context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 109, in find_template
+    template, origin = context.template.engine.find_template(
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\engine.py", line 159, in find_template
+    template = loader.get_template(name, skip=skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\cached.py", line 57, in get_template
+    template = super().get_template(template_name, skip)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loaders\base.py", line 28, in get_template
+    return Template(
+           ^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 154, in __init__
+    self.nodelist = self.compile_nodelist()
+                    ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 196, in compile_nodelist
+    return parser.parse()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 510, in parse
+    raise self.error(token, e)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 508, in parse
+    compiled_result = compile_func(self, token)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 960, in do_if
+    condition = TemplateIfParser(parser, bits).parse()
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 893, in __init__
+    super().__init__(*args, **kwargs)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 171, in __init__
+    mapped_tokens.append(self.translate_token(token))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\smartif.py", line 182, in translate_token
+    return self.create_var(token)
+           ^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 896, in create_var
+    return TemplateLiteral(self.template_parser.compile_filter(value), value)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 597, in compile_filter
+    return FilterExpression(token, self)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 698, in __init__
+    raise TemplateSyntaxError(
+django.template.exceptions.TemplateSyntaxError: Could not parse the remainder: '=='notices'' from 'request.path=='notices''
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Internal Server Error: /
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\contrib\sessions\backends\base.py", line 187, in _get_session
+    return self._session_cache
+           ^^^^^^^^^^^^^^^^^^^
+AttributeError: 'SessionStore' object has no attribute '_session_cache'
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 275, in ensure_connection
+    self.connect()
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\postgresql\base.py", line 277, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\psycopg2\__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: could not translate host name "aws-0-ap-southeast-1.pooler.supabase.com" to address: No such host is known. 
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 7, in _wrapped_view
+    if 'teacher_email' in request.session:
+       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\contrib\sessions\backends\base.py", line 50, in __contains__
+    return key in self._session
+                  ^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\contrib\sessions\backends\base.py", line 192, in _get_session
+    self._session_cache = self.load()
+                          ^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\contrib\sessions\backends\db.py", line 42, in load
+    s = self._get_session_from_db()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\contrib\sessions\backends\db.py", line 32, in _get_session_from_db
+    return self.model.objects.get(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\manager.py", line 87, in manager_method
+    return getattr(self.get_queryset(), name)(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 645, in get
+    num = len(clone)
+          ^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 382, in __len__
+    self._fetch_all()
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 1928, in _fetch_all
+    self._result_cache = list(self._iterable_class(self))
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 91, in __iter__
+    results = compiler.execute_sql(
+              ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\sql\compiler.py", line 1560, in execute_sql
+    cursor = self.connection.cursor()
+             ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 316, in cursor
+    return self._cursor()
+           ^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 292, in _cursor
+    self.ensure_connection()
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 274, in ensure_connection
+    with self.wrap_database_errors:
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\utils.py", line 91, in __exit__
+    raise dj_exc_value.with_traceback(traceback) from exc_value
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 275, in ensure_connection
+    self.connect()
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\base\base.py", line 256, in connect
+    self.connection = self.get_new_connection(conn_params)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\utils\asyncio.py", line 26, in inner
+    return func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\backends\postgresql\base.py", line 277, in get_new_connection
+    connection = self.Database.connect(**conn_params)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\psycopg2\__init__.py", line 122, in connect
+    conn = _connect(dsn, connection_factory=connection_factory, **kwasync)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+django.db.utils.OperationalError: could not translate host name "aws-0-ap-southeast-1.pooler.supabase.com" to address: No such host is known. 
+
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 400 Bad Request"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 400 Bad Request"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 400 Bad Request"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Unexpected error in index view: Cannot use QuerySet.first() on an unordered queryset performing aggregation. Add an ordering with order_by().
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/admin/css/base.css
+Not Found: /static/admin/js/theme.js
+Not Found: /static/admin/css/dark_mode.css
+Not Found: /static/admin/css/nav_sidebar.css
+Not Found: /static/admin/css/login.css
+Not Found: /static/admin/js/nav_sidebar.js
+Not Found: /static/admin/css/responsive.css
+Not Found: /leave
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/script/progressbar.js
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Not Found: /favicon.ico
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/style/style.css 
+Not Found: /academics/assets/script/script.js
+Not Found: /static/assets/style/style.css 
+Not Found: /academics/assets/script/script.js
+Not Found: /static/assets/style/style.css 
+Not Found: /academics/assets/script/script.js
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 400 Bad Request"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Not Found: /favicon.ico
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Not Found: /favicon.ico
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Not Found: /favicon.ico
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/script/script.js
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.jpg
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/script/script.js
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+Not Found: /static/assets/img/user.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/script/script.js
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+Not Found: /static/assets/img/user.png
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/style_css.css
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /static/assets/img/logo.png
+Watching for file changes with StatReloader
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+Not Found: /static/assets/img/logo.png
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /leaves
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Not Found: /leaves
+Not Found: /academics/login/
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /static/assets/style/progress_bar.css
+Not Found: /static/assets/style/history.css
+Not Found: /static/assets/style/notice.css
+Not Found: /static/assets/style/students.css
+Not Found: /static/assets/style/style.css
+Not Found: /static/assets/img/user.png
+Not Found: /static/assets/style/mac.css
+Not Found: /static/assets/img/tae-logo.png
+Not Found: /static/assets/script/script.js
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Unexpected error in index view: Missing staticfiles manifest entry for '/assets/style/progress_bar.css'
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Unexpected error in index view: Missing staticfiles manifest entry for '/assets/style/progress_bar.css'
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Internal Server Error: /leaves
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1054, in leaves
+    leaves = LeaveRequest.objects.filter(TeacherID=teacher).order_by('-Date')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 1701, in order_by
+    obj.query.add_ordering(*field_names)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\sql\query.py", line 2253, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\sql\query.py", line 1772, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'Date' into field. Choices are: ApprovalDate, EndDate, LeaveRequestID, LeaveTypeID, LeaveTypeID_id, Reason, RequestDate, RequestedTo, RequestedTo_id, StartDate, Status, TeacherID, TeacherID_id
+Not Found: /sam
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+Not Found: /sam
+Internal Server Error: /leaves
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1054, in leaves
+    leaves = LeaveRequest.objects.filter(TeacherID=teacher).order_by('-Date')
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\query.py", line 1701, in order_by
+    obj.query.add_ordering(*field_names)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\sql\query.py", line 2253, in add_ordering
+    self.names_to_path(item.split(LOOKUP_SEP), self.model._meta)
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\db\models\sql\query.py", line 1772, in names_to_path
+    raise FieldError(
+django.core.exceptions.FieldError: Cannot resolve keyword 'Date' into field. Choices are: ApprovalDate, EndDate, LeaveRequestID, LeaveTypeID, LeaveTypeID_id, Reason, RequestDate, RequestedTo, RequestedTo_id, StartDate, Status, TeacherID, TeacherID_id
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+HTTP Request: POST https://gipdgkwmxmmykyaliwhr.supabase.co/auth/v1/token?grant_type=password "HTTP/1.1 200 OK"
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in leaves view: 'Teacher' object is not iterable
+Internal Server Error: /leaves
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1140, in leaves
+    return render(request, 'leaves.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 197, in render
+    values = list(values)
+             ^^^^^^^^^^^^
+TypeError: 'Teacher' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1145, in leaves
+    return redirect('index')
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 180, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\resolvers.py", line 851, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'index' not found. 'index' is not a valid view function or pattern name.
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\settings.py changed, reloading.
+Watching for file changes with StatReloader
+Error in leaves view: 'Teacher' object is not iterable
+Internal Server Error: /leaves
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1140, in leaves
+    return render(request, 'leaves.html', context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 25, in render
+    content = loader.render_to_string(template_name, context, request, using=using)
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader.py", line 62, in render_to_string
+    return template.render(context, request)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\backends\django.py", line 61, in render
+    return self.template.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 171, in render
+    return self._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 159, in render
+    return compiled_parent._render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 163, in _render
+    return self.nodelist.render(context)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\loader_tags.py", line 65, in render
+    result = block.nodelist.render(context)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in render
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 1000, in <listcomp>
+    return SafeString("".join([node.render_annotated(context) for node in self]))
+                               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\base.py", line 961, in render_annotated
+    return self.render(context)
+           ^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\template\defaulttags.py", line 197, in render
+    values = list(values)
+             ^^^^^^^^^^^^
+TypeError: 'Teacher' object is not iterable
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\exception.py", line 55, in inner
+    response = get_response(request)
+               ^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\core\handlers\base.py", line 197, in _get_response
+    response = wrapped_callback(request, *callback_args, **callback_kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\decorators.py", line 9, in _wrapped_view
+    return view_func(request, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py", line 1145, in leaves
+    return redirect('index')
+           ^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 49, in redirect
+    return redirect_class(resolve_url(to, *args, **kwargs))
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\shortcuts.py", line 180, in resolve_url
+    return reverse(to, args=args, kwargs=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\base.py", line 88, in reverse
+    return resolver._reverse_with_prefix(view, prefix, *args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\erp_env\Lib\site-packages\django\urls\resolvers.py", line 851, in _reverse_with_prefix
+    raise NoReverseMatch(msg)
+django.urls.exceptions.NoReverseMatch: Reverse for 'index' not found. 'index' is not a valid view function or pattern name.
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in leaves view: 'Teacher' object is not iterable
+Error in leaves view: 'Teacher' object is not iterable
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Error in leaves view: 'Teacher' object is not iterable
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\TAE_erp\urls.py changed, reloading.
+Watching for file changes with StatReloader
+Bad Request: /leaves
+Bad Request: /leaves
+Bad Request: /leaves
+Bad Request: /leaves
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Bad Request: /leaves
+Bad Request: /leaves
+Error submitting leave request: module 'datetime' has no attribute 'strptime'
+Internal Server Error: /leaves
+Error submitting leave request: module 'datetime' has no attribute 'strptime'
+Internal Server Error: /leaves
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+C:\Users\samii\OneDrive\Desktop\TAE_erp\TAE_erp\TAE-erp-backend\TAE_erp\erp_1\views.py changed, reloading.
+Watching for file changes with StatReloader
+Watching for file changes with StatReloader
+Not Found: /favicon.ico
+Not Found: /favicon.ico
+Watching for file changes with StatReloader

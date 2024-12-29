@@ -11,7 +11,6 @@ urlpatterns = [
     path('pre_attendance', views.pre_attendance, name='pre_attendance'),
     path('greenbook', views.greenbook, name='greenbook'),
     path('timetable', views.timetable, name='timetable'),
-    path('pretest', views.pretest, name='pretest'),
     path('report', views.report, name='report'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
 ] 

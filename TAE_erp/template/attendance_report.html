@@ -16,48 +16,129 @@
             margin: auto;
         }
         .form-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-            margin-bottom: 20px;
-            background-color: #f4f4f4;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 24px rgba(149, 157, 165, 0.2);
+            width: 100%;
+            max-width: 1300px;
+            margin: 1rem;
         }
 
         .form-container form {
             display: flex;
-            gap: 15px;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            gap: 1.5rem;
         }
 
-        .form-container label {
-            font-weight: bold;
-            margin-right: 5px;
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
         }
 
-        .form-container input,
-        .form-container select {
-            padding: 8px 12px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            font-size: 14px;
+        .date-controls {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            align-items: end;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            width: 100%;
+        }
+
+        .form-group select,
+        .form-group input {
+            width: 100%;
+        }
+
+        .btn-container {
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .form-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 0.25rem;
+        }
+
+        .form-group select,
+        .form-group input {
+            padding: 0.75rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 0.95rem;
+            width: 100%;
+            transition: all 0.3s ease;
+            background-color: #f8f9fa;
+        }
+
+        .form-group select:hover,
+        .form-group input:hover {
+            border-color: #3c91e6;
+        }
+
+        .form-group select:focus,
+        .form-group input:focus {
+            outline: none;
+            border-color: #3c91e6;
+            box-shadow: 0 0 0 3px rgba(60, 145, 230, 0.1);
+        }
+
+        .date-range {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
 
         .form-container button {
-            background-color: #3c91e6c2;
+            background-color: #3c91e6;
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 4px;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
             cursor: pointer;
-            transition: background-color 0.3s;
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 500px;
+            justify-self: end;
         }
 
         .form-container button:hover {
-            background-color: #337ab7;
+            background-color: #2a75c0;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(60, 145, 230, 0.2);
+        }
+
+        .form-container button:active {
+            transform: translateY(0);
+        }
+
+        @media (max-width: 768px) {
+            .form-container {
+                padding: 1rem;
+                margin: 1rem;
+            }
+
+            .form-container form {
+                grid-template-columns: 1fr;
+            }
+
+            .date-range {
+                grid-template-columns: 1fr;
+            }
+
+            .form-container button {
+                max-width: 100%;
+            }
         }
 
         .container {
@@ -99,96 +180,140 @@
         .download-btn:hover {
             background-color: #337ab7;
         }
+
+        .back-btn {
+            background-color: transparent;
+            color: #3c91e6;
+            border: 2px solid #3c91e6;
+            padding: 0.5rem 1.7rem;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            margin: 1rem 1rem;
+        }
+
+        .back-btn:hover {
+            background-color: #3c91e6;
+            color: white;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(60, 145, 230, 0.2);
+            text-decoration: none;
+        }
+
+        .back-btn:active {
+            transform: translateY(0);
+        }
+
+        .back-btn i {
+            margin-right: 0.2rem;
+        }
     </style>
     {% endblock %}
 </head>
 
 <body>
     {% block content %}
-
     <section id="mySection">
+        <a href="{% if request.path == '/custom_report' %}{% url 'erp_1:preports' %}{% else %}{% url 'academics:preacademic' %}{% endif %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i> Back
+        </a>
+
         <div class="form-container">
-            <form method="POST">
-                {% csrf_token %}
-                <div class="d-flex flex-row " style="display: flex; flex-direction:row;">
-                <label style="margin:auto" for="start_date">From:</label>
-                <input style="margin:auto"  type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}">
+            <form method="GET">
+                <div class="form-row">
+                    {% if teacher.RoleID.RoleName == 'Principal' or teacher.RoleID.RoleName == 'HOD' %}
+                    <div class="form-group">
+                        <label for="department">Department:</label>
+                        <select name="department" id="department" class="form-control" onchange="this.form.submit()">
+                            <option value="">Select Department</option>
+                            {% for dept in departments %}
+                            <option value="{{ dept.DepartmentID }}" {% if dept.DepartmentID|stringformat:"s" == selected_department|stringformat:"s" %}selected{% endif %}>
+                                {{ dept.DepartmentName }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    {% endif %}
 
-                <label style="margin-left:10px;" for="end_date">To:</label>
-                <input style="margin:auto" type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}">
+                    <div class="form-group">
+                        <label for="class">Class:</label>
+                        <select name="class" id="class" class="form-control" onchange="this.form.submit()">
+                            <option value="">Select Class</option>
+                            {% for class in classes %}
+                            <option value="{{ class.ClassID }}" {% if class.ClassID|stringformat:"s" == selected_class|stringformat:"s" %}selected{% endif %}>
+                                {{ class.ClassName }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
 
+                    <div class="form-group">
+                        <label for="subject">Subject:</label>
+                        <select name="subject" id="subject" class="form-control" onchange="this.form.submit()">
+                            <option value="">Select Subject</option>
+                            {% for subject in subjects %}
+                            <option value="{{ subject.SubjectID }}" {% if subject.SubjectID|stringformat:"s" == selected_subject|stringformat:"s" %}selected{% endif %}>
+                                {{ subject.SubjectName }}
+                            </option>
+                            {% endfor %}
+                        </select>
+                    </div>
                 </div>
-                <label for="subject">Subject:</label>
-                <select name="subject" style="width: 200px;" required>
-                    <option value="">Subjects</option>
-                    {% for subject in subjects %}
-                    <option value="{{ subject.SubjectID }}" {% if subject.SubjectID == selected_subject %}selected{% endif %}>
-                        {{ subject.SubjectName }}
-                    </option>
-                    {% endfor %}
-                </select>
 
-                <label for="class">Class:</label>
-                <select name="class" style="width: 200px;" required>
-                    <option value="">Classes</option>
-                    {% for class in classes %}
-                    <option value="{{ class.ClassID }}" {% if class.ClassID == selected_class %}selected{% endif %}>
-                        {{ class.ClassName }}
-                    </option>
-                    {% endfor %}
-                </select>
-
-                <button type="submit">Generate Report</button>
+                <div class="date-controls">
+                    <div class="form-group">
+                        <label for="start_date">From:</label>
+                        <input type="date" name="start_date" id="start_date" value="{{ start_date|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="end_date">To:</label>
+                        <input type="date" name="end_date" id="end_date" value="{{ end_date|date:'Y-m-d' }}" required>
+                    </div>
+                    <div class="form-group btn-container">
+                        <button type="submit" class="btn btn-primary">Generate Report</button>
+                    </div>
+                </div>
             </form>
         </div>
 
+        {% if attendance_data %}
         <div class="container">
             <button id="downloadBtn" class="btn btn-primary download-btn">Download as CSV</button>
             <table id="attendanceTable" class="table table-bordered">
                 <thead>
                     <tr>
                         <th>Roll No</th>
-                        <th>Name of Student</th>
-                        {% for subject in subjects %}
-                            {% if subject.SubjectID|stringformat:"s" == selected_subject|stringformat:"s" %}
-                                <th>{{ subject.SubjectName }}</th>
-                            {% endif %}
-                        {% endfor %}
-                        <th>Total Lectures Conducted</th>
-                        <th>%</th>
+                        <th>Student Name</th>
+                        <th>Lectures Attended</th>
+                        <th>Total Lectures</th>
+                        <th>Attendance %</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for data in attendance_data %}
-                        <tr>
-                            <td>{{ data.student.RollNo }}</td>
-                            <td>{{ data.student.FirstName }} {{ data.student.LastName }}</td>
-            
-                            {# Loop through subjects to display attendance #}
-                            
-                                <td>
-                                    
-                        
-                                    {# Check if attendance data exists for the current subject #}
-                                    {% for record in data.attendance %}
-                                            {{ record.attended_count }} / {{ record.total_lectures }}
-                                        
-                                    {% endfor %}
-                                
-                                </td>
-                            
-            
-                            {# Total attendance for the student #}
-                            <td>{{ data.total_attended }}</td>
-            
-                            {# Percentage of attendance #}
-                            <td>{{ data.average_percentage|floatformat:2 }}%</td>
-                        </tr>
+                    <tr>
+                        <td>{{ data.student.RollNo }}</td>
+                        <td>{{ data.student.FirstName }} {{ data.student.LastName }}</td>
+                        <td>
+                            {% for record in data.attendance %}
+                                {{ record.attended_count }}
+                            {% endfor %}
+                        </td>
+                        <td>
+                            {% for record in data.attendance %}
+                                {{ record.total_lectures }}
+                            {% endfor %}
+                        </td>
+                        <td>{{ data.average_percentage|floatformat:2 }}%</td>
+                    </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            
         </div>
+        {% endif %}
     </section>
     {% endblock %}
 

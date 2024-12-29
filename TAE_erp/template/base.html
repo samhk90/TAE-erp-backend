@@ -79,12 +79,20 @@
                     <span class="text">Dashboard</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/preacademic' or request.path == '/academics' or request.path == '/greenbook' or request.path == '/report' or request.path == '/attendance_form' %}active{% endif %}">
+            <li class="{% if request.path == '/academics/preacademic' or request.path == '/academics/pre_attendance' or request.path == '/academics/greenbook' or request.path == '/academics/report' or request.path == '/academics/attendance_form' %}active{% endif %}">
                 <a href="{% url 'academics:preacademic' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Academics</span>
                 </a>
             </li>
+            {% if teacher.RoleID.RoleName == 'HOD' %}
+            <li class="{% if request.path == '/preports' or request.path == '/daily_report' or request.path == '/weekly_report' or request.path == '/monthly_report' or request.path == '/subjectwise' or request.path == '/class_report'%}active{% endif %}">
+                <a href="{% url 'erp_1:preports' %}">
+                    <i class='bx bxs-message-dots'></i>
+                    <span class="text">Reports</span>
+                </a>
+            </li>
+            {% endif %}
             <li class="{% if request.path == '/notices' %}active{% endif %}">
                 <a href="{% url 'erp_1:notices' %}">
                     <i class='bx bxs-doughnut-chart'></i>
@@ -92,7 +100,7 @@
                 </a>
             </li>
             <li class="{% if request.path == '/leaves' %}active{% endif %}">
-                <a href="{% url 'erp_1:index' %}">
+                <a href="{% url 'erp_1:leaves' %}">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Leaves</span>
                 </a>
@@ -103,7 +111,7 @@
                     <span class="text">Daily Logs</span>
                 </a>
             </li>
-            <li class="{% if request.path == 'students' %}active{% endif %}">
+            <li class="{% if request.path == '/students' %}active{% endif %}">
                 <a href="{% url 'erp_1:students' %}">
                     <i class='bx bxs-group'></i>
                     <span class="text">Student Info</span>
@@ -135,19 +143,19 @@
 			<span class="text"><img src="{% static '/assets/img/tae-logo.png'%}" height="100px" alt=""></span>
 		</a>
 		<ul class="side-menu top">
-			<li class="active">
+			<li class="{% if request.path == '/' %}active{% endif %}">
 				<a href="/">
 					<i class='bx bxs-dashboard'></i>
 					<span class="text">Dashboard</span>
 				</a>
 			</li>
-            <li class="{% if request.path == '/preports' %}active{% endif %}">
+            <li class="{% if request.path == '/preports' or request.path == '/daily_report' or request.path == '/weekly_report' or request.path == '/monthly_report' or request.path == '/subjectwise' or request.path == '/class_report'%}active{% endif %}">
                 <a href="{% url 'erp_1:preports' %}">
                     <i class='bx bxs-message-dots'></i>
                     <span class="text">Reports</span>
                 </a>
             </li>
-            <li class="{% if request.path == '/preports' %}active{% endif %}">
+            <li class="{% if request.path == '/logs' %}active{% endif %}">
                 <a href="{% url 'erp_1:logs' %}">
                     <i class='bx bxs-calendar-star'></i>
                     <span class="text">Daily Logs</span>
@@ -155,34 +163,14 @@
             </li>
 
 				
-                <li class="{% if request.path == '/preports' %}active{% endif %}">
+                <li class="{% if request.path == '/notices' %}active{% endif %}">
                     <a href="{% url 'erp_1:notices' %}">
                         <i class='bx bxs-doughnut-chart'></i>
                         <span class="text">Notices</span>
                     </a>
-                </li>
-			<!-- </li>
-			<li>
-				<a href="timetable">
-					<i class='bx bxs-message-dots'></i>
-					<span class="text">Time Table</span>
-				</a>
-			</li>
-			<li>
-				<a href="leaves">
-					<i class='bx bxs-group'></i>
-					<span class="text">Leaves</span>
-				</a>
-			</li>
+                </li>	
 
-			<li>
-				<a href="sub_allocation.html">
-					<i class='bx bx-chalkboard'></i>
-					<span class="text">Faculty</span>
-				</a>
-			</li> -->
-
-			<li class="{% if request.path == '/preports' %}active{% endif %}">
+			<li class="{% if request.path == '/students' %}active{% endif %}">
 				<a href="{% url 'erp_1:students' %}">
 					<i class='bx bxs-group'></i>
 					<span class="text">Student Info</span>
@@ -233,6 +221,8 @@
         </main>
     </section>
     <!-- CONTENT -->
+    {% if request.path == '/notices' %}
+    {%else%}
     <script>
         document.addEventListener("DOMContentLoaded", function() {
             const loader = document.getElementById('loader');
@@ -282,7 +272,7 @@
                 hideLoader();
             });
         });
-    </script>
+    </script>{% endif %}
     {% block scripts %}
 
     {% endblock %}

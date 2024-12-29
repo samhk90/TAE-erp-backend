@@ -66,7 +66,6 @@
                                 <th>Contact</th>
                                 <th>Department</th>
                                 <th>Year</th>
-                                <th>Attendance</th>
                             </tr>
                         </thead>
 
@@ -74,14 +73,13 @@
                             {% if students_data %}
                             {% for student_data in students_data %}
                             <tr>
-                                <td>{{ student_data.student.RollNumber }}</td>
-                                <td>{{ student_data.student.PRN }}</td>
-                                <td>{{ student_data.student.FirstName }} {{ student_data.student.LastName }}</td>
-                                <td>{{ student_data.student.Email }}</td>
-                                <td>{{ student_data.student.MobileNumber }}</td>
-                                <td>{{ student_data.student.CurrentClassID.DepartmentID.DepartmentName }}</td>
-                                <td>{{ student_data.student.CurrentClassID.YearID.YearName }}</td>
-                                <td>{{ student_data.average_percentage|floatformat:2 }}%</td>
+                                <td>{{ student_data.RollNumber }}</td>
+                                <td>{{ student_data.PRN }}</td>
+                                <td>{{ student_data.FirstName }} {{ student_data.LastName }}</td>
+                                <td>{{ student_data.Email }}</td>
+                                <td>{{ student_data.MobileNumber }}</td>
+                                <td>{{ student_data.CurrentClassID.DepartmentID.DepartmentName }}</td>
+                                <td>{{ student_data.CurrentClassID.YearID.YearName }}</td>
                             </tr>
                             {% endfor %}
                             {% else %}

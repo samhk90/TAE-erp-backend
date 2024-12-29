@@ -1,0 +1,112 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+}
+body{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container{
+    width: 100%;
+    display: flex;
+    max-width: 950px;
+    background: #fff;
+    border-radius: 15px;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+
+
+.container i{
+    position: absolute;
+    left: 65px;
+   color: blue;
+   margin-top: 18px;
+
+}
+.login{
+    width: 400px;
+}
+form{
+    width: 250px;
+    margin: 60px auto;
+}
+h1{
+    margin: 20px;
+    text-align: center;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+p{
+    text-align: center;
+    margin: 10px;
+}
+hr{
+    border-top: 2px solid #1353df;
+}
+form label{
+    display: block;
+    font-size: 16px;
+    font-weight: 600;
+    padding: 5px;
+}
+input{
+    width: 100%;
+    margin: 2px;
+    border: none;
+    outline: none;
+    padding: 8px;
+    border-radius: 5px;
+    /* border: 1px solid gray; */
+    border-bottom: 1px solid black;
+    border-radius: 0;
+}
+.option{
+    margin-top: 20px;
+    margin-left: 40px;
+}
+
+.container input:focus{
+    border-bottom-color: #007bff;
+}
+
+button[type="submit"] {
+    border: none;
+    width: 200px;
+    padding: 8px;
+    position: relative;
+    color: white;
+    /* background-color: #007bff; */
+    margin-bottom: 10px;
+}
+a{
+    text-decoration: none;
+}
+
+a:hover{
+    color: #007bff;
+    
+}
+
+button{
+    border: none;
+    outline: none;
+    padding: 8px;
+    width: 252px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 20px;
+    border-radius: 5px;
+    background: #037bf4;
+}
+button:hover{
+    background: #1353df;
+    transition: all .3s ease;
+}

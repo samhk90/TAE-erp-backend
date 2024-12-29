@@ -18,6 +18,13 @@ from django.db.models import Case, When, IntegerField, FloatField
 from django.shortcuts import redirect
 from django.http import HttpResponse
 import supabase
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import HttpResponseServerError
+from django.db import DatabaseError
+import logging
+
+logger = logging.getLogger(__name__)
+
 @supabase_login_required
 def preacademic(request):
     email = request.session.get('teacher_email')
@@ -56,75 +63,111 @@ from django.db.models import Count, Q, F
 
 @supabase_login_required
 def greenbook(request):
-    email = request.session.get('teacher_email')
-    # Optimize by combining queries and using select_related
-    teacher = get_object_or_404(Teacher.objects.select_related(), Email=email)
-    assignment = get_object_or_404(
-        ClassTeacherAssignment.objects.select_related('RoleID', 'ClassID'),
-        TeacherID=teacher.Teacherid
-    )
-    classteacher = assignment.RoleID.RoleName == 'Classteacher'
-    
-    # Optimize student query with select_related
-    students = Student.objects.filter(
-        CurrentClassID=assignment.ClassID
-    ).select_related('CurrentClassID').order_by('RollNumber')
-    
-    # Optimize attendance query by using prefetch_related and annotations
-    attendance_records = (
-        Attendance.objects.filter(
-            StudentID__in=students.values_list('StudentID', flat=True)
-        ).select_related('StudentID', 'SubjectID')
-        .values('StudentID', 'SubjectID', 'SubjectName')
-        .annotate(
-            attended_count=Count('AttendanceID', filter=Q(Status=True)),
-            total_lectures=Count('AttendanceID'),
-            attendance_percentage=Case(
-                When(total_lectures__gt=0, 
-                     then=100.0 * Count('AttendanceID', filter=Q(Status=True)) / Count('AttendanceID')),
-                default=0.0,
-                output_field=FloatField(),
+    try:
+        email = request.session.get('teacher_email')
+        if not email:
+            messages.error(request, 'Teacher email not found in session')
+            return redirect('login')
+
+        # Optimize by combining queries and using select_related
+        try:
+            teacher = get_object_or_404(Teacher.objects.select_related(), Email=email)
+        except ObjectDoesNotExist:
+            messages.error(request, 'Teacher not found')
+            logger.error(f'Teacher not found for email: {email}')
+            return redirect('login')
+
+        try:
+            assignment = get_object_or_404(
+                ClassTeacherAssignment.objects.select_related('RoleID', 'ClassID'),
+                TeacherID=teacher.Teacherid
             )
-        )
-    )
+        except ObjectDoesNotExist:
+            messages.error(request, 'Class teacher assignment not found')
+            logger.error(f'Class teacher assignment not found for teacher ID: {teacher.Teacherid}')
+            return render(request, 'green.html', {'error': 'No class assignment found'})
 
-    # Use dictionary for O(1) lookups instead of list operations
-    attendance_by_student = defaultdict(list)
-    subjects_set = set()
-    
-    for record in attendance_records:
-        subjects_set.add(record['SubjectName'])
-        attendance_by_student[record['StudentID']].append(record)
+        classteacher = assignment.RoleID.RoleName == 'Classteacher'
+        
+        try:
+            # Optimize student query with select_related
+            students = Student.objects.filter(
+                CurrentClassID=assignment.ClassID
+            ).select_related('CurrentClassID').order_by('RollNumber')
 
-    attendance_data = []
-    for student in students:
-        student_records = attendance_by_student.get(student.StudentID, [])
-        if student_records:
-            total_attended = sum(rec['attended_count'] for rec in student_records)
-            total_conducted = sum(rec['total_lectures'] for rec in student_records)
-            average_percentage = (total_attended / total_conducted * 100) if total_conducted > 0 else 0
-        else:
-            total_attended = 0
-            average_percentage = 0
+            if not students.exists():
+                messages.warning(request, 'No students found in this class')
+                return render(request, 'green.html', {'no_students': True})
 
-        attendance_data.append({
-            'student': {
-                'RollNo': student.RollNumber,
-                'FirstName': student.FirstName,
-                'LastName': student.LastName,
-            },
-            'attendance': student_records,
-            'total_attended': total_attended,
-            'average_percentage': average_percentage,
-        })
+            # Optimize attendance query by using prefetch_related and annotations
+            attendance_records = (
+                Attendance.objects.filter(
+                    StudentID__in=students.values_list('StudentID', flat=True)
+                ).select_related('StudentID', 'SubjectID')
+                .values('StudentID', 'SubjectID', 'SubjectName')
+                .annotate(
+                    attended_count=Count('AttendanceID', filter=Q(Status=True)),
+                    total_lectures=Count('AttendanceID'),
+                    attendance_percentage=Case(
+                        When(total_lectures__gt=0, 
+                             then=100.0 * Count('AttendanceID', filter=Q(Status=True)) / Count('AttendanceID')),
+                        default=0.0,
+                        output_field=FloatField(),
+                    )
+                )
+            )
 
-    context = {
-        'classteacher': classteacher,
-        'teacher': teacher,
-        'attendance_data': attendance_data,
-        'subjects': sorted(subjects_set),
-    }
-    return render(request, 'green.html', context)
+            # Use dictionary for O(1) lookups instead of list operations
+            attendance_by_student = defaultdict(list)
+            subjects_set = set()
+            
+            for record in attendance_records:
+                subjects_set.add(record['SubjectName'])
+                attendance_by_student[record['StudentID']].append(record)
+
+            attendance_data = []
+            for student in students:
+                try:
+                    student_records = attendance_by_student.get(student.StudentID, [])
+                    if student_records:
+                        total_attended = sum(rec['attended_count'] for rec in student_records)
+                        total_conducted = sum(rec['total_lectures'] for rec in student_records)
+                        average_percentage = (total_attended / total_conducted * 100) if total_conducted > 0 else 0
+                    else:
+                        total_attended = 0
+                        average_percentage = 0
+
+                    attendance_data.append({
+                        'student': {
+                            'RollNo': student.RollNumber,
+                            'FirstName': student.FirstName,
+                            'LastName': student.LastName,
+                        },
+                        'attendance': student_records,
+                        'total_attended': total_attended,
+                        'average_percentage': average_percentage,
+                    })
+                except Exception as e:
+                    logger.error(f'Error processing student {student.StudentID}: {str(e)}')
+                    continue
+
+            context = {
+                'classteacher': classteacher,
+                'teacher': teacher,
+                'attendance_data': attendance_data,
+                'subjects': sorted(subjects_set),
+            }
+            return render(request, 'green.html', context)
+
+        except DatabaseError as e:
+            logger.error(f'Database error: {str(e)}')
+            messages.error(request, 'A database error occurred')
+            return HttpResponseServerError('A database error occurred')
+
+    except Exception as e:
+        logger.error(f'Unexpected error in greenbook view: {str(e)}')
+        messages.error(request, 'An unexpected error occurred')
+        return HttpResponseServerError('An unexpected error occurred')
 
 @supabase_login_required
 def attendance_form(request):
@@ -191,7 +234,6 @@ def attendance_form(request):
     Day=day_name
 ).values_list('SlotID', flat=True).first()
     slot=Slots.objects.get(Slotid=slot)
-    print(slot)
     if batch:
         batch = int(batch)  # Ensure batch is an integer if needed
         students = Student.objects.filter(CurrentClassID=selected_class, batch=batch).order_by('RollNumber')
@@ -263,108 +305,145 @@ def timetable(request):
     
     return render(request, 'timetable.html', context)
 
+
+
 @supabase_login_required
 def report(request):
-    email = request.session.get('teacher_email')
-    # Optimize initial queries with select_related
-    teacher = get_object_or_404(Teacher.objects.select_related('DepartmentID'), Email=email)
-    
-    # Optimize assignments query with select_related
-    assignments = TeacherSubjectAssignment.objects.filter(
-        TeacherID=teacher.Teacherid
-    ).select_related('SubjectID', 'SubjectID__CurrentClassID')
-    
-    # Use values_list for better performance
-    subject_ids = assignments.values_list('SubjectID__SubjectID', flat=True)
-    
-    # Optimize subject and class queries
-    subjects = Subject.objects.filter(
-        SubjectID__in=subject_ids
-    ).select_related('CurrentClassID')
-    
-    class_ids = subjects.values_list('CurrentClassID', flat=True).distinct()
-    assigned_classes = Classes.objects.filter(ClassID__in=class_ids)
+    try:
+        email = request.session.get('teacher_email')
+        teacher = get_object_or_404(Teacher.objects.select_related('RoleID', 'DepartmentID'), Email=email)
+        role = teacher.RoleID.RoleName
+        if role == 'HOD':
+            departments = [teacher.DepartmentID]
+            print(departments)
+            selected_department = teacher.DepartmentID.DepartmentID
+        elif role == 'Principal':
+            departments = Department.objects.all()
+            selected_department = request.GET.get('department')
+        else:  # Regular teacher
+            # Get departments from teacher's assigned subjects
+            assigned_dept_ids = TeacherSubjectAssignment.objects.filter(
+                TeacherID=teacher
+            ).values_list('SubjectID__CurrentClassID__DepartmentID', flat=True).distinct()
+            departments = Department.objects.filter(DepartmentID__in=assigned_dept_ids)
+            selected_department = request.GET.get('department')
 
-    if request.method == 'POST':
-        start_date = request.POST.get('start_date')
-        end_date = request.POST.get('end_date')
-        selected_subject = request.POST.get('subject')
-        selected_class_id = request.POST.get('class')
+        # Get classes based on department and role
+        if selected_department:
+            if role == 'Teacher':
+                # Filter classes by teacher's assignments
+                class_ids = TeacherSubjectAssignment.objects.filter(
+                    TeacherID=teacher,
+                    SubjectID__CurrentClassID__DepartmentID=selected_department
+                ).values_list('SubjectID__CurrentClassID', flat=True).distinct()
+                classes = Classes.objects.filter(ClassID__in=class_ids)
+            else:
+                classes = Classes.objects.filter(DepartmentID=selected_department)
+        else:
+            classes = Classes.objects.none()
+
+        # Get subjects and handle selected class
+        selected_class = request.GET.get('class')
+        subjects = []
+        if selected_class:
+            if role == 'Teacher':
+                subjects = Subject.objects.filter(
+                    teachersubjectassignment__TeacherID=teacher,
+                    CurrentClassID=selected_class
+                ).distinct()
+            else:
+                subjects = Subject.objects.filter(CurrentClassID=selected_class)
+
+        selected_subject = request.GET.get('subject')
+        start_date = request.GET.get('start_date')
+        end_date = request.GET.get('end_date')
         
-        # Optimize by combining queries
-        selected_class = get_object_or_404(Classes.objects.select_related(), ClassID=selected_class_id)
-        students = Student.objects.filter(
-            CurrentClassID=selected_class
-        ).select_related('CurrentClassID').order_by('RollNumber')
-
         attendance_data = []
-        if start_date and end_date:
-            start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
-            end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d').date()
-            
-            # Optimize attendance query by using prefetch_related and annotations
-            attendance_records = Attendance.objects.filter(
-                StudentID__in=students.values_list('StudentID', flat=True),
-                SubjectID=selected_subject,
-                Date__range=(start_date, end_date)
-            ).values(
-                'StudentID'
-            ).annotate(
-                attended_count=Count('AttendanceID', filter=Q(Status=True)),
-                total_lectures=Count('AttendanceID'),
-                attendance_percentage=Case(
-                    When(total_lectures__gt=0, 
-                         then=100.0 * Count('AttendanceID', filter=Q(Status=True)) / Count('AttendanceID')),
-                    default=0.0,
-                    output_field=FloatField(),
-                )
-            )
-            
-            # Create lookup dictionary for O(1) access
-            attendance_by_student = {
-                record['StudentID']: record for record in attendance_records
-            }
-            
-            for student in students:
-                record = attendance_by_student.get(student.StudentID, {
-                    'attended_count': 0,
-                    'total_lectures': 0,
-                    'attendance_percentage': 0
-                })
+        if all([selected_class, selected_subject, start_date, end_date]):
+            try:
+                start_date = timezone.datetime.strptime(start_date, '%Y-%m-%d').date()
+                end_date = timezone.datetime.strptime(end_date, '%Y-%m-%d').date()
                 
-                attendance_data.append({
-                    'student': {
-                        'RollNo': student.RollNumber,
-                        'FirstName': student.FirstName,
-                        'LastName': student.LastName,
-                    },
-                    'attendance': [{
-                        'attended_count': record['attended_count'],
-                        'total_lectures': record['total_lectures']
-                    }],
-                    'total_attended': record['attended_count'],
-                    'average_percentage': record['attendance_percentage']
+                # Get students and their attendance records
+                students = Student.objects.filter(
+                    CurrentClassID=selected_class
+                ).order_by('RollNumber')
+
+                # Optimize attendance query with annotations
+                attendance_records = (
+                    Attendance.objects.filter(
+                        StudentID__in=students.values_list('StudentID', flat=True),
+                        SubjectID=selected_subject,
+                        Date__range=(start_date, end_date)
+                    ).values('StudentID')
+                    .annotate(
+                        attended_count=Count('AttendanceID', filter=Q(Status=True)),
+                        total_lectures=Count('AttendanceID'),
+                        attendance_percentage=Case(
+                            When(total_lectures__gt=0, 
+                                 then=100.0 * Count('AttendanceID', filter=Q(Status=True)) / Count('AttendanceID')),
+                            default=0.0,
+                            output_field=FloatField(),
+                        )
+                    )
+                )
+
+                # Create lookup dictionary for O(1) access
+                attendance_lookup = {
+                    record['StudentID']: record for record in attendance_records
+                }
+
+                # Prepare attendance data
+                for student in students:
+                    record = attendance_lookup.get(student.StudentID, {
+                        'attended_count': 0,
+                        'total_lectures': 0,
+                        'attendance_percentage': 0
+                    })
+
+                    attendance_data.append({
+                        'student': {
+                            'RollNo': student.RollNumber,
+                            'FirstName': student.FirstName,
+                            'LastName': student.LastName,
+                        },
+                        'attendance': [{
+                            'attended_count': record['attended_count'],
+                            'total_lectures': record['total_lectures']
+                        }],
+                        'total_attended': record['attended_count'],
+                        'average_percentage': record['attendance_percentage']
+                    })
+
+            except ValueError as e:
+                messages.error(request, 'Invalid date format')
+                logger.error(f'Date parsing error in custom_report: {str(e)}')
+                return render(request, 'attendance_report.html', {
+                    'teacher': teacher,
+                    'departments': departments,
+                    'classes': classes,
+                    'subjects': subjects,
                 })
 
-            context = {
-                'teacher': teacher,
-                'attendance_data': attendance_data,
-                'subjects': subjects,
-                'classes': assigned_classes,
-                'start_date': start_date,
-                'end_date': end_date,
-                'selected_subject': selected_subject,
-                'selected_class': selected_class,
-            }
-            return render(request, 'attendance_report.html', context)
+        context = {
+            'teacher': teacher,
+            'departments': departments,
+            'classes': classes,
+            'subjects': subjects,
+            'selected_department': selected_department,
+            'selected_class': selected_class,
+            'selected_subject': selected_subject,
+            'attendance_data': attendance_data,
+            'start_date': start_date if 'start_date' in locals() else None,
+            'end_date': end_date if 'end_date' in locals() else None,
+        }
 
-    # Initial render context
-    context = {
-        'teacher': teacher,
-        'subjects': subjects,
-        'classes': assigned_classes,
-    }
-    return render(request, 'attendance_report.html', context)
+        return render(request, 'attendance_report.html', context)
+
+    except Exception as e:
+        logger.error(f'Error in custom_report: {str(e)}')
+        messages.error(request, 'An error occurred while generating the report')
+        return redirect('academics:preacademic')
 
 import csv
 def download_csv_template(request):
@@ -386,39 +465,4 @@ def download_csv_template(request):
     
     return response
 
-from django.http import HttpResponse
-import json
 
-from datetime import date
-import json
-from django.http import HttpResponse
-from django.shortcuts import get_object_or_404
-
-@supabase_login_required
-def pretest(request):
-    email = request.session.get('teacher_email')
-    # Optimize by using select_related and combining queries
-    teacher = get_object_or_404(Teacher.objects.select_related('DepartmentID'), Email=email)
-    
-    # Use a constant for the day since it's hardcoded anyway
-    day_name = 'Tuesday'
-    
-    # Optimize timetable query by using select_related and values_list
-    subject_ids = Timetable.objects.filter(
-        Day=day_name,
-        SubjectAssignmentID__TeacherID=teacher.Teacherid
-    ).select_related(
-        'SubjectAssignmentID__SubjectID'
-    ).values_list(
-        'SubjectAssignmentID__SubjectID', 
-        flat=True
-    ).distinct()
-    
-    # Optimize subjects query with select_related
-    subjects = Subject.objects.filter(
-        SubjectID__in=subject_ids
-    ).select_related('CurrentClassID')
-    
-    return render(request, 'test.html', {
-        'timetables1': list(subject_ids),
-    })

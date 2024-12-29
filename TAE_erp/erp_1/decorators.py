@@ -8,5 +8,5 @@ def supabase_login_required(view_func):
             # User is authenticated, proceed to the view
             return view_func(request, *args, **kwargs)
         # User is not authenticated, redirect to login page
-        return redirect('login')  # Replace 'login' with your login URL name if different
+        return redirect('login/')  # Replace 'login' with your login URL name if different
     return _wrapped_view
