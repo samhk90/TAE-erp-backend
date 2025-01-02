@@ -215,16 +215,29 @@ class LeaveRequest(models.Model):
     StartDate = models.DateField()
     EndDate = models.DateField()
     Reason = models.TextField()
-    Status = models.CharField(max_length=50, default='Pending')
+    Status = models.CharField(max_length=50, choices=[
+        ('Pending', 'Pending'), 
+        ('Pending Principal Approval', 'Pending Principal Approval'),
+        ('Approved', 'Approved'), 
+        ('Rejected', 'Rejected')
+    ], default='Pending')
     RequestedTo = models.ForeignKey(Teacher, on_delete=models.CASCADE, related_name='leave_approvals')
     RequestDate = models.DateTimeField(auto_now_add=True)
     ApprovalDate = models.DateTimeField(null=True, blank=True)
+    is_approvedByHOD = models.BooleanField(default=False)
+    is_approvedByPrincipal = models.BooleanField(default=False)
+    HODApprovalDate = models.DateTimeField(null=True, blank=True)
+    PrincipalApprovalDate = models.DateTimeField(null=True, blank=True)
 
 class TempTimetable(models.Model):
     TimeSlotID = models.AutoField(primary_key=True)
-    TeacherID = models.ForeignKey(Teacher, on_delete=models.CASCADE)
+    LeaveRequestID = models.ForeignKey('LeaveRequest', on_delete=models.CASCADE,default=1)
     ClassID = models.ForeignKey(Classes, on_delete=models.CASCADE)
-    Day = models.CharField(max_length=50)
-    StartTime = models.TimeField()
-    EndTime = models.TimeField()
+    Date = models.DateField(default=date.today)
     SlotID = models.ForeignKey(Slots, on_delete=models.CASCADE)
+    ReplacementTeacherID = models.ForeignKey(TeacherSubjectAssignment, on_delete=models.CASCADE,default=1)
+
+   
+
+    def __str__(self):
+        return f"{self.LeaveRequestID} - {self.ClassID} - {self.Date} - {self.SlotID}"

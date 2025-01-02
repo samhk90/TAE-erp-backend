@@ -521,33 +521,34 @@
 					</p>
 
 					<div class="details">
+						{% for leave in employeesOnLeave %}
 						<div class="info">
+							
 							<div class="user">
 								<img src="{% static '/assets/img/user.png' %}" alt="">
 								<div class="user-content">
-									Prof. Rambhau Lagdive
-									<p class="reallocate">RE. to : Prof. XYZ-ABCD</p>
+									{{leave.TeacherID.FirstName}} {{leave.TeacherID.LastName}}
 								</div>
 							</div>
 
-							<div class="date">10 <sup>th</sup> - 12<sup>th</sup>April 2024</div>
+							<div class="date">{{leave.StartDate}}- {{leave.EndDate}}</div>
 						</div>
 						
-
+						{% endfor %}
 
 					</div>
 				</li>
 				<li>
 					<div class="title" style="display: flex; justify-content: space-between; align-items: center;">
 						<div style="display: flex; align-items: center;">
-							<p>Announcements</p>
+							<p>Today's Lectures</p>
 							<i class="fa-solid fa-triangle-exclamation fa-fade" style="margin-left: 8px;"></i>
 						</div>
-						<button id="addButton" style="background-color: transparent; border: none;">
+						<!-- <button id="addButton" style="background-color: transparent; border: none;">
 							<p style="color: green; font-weight: 600; cursor: pointer;">Add <i class="fa-solid fa-plus"
 									style="font-size: 16px;"></i></p>
 						</button>
-						<button id="deleteBtn" class="delete-btn"><i class="fa-solid fa-trash"></i></button>
+						<button id="deleteBtn" class="delete-btn"><i class="fa-solid fa-trash"></i></button> -->
 
 					</div>
 
@@ -598,17 +599,32 @@
 
 					<div class="announce">
 						
-						<div class="info">
-							<div class="user" style="cursor: pointer;">
-								<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
-								<i class='fas fa-bell'></i>
-								<span class="meeting-text">Staff Meeting</span>
+						<div class="announce">
+							{%for class in todays_classes1 %}
+							
+							<div class="info">
+								<div class="user" style="cursor: pointer;">
+									<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+									<i class='fas fa-bell'></i>
+									
+									<span class="meeting-text">{{ class.ReplacementTeacherID.SubjectID.SubjectName }}</span>
+								</div>
+								<p class="time">{{ class.SlotID.start_time }} - {{ class.SlotID.end_time }}</p>
 							</div>
-							<p class="date">10 <sup>th</sup> April 2024</p>
-							<p class="time">10:00am</p>
-							<p class="announcement_desc">This is the first meeting description.</p>
+							{% endfor %}
+							{% for class in todaysclases2 %}						
+							<div class="info">
+								<div class="user" style="cursor: pointer;">
+									<input type="checkbox" class="announcement-delete-checkbox" style="display: none;">
+									<i class='fas fa-bell'></i>
+									
+									<span class="meeting-text">{{ class.SubjectAssignmentID.SubjectID.SubjectName }}</span>
+								</div>
+								<p class="time">{{ class.SlotID.start_time }} - {{ class.SlotID.end_time }}</p>
+							</div>
+							{% endfor %}
+							
 						</div>
-
 						
 					</div>
 

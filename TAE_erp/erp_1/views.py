@@ -11,7 +11,7 @@ from .models import Teacher, ClassTeacherAssignment, Student, Attendance,Slots,L
 from datetime import datetime, date, timedelta  # Update this import line
 from django.utils import timezone
 from django.http import JsonResponse
-
+from django.db import DatabaseError
 from collections import defaultdict
 from django.db.models import Case, When, IntegerField
 from django.shortcuts import redirect
@@ -20,7 +20,6 @@ from .models import Notices
 import supabase
 import logging
 from django.conf import settings
-from django.db import DatabaseError
 logger = logging.getLogger(__name__)
 
 @supabase_login_required
@@ -38,7 +37,8 @@ def index(request):
         today = date.today()
         timefrom = "09:15 am"
         timeto = "10:15 am"
-
+        today_date = date.today()
+        day_name = today_date.strftime("%A")
         # Optimize teacher query with select_related
         try:
             teacher = (
@@ -76,7 +76,13 @@ def index(request):
                 total_count = Student.objects.filter(
                     CurrentClassID__DepartmentID=teacher.DepartmentID
                 ).count()
-
+                employeesOnLeave = LeaveRequest.objects.filter(
+                    Q(StartDate__lte=today) & Q(EndDate__gte=today),
+                    Status='Approved',
+                    TeacherID__DepartmentID=teacher.DepartmentID
+                )
+                todays_classes1 = TempTimetable.objects.filter(Date=today)
+                todaysclases2 = Timetable.objects.filter(Day=day_name,SubjectAssignmentID__TeacherID=teacher.Teacherid)
                 present_count = attendance_data['present_count'] if attendance_data else 0
                 absent_count = attendance_data['absent_count'] if attendance_data else 0
                 attendance_percentage = (present_count / total_count * 100) if total_count > 0 else 0
@@ -107,7 +113,12 @@ def index(request):
                     ).order_by('ClassID__DepartmentID')  # Add ordering
                     .first()
                 )
-
+                employeesOnLeave = LeaveRequest.objects.filter(
+                    Q(StartDate__lte=today) & Q(EndDate__gte=today),
+                    Status='Approved'
+                )
+                todays_classes1 = TempTimetable.objects.filter(Date=today)
+                todaysclases2 = Timetable.objects.filter(Day=day_name)
                 total_count = Student.objects.count()
                 present_count = attendance_data['present_count'] if attendance_data else 0
                 absent_count = attendance_data['absent_count'] if attendance_data else 0
@@ -125,15 +136,18 @@ def index(request):
         else:
             # For other roles, just show basic interface
             return render(request, 'index.html', {'teacher': teacher})
-
+            
         context = {
             'teacher': teacher,
             'present': present_count,
             'absent': absent_count,
             'total': total_count,
+            'employeesOnLeave': employeesOnLeave,
             'attendance_percentage': attendance_percentage,
+            'todays_classes1': todays_classes1,
+            'todaysclases2': todaysclases2,
         }
-        
+        print(todaysclases2)
         return render(request, 'index.html', context)
 
     except Exception as e:
@@ -1048,6 +1062,7 @@ def subjectwise_report(request):
 
     return render(request, 'subjectwise.html', context)
 import json
+from django.db.models import Q
 @supabase_login_required
 def leaves(request):
     try:
@@ -1073,78 +1088,40 @@ def leaves(request):
                 end_date = data.get('endDate')
                 requested_to_id = data.get('requestedTo')
                 reason = data.get('reason')
-                
-                # Enhanced validation with specific error messages
-                missing_fields = []
-                if not leave_type_id:
-                    missing_fields.append('Leave Type')
-                if not start_date:
-                    missing_fields.append('Start Date')
-                if not end_date:
-                    missing_fields.append('End Date')
-                if not requested_to_id:
-                    missing_fields.append('Requested To')
-                if not reason:
-                    missing_fields.append('Reason')
+                slots = data.getlist('slots[]')  # Get the slots data as a list
 
-                if missing_fields:
-                    return JsonResponse({
-                        'status': 'error',
-                        'message': f'Please fill in the following required fields: {", ".join(missing_fields)}'
-                    }, status=400)
+                # Validation code...
 
-                # Additional date validation
-                try:
-                    # Convert string dates to datetime objects using datetime.strptime
-                    start_date_obj = datetime.strptime(start_date, '%Y-%m-%d').date()
-                    end_date_obj = datetime.strptime(end_date, '%Y-%m-%d').date()
-                    today = timezone.localdate()
-                    
-                    if start_date_obj > end_date_obj:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': 'End date cannot be earlier than start date'
-                        }, status=400)
-                    
-                    if start_date_obj < today:
-                        return JsonResponse({
-                            'status': 'error',
-                            'message': 'Start date cannot be in the past'
-                        }, status=400)
-                except ValueError as e:
-                    return JsonResponse({
-                        'status': 'error',
-                        'message': f'Invalid date format: {str(e)}'
-                    }, status=400)
-
-                # Create leave request after validation passes
+                # Create leave request
                 leave_request = LeaveRequest.objects.create(
                     TeacherID=teacher,
                     LeaveTypeID_id=leave_type_id,
-                    StartDate=start_date_obj,  # Use the parsed date object
-                    EndDate=end_date_obj,      # Use the parsed date object
+                    StartDate=start_date,
+                    EndDate=end_date,
                     RequestedTo_id=requested_to_id,
                     Reason=reason,
                     Status='Pending'
                 )
 
                 # Handle time slots if provided
-                slots_data = request.POST.getlist('slots[]', [])
-                if slots_data:
-                    for slot in slots_data:
+                print(slots)
+                if slots:
+                    for slot_data in slots:
                         try:
-                            slot_data = json.loads(slot)
+                            slot = json.loads(slot_data)
                             TempTimetable.objects.create(
                                 LeaveRequestID=leave_request,
-                                ClassID_id=slot_data['class'],
-                                Date=slot_data['date'],
-                                SlotID_id=slot_data['time_slot'],
-                                ReplacementTeacherID_id=slot_data['replacement_teacher']
+                                ClassID_id=slot['class'],
+                                Date=slot['date'],
+                                SlotID_id=slot['time_slot'],
+                                ReplacementTeacherID_id=slot['replacement_teacher']
                             )
-                        except (json.JSONDecodeError, KeyError) as e:
-                            # Log the error but don't fail the request
-                            logger.warning(f'Error processing slot data: {str(e)}')
-                            continue
+                        except json.JSONDecodeError as e:
+                            logger.warning(f'Invalid slot data format: {e}')
+                        except KeyError as e:
+                            logger.warning(f'Missing slot data field: {e}')
+                        except Exception as e:
+                            logger.error(f'Error creating temp timetable entry: {e}')
 
                 return JsonResponse({
                     'status': 'success',
@@ -1158,20 +1135,76 @@ def leaves(request):
                     'message': f'Error submitting leave request: {str(e)}'
                 }, status=500)
 
-        # Get pending leaves for admin users
+        # Get pending leaves for admin users with specific filtering
         pending_leaves = None
-        if role in ['HOD', 'Principal']:
-            pending_leaves = LeaveRequest.objects.filter(Status='Pending')
-            if role == 'HOD':
-                pending_leaves = pending_leaves.filter(TeacherID__DepartmentID=teacher.DepartmentID)
+        if role == 'HOD':
+            pending_leaves = LeaveRequest.objects.filter(
+                Status='Pending',
+                TeacherID__DepartmentID=teacher.DepartmentID,
+                is_approvedByHOD=False
+            ).prefetch_related(
+                'temptimetable_set',
+                'temptimetable_set__ClassID',
+                'temptimetable_set__SlotID',
+                'temptimetable_set__ReplacementTeacherID'
+            ).select_related('TeacherID', 'LeaveTypeID')
+        elif role == 'Principal':
+            pending_leaves = LeaveRequest.objects.filter(
+                Status='Pending Principal Approval',
+                is_approvedByHOD=True,
+                is_approvedByPrincipal=False
+            ).prefetch_related(
+                'temptimetable_set',
+                'temptimetable_set__ClassID',
+                'temptimetable_set__SlotID',
+                'temptimetable_set__ReplacementTeacherID'
+            ).select_related('TeacherID', 'LeaveTypeID')
+        else:
+            pending_leaves = LeaveRequest.objects.filter(
+                TeacherID=teacher,
+                Status__in=['Pending', 'Pending Principal Approval']
+            ).prefetch_related(
+                'temptimetable_set',
+                'temptimetable_set__ClassID',
+                'temptimetable_set__SlotID',
+                'temptimetable_set__ReplacementTeacherID'
+            ).select_related('TeacherID', 'LeaveTypeID')
+
+        # No need to manually attach temp_slots as we're using prefetch_related
+        
+        # Get leave history with temp slots
+        leave_history = LeaveRequest.objects.filter(
+            TeacherID=teacher
+        ).prefetch_related(
+            'temptimetable_set',
+            'temptimetable_set__ClassID',
+            'temptimetable_set__SlotID',
+            'temptimetable_set__ReplacementTeacherID'
+        ).order_by('-RequestDate')
 
         # Get leave history and stats
         leave_history = LeaveRequest.objects.filter(TeacherID=teacher).order_by('-RequestDate')
         stats = {
             'approved': leave_history.filter(Status='Approved').count(),
-            'pending': leave_history.filter(Status='Pending').count(),
+            'pending': leave_history.filter(
+                Q(Status='Pending') | 
+                Q(Status='Pending Principal Approval')
+            ).count(),
             'rejected': leave_history.filter(Status='Rejected').count()
         }
+
+        # Get all active slots
+        slots = Slots.objects.all().order_by('start_time')
+        
+        # Get all teachers except current teacher for replacement options
+        all_teachers = TeacherSubjectAssignment.objects.filter(TeacherID__DepartmentID=teacher.DepartmentID).exclude(TeacherID=teacher.Teacherid).order_by('AssignmentID')
+        classes=Classes.objects.filter(DepartmentID=teacher.DepartmentID)
+        # Get teacher assignments for class selection
+        teacher_assignments = TeacherSubjectAssignment.objects.filter(
+            TeacherID=teacher
+        ).select_related(
+            'SubjectID__CurrentClassID'
+        ).order_by('SubjectID__CurrentClassID__ClassName')
 
         context = {
             'teacher': teacher,
@@ -1181,6 +1214,10 @@ def leaves(request):
             'pending_leaves': pending_leaves,
             'leave_history': leave_history,
             'stats': stats,
+            'slots': slots,
+            'all_teachers': all_teachers,
+            'teacher_assignments': teacher_assignments,
+            'classes':classes,
         }
 
         return render(request, 'leaves.html', context)
@@ -1199,29 +1236,51 @@ def leave_action(request, leave_id):
         try:
             email = request.session.get('teacher_email')
             teacher = get_object_or_404(Teacher.objects.select_related('RoleID'), Email=email)
+            leave_request = get_object_or_404(LeaveRequest, LeaveRequestID=leave_id)
             
-            if teacher.RoleID.RoleName not in ['HOD', 'Principal']:
-                return JsonResponse({'error': 'Unauthorized'}, status=403)
+            action = request.POST.get('action', 'no_action')
             
-            leave_request = get_object_or_404(LeaveRequest, id=leave_id)
-            action = request.POST.get('action')
-            
-            if action == 'approve':
-                leave_request.Status = 'Approved'
-            elif action == 'reject':
-                leave_request.Status = 'Rejected'
-            
-            leave_request.ActionDate = timezone.now()
-            leave_request.ActionBy = teacher
-            leave_request.save()
-            
-            return JsonResponse({'status': 'success'})
+            if action == 'no_action':
+                return JsonResponse({
+                    'status': 'error',
+                    'message': 'No action specified'
+                }, status=400)
+
+            current_time = timezone.now()
+
+            # Process based on role and action
+            if teacher.RoleID.RoleName == 'HOD':
+                if action == 'approve' and not leave_request.is_approvedByHOD:
+                    leave_request.is_approvedByHOD = True
+                    leave_request.HODApprovalDate = current_time
+                    leave_request.Status = 'Pending Principal Approval'
+                    leave_request.save()
+                elif action == 'reject' and not leave_request.is_approvedByHOD:
+                    leave_request.Status = 'Rejected'
+                    leave_request.save()
+
+            elif teacher.RoleID.RoleName == 'Principal':
+                if action == 'approve' and leave_request.is_approvedByHOD and not leave_request.is_approvedByPrincipal:
+                    leave_request.is_approvedByPrincipal = True
+                    leave_request.PrincipalApprovalDate = current_time
+                    leave_request.Status = 'Approved'
+                    leave_request.save()
+                elif action == 'reject' and not leave_request.is_approvedByPrincipal:
+                    leave_request.Status = 'Rejected'
+                    leave_request.save()
+
+            # Return success response
+            return redirect('/leaves')
             
         except Exception as e:
             logger.error(f'Error in leave_action: {str(e)}')
-            return JsonResponse({'error': str(e)}, status=500)
+            return JsonResponse({
+                'status': 'error',
+                'message': str(e)
+            }, status=500)
     
-    return JsonResponse({'error': 'Invalid request'}, status=400)
+    # If not POST, redirect to leaves page
+    return redirect('/leaves')
 
 def handler404(request, exception):
     context = {

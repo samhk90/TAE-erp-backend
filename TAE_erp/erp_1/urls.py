@@ -2,6 +2,9 @@ from django.urls import path
 from . import views
 from django.conf.urls.static import static
 from django.conf import settings
+
+app_name = 'erp_1'  # Add this line to define the app namespace
+
 urlpatterns = [
 
     path('', views.index, name='index'),
@@ -23,7 +26,7 @@ urlpatterns = [
     path('class_report',views.class_report,name='class_report'),
     path('download-csv-template/', views.download_csv_template, name='download_csv_template'),
     path('leaves', views.leaves, name='leaves'),
-    path('leave-action/<int:leave_id>/', views.leave_action, name='leave_action'),
+    path('leave_action/<int:leave_id>/', views.leave_action, name='leave_action'),
 
 ] 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

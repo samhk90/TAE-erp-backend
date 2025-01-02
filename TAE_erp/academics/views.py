@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import render,redirect,get_object_or_404
-from erp_1.models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,Year,Classes,ClassTeacherAssignment
+from erp_1.models import Notices,Timetable,Teacher,Subject,Student,Attendance,TeacherSubjectAssignment,Department,TempTimetable,Classes,ClassTeacherAssignment
 from supabase import create_client, Client,SupabaseAuthClient
 from django.core.serializers import serialize
 from django.shortcuts import render
@@ -29,8 +29,6 @@ logger = logging.getLogger(__name__)
 def preacademic(request):
     email = request.session.get('teacher_email')
     teacher = Teacher.objects.get(Email=email)
-
-    # Use `.filter()` to avoid exceptions and check the role directly in the query
     classteacher = ClassTeacherAssignment.objects.filter(
         TeacherID=teacher.Teacherid, RoleID__RoleName='Classteacher'
     ).exists()
@@ -47,12 +45,21 @@ def pre_attendance(request):
     teacher = get_object_or_404(Teacher, Email=email)
     today_date = date.today()
     day_name = today_date.strftime("%A")
-    day_name = 'Thursday' 
     subject_ids = Timetable.objects.filter(
         Day=day_name,
         SubjectAssignmentID__TeacherID=teacher.Teacherid
     ).values_list('SubjectAssignmentID__SubjectID', flat=True)
-    subjects = Subject.objects.filter(SubjectID__in=subject_ids)
+    # Get temp slots and their subjects
+    temp_slots = TempTimetable.objects.filter(
+    Date=today_date,
+    ReplacementTeacherID__TeacherID=teacher.Teacherid
+).values_list('ReplacementTeacherID__SubjectID', flat=True)
+
+# No need for additional TeacherSubjectAssignment query since we get SubjectID directly
+    all_subject_ids = list(subject_ids) + list(temp_slots)
+    subjects = Subject.objects.filter(SubjectID__in=all_subject_ids)
+    
+    subjects = Subject.objects.filter(SubjectID__in=all_subject_ids)
     context={
         'teacher':teacher,
         'subjects':subjects,

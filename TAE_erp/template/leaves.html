@@ -178,6 +178,7 @@
            display: flex;
            align-items: center;
            justify-content: center;
+           cursor: pointer;
        }
 
        .close:hover {
@@ -567,7 +568,7 @@
        .requests-table th,
        .requests-table td {
            padding: 12px;
-           text-align: left;
+           text-align: center;
            border-bottom: 1px solid #eee;
        }
 
@@ -713,6 +714,9 @@
            right: 50px;
            top: 50%;
            transform: translateY(-50%);
+           display: flex;
+              gap: 10px;
+              justify-content: space-evenly;
        }
 
        .btn-accept {
@@ -735,21 +739,44 @@
            transform: translateY(-2px);
            box-shadow: 0 4px 12px rgba(46, 213, 115, 0.2);
        }
-
+       .btn-reject{
+              background: #ff4757;
+              color: white;
+              border: none;
+              padding: 8px 16px;
+              border-radius: 6px;
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              gap: 8px;
+              font-size: 0.9rem;
+              font-weight: 500;
+              transition: all 0.2s ease;
+       }
+       .btn-reject:hover{
+           background: #ff6b6b;
+           transform: translateY(-2px);
+           box-shadow: 0 4px 12px rgba(255, 71, 87, 0.2);
+       }
        .modal-header {
            display: flex;
            align-items: center;
            justify-content: space-between;
        }
+       .status-badge.pending-hod {
+        background: rgba(255, 171, 0, 0.15);
+        color: #ffab00;
+    }
+    .status-badge.pending-principal {
+        background: rgba(0, 150, 255, 0.15);
+        color: #0096ff;
+    }
+    
    </style>
 	{% endblock %}
 </head>
 
-<body>
-
-
-
-
+<body data-user-role="{{ user.RoleID.RoleName }}">
 
 	<!-- CONTENT -->
 	<section id="content">
@@ -799,16 +826,49 @@
     </div>
 </div>
 
-{% if is_admin %}
+<!-- Replace the navigation section with this -->
 <div class="leave-navigation">
-    <button class="nav-tab {% if is_admin %}active{% endif %}" data-tab="requests">Leave Requests</button>
-    <button class="nav-tab {% if not is_admin %}active{% endif %}" data-tab="history">Leave History</button>
+    <button class="nav-tab {%if not is_admin %}hidden{% endif %}" data-tab="history">Leave History</button>
+    {% if is_admin %}
+    <button class="nav-tab" data-tab="requests">Leave Requests</button>
+    {% endif %}
 </div>
-{% endif %}
-
 
 <div class="leave-sections">
-    <div class="section-card leave-section {% if is_admin %}active{% endif %}" data-tab="requests">
+    <!-- Show history section first -->
+    <div class="section-card leave-section active" data-tab="history">
+        <h2 class="section-title">Leave History</h2>
+        <table class="requests-table">
+            <thead>
+                <tr>
+                    <th>Type</th>
+                    <th>From</th>
+                    <th>To</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for leave in leave_history %}
+                <tr>
+                    <td>{{ leave.LeaveTypeID.LeaveTypeName }}</td>
+                    <td>{{ leave.StartDate }}</td>
+                    <td>{{ leave.EndDate }}</td>
+                    <td><span class="status-badge {{ leave.Status|lower }}">{{ leave.Status }}</span></td>
+                    <td>
+                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.LeaveRequestID }}')">
+                            <i class='bx bx-show'></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if is_admin %}
+    <!-- Only show requests section for admins -->
+    <div class="section-card leave-section" data-tab="requests">
         <h2 class="section-title">Leave Requests</h2>
         {% if is_admin %}
         <!-- Admin view - pending requests -->
@@ -825,14 +885,24 @@
             </thead>
             <tbody>
                 {% for leave in pending_leaves %}
-                <tr>
+                <tr data-leave-id="{{ leave.id }}" 
+                    data-reason="{{ leave.Reason }}"
+                    data-slots="{{ leave.temp_slots_json }}">
                     <td>{{ leave.TeacherID.FirstName }} {{ leave.TeacherID.LastName }}</td>
-                    <td>{{ leave.LeaveTypeID.Name }}</td>
+                    <td>{{ leave.LeaveTypeID.LeaveTypeName }}</td>
                     <td>{{ leave.StartDate }}</td>
                     <td>{{ leave.EndDate }}</td>
-                    <td><span class="status-badge pending">{{ leave.Status }}</span></td>
                     <td>
-                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.id }}')">
+                        <span class="status-badge {% if leave.is_approvedByHOD %}pending-principal{% else %}pending-hod{% endif %}">
+                            {% if leave.is_approvedByHOD %}
+                                Pending Principal Approval
+                            {% else %}
+                                Pending HOD Approval
+                            {% endif %}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.LeaveRequestID }}')">
                             <i class='bx bx-show'></i>
                         </button>
                     </td>
@@ -842,42 +912,191 @@
         </table>
         {% endif %}
     </div>
+    {% endif %}
+</div>
 
-    <div class="section-card leave-section {% if not is_admin %}active{% endif %}" data-tab="history">
-        <h2 class="section-title">Leave History</h2>
-        <table class="requests-table">
-            <thead>
-                <tr>
-                    <th>Type</th>
-                    <th>From</th>
-                    <th>To</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for leave in leave_history %}
-                <tr>
-                    <td>{{ leave.LeaveTypeID.Name }}</td>
-                    <td>{{ leave.StartDate }}</td>
-                    <td>{{ leave.EndDate }}</td>
-                    <td><span class="status-badge {{ leave.Status|lower }}">{{ leave.Status }}</span></td>
-                    <td>
-                        <button class="btn-view" onclick="viewLeaveDetails('{{ leave.id }}')">
-                            <i class='bx bx-show'></i>
-                        </button>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+<!-- View Leave Modals - One for each leave request -->
+{% for leave in pending_leaves %}
+<div id="viewLeaveModal_{{ leave.LeaveRequestID }}" class="modal">
+    <div class="modal-content view-leave-content">
+        <span class="close" onclick="closeViewModal('{{ leave.LeaveRequestID }}')">&times;</span>
+        <div class="modal-header" style="display: flex;">
+            <h2>Leave Request Details</h2>
+            {% if teacher.RoleID.RoleName == 'HOD' and not leave.is_approvedByHOD  %}
+            <div class="action-buttons">
+                <form method="POST" action="{% url 'erp_1:leave_action' leave.LeaveRequestID %}?action=approve" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="approve">
+                    <button type="submit" class="btn-accept">
+                        <i class='bx bx-check'></i> Approve Leave
+                    </button>
+                </form>
+                <form method="POST" action="{% url 'erp_1:leave_action' leave.LeaveRequestID %}?action=reject" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="reject">
+                    <button type="submit" class="btn-reject">
+                        <i class='bx bx-check'></i> Reject Leave
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+            {% if teacher.RoleID.RoleName == 'Principal' and not leave.is_approvedByPrincipal  %}
+            <div class="action-buttons">
+                <form method="POST" action="{% url 'erp_1:leave_action' leave.LeaveRequestID %}" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="approve">
+                    <button type="submit" class="btn-accept">
+                        <i class='bx bx-check'></i> Approve Leave
+                    </button>
+                </form>
+                <form method="POST" action="{% url 'erp_1:leave_action' leave.LeaveRequestID %}?action=reject" style="display: inline;">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="reject">
+                    <button type="submit" class="btn-reject">
+                        <i class='bx bx-check'></i> Reject Leave
+                    </button>
+                </form>
+            </div>
+            {% endif %}
+
+        </div>
+        <div class="leave-details">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Teacher Name</label>
+                    <p>{{ leave.TeacherID.FirstName }} {{ leave.TeacherID.LastName }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Leave Type</label>
+                    <p>{{ leave.LeaveTypeID.LeaveName }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>From Date</label>
+                    <p>{{ leave.StartDate }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>To Date</label>
+                    <p>{{ leave.EndDate }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Status</label>
+                    <p>
+                        <span class="status-badge {% if leave.is_approvedByHOD %}pending-principal{% else %}pending-hod{% endif %}">
+                            {{leave.Status}}
+                        </span>
+                    </p>
+                </div>
+                <div class="detail-item full-width">
+                    <label>Reason</label>
+                    <p>{{ leave.Reason }}</p>
+                </div>
+            </div>
+            <div class="time-slots-details">
+                <h3>Temporary Time Slots</h3>
+                <table class="slots-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Class</th>
+                            <th>Time Slot</th>
+                            <th>Replacement Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slot in leave.temptimetable_set.all %}
+                        <tr>
+                            <td>{{ slot.Date|date:"Y-m-d" }}</td>
+                            <td>{{ slot.ClassID.ClassName }}</td>
+                            <td>{{ slot.SlotID.start_time }} - {{ slot.SlotID.end_time }}</td>
+                            <td>{{ slot.ReplacementTeacherID.TeacherID.FirstName }} {{ slot.ReplacementTeacherID.TeacherID.LastName }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No temporary slots found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
     </div>
 </div>
+{% endfor %}
+
+
+<!-- Same modal structure for leave history -->
+{% for leave in leave_history %}
+<div id="viewLeaveModal_{{ leave.LeaveRequestID }}" class="modal" >
+    <!-- Similar structure as above, but without action buttons -->
+    <div class="modal-content view-leave-content">
+        <span class="close" onclick="closeViewModal('{{leave.LeaveRequestID}}')" id="leave_history">&times;</span>
+        <div class="leave-details">
+            <div class="detail-grid">
+                <div class="detail-item">
+                    <label>Teacher Name</label>
+                    <p>{{ leave.TeacherID.FirstName }} {{ leave.TeacherID.LastName }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Leave Type</label>
+                    <p>{{ leave.LeaveTypeID.LeaveTypeName }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>From Date</label>
+                    <p>{{ leave.StartDate }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>To Date</label>
+                    <p>{{ leave.EndDate }}</p>
+                </div>
+                <div class="detail-item">
+                    <label>Status</label>
+                    <p>
+                        <span class="status-badge {% if leave.is_approvedByHOD %}pending-principal{% else %}pending-hod{% endif %}">
+                            {{leave.Status}}
+                        </span>
+                    </p>
+                </div>
+                <div class="detail-item full-width">
+                    <label>Reason</label>
+                    <p>{{ leave.Reason }}</p>
+                </div>
+            </div>
+            <div class="time-slots-details">
+                <h3>Temporary Time Slots</h3>
+                <table class="slots-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Class</th>
+                            <th>Time Slot</th>
+                            <th>Replacement Teacher</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for slot in leave.temptimetable_set.all %}
+                        <tr>
+                            <td>{{ slot.Date|date:"Y-m-d" }}</td>
+                            <td>{{ slot.ClassID.ClassName }}</td>
+                            <td>{{ slot.SlotID.start_time }} - {{ slot.SlotID.end_time }}</td>
+                            <td>{{ slot.ReplacementTeacherID.TeacherID.FirstName  }} {{ slot.ReplacementTeacherID.TeacherID.LastName }}</td>
+                        </tr>
+                        {% empty %}
+                        <tr>
+                            <td colspan="4">No temporary slots found</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endfor %}
 
 <!-- Leave Request Modal -->
 <div id="leaveModal" class="modal">
     <div class="modal-content">
-        <span class="close">&times;</span>
+        <span class="close" id="leaveModalClose">&times;</span>
         <div class="modal-header">
             <h2>Create Leave Request</h2>
         </div>
@@ -912,7 +1131,6 @@
                                 {% else %}
                                     Principal - {{ t.FirstName }} {{ t.LastName }}
                                 {% endif %}
-                                ({{ t.DepartmentID.DepartmentName }})
                             </option>
                         {% endfor %}
                     </select>
@@ -928,34 +1146,37 @@
                 <h3>Temporary Time Slots</h3>
                 <div class="slots-container">
                     <div class="slot-inputs">
-                        <select class="class-select">
+                        <select name="class" class="class-select" required>
                             <option value="">Select Class</option>
-                            <option value="FE">FE</option>
-                            <option value="SE">SE</option>
-                            <option value="TE">TE</option>
+                            {% for class in classes %}
+                                <option value="{{ class.ClassID }}">
+                                    {{ class.ClassName }}
+                                </option>
+                            {% endfor %}
                         </select>
-                        <input type="date" class="slot-date" />
-                        <select class="time-slot">
-                            <option value="">Select Slots</option>
-                            <option value="1">9:00 - 10:00</option>
-                            <option value="2">10:00 - 11:00</option>
-                            <option value="3">11:00 - 12:00</option>
+                        <input name="date" type="date" class="slot-date" required />
+                        <select name="time_slot" class="time-slot" required>
+                            <option value="">Select Time Slot</option>
+                            {% for slot in slots %}
+                                <option value="{{ slot.Slotid }}">{{ slot.start_time }} - {{ slot.end_time }}</option>
+                            {% endfor %}
                         </select>
-                        <select class="replacement-teacher">
+                        <select name="replacement_teacher" class="replacement-teacher" required>
                             <option value="">Select Teacher</option>
-                            <option value="1">Teacher 1</option>
-                            <option value="2">Teacher 2</option>
-                            <option value="3">Teacher 3</option>
+                            {% for t in all_teachers %}
+    <option value="{{ t.AssignmentID }}">
+        {{ t.TeacherID.FirstName }} {{ t.TeacherID.LastName }} - {{ t.SubjectID.SubjectName }}
+    </option>
+{% endfor %}
                         </select>
                         <button type="button" class="btn-delete" onclick="removeSlotRow(this)">
                             <i class='bx bx-trash'></i>
                         </button>
                     </div>
                 </div>
-            <button type="button" id="addSlotBtn" class="btn-add-slot">
-                        <i class='bx bx-plus'></i> Add Another Slot
-                    </button>
-
+                <button type="button" id="addSlotBtn" class="btn-add-slot" >
+                    <i class='bx bx-plus'></i> Add Another Slot
+                </button>
             </div>
 
             <button type="submit" class="submit-btn">Submit Request</button>
@@ -963,69 +1184,6 @@
     </div>
 </div>
 
- <!-- Update the view leave modal content -->
-<div id="viewLeaveModal" class="modal">
-    <div class="modal-content view-leave-content">
-        <span class="close" onclick="closeViewModal()">&times;</span>
-        <div class="modal-header">
-            <h2>Leave Request Details</h2>
-            <div class="action-buttons">
-                <button class="btn-accept" onclick="acceptLeave()">
-                    <i class='bx bx-check'></i> Accept Leave
-                </button>
-            </div>
-        </div>
-        <div class="leave-details">
-            <div class="detail-grid">
-                <div class="detail-item">
-                    <label>Request ID</label>
-                    <p>#REQ001</p>
-                </div>
-                <div class="detail-item">
-                    <label>Leave Type</label>
-                    <p>Medical Leave</p>
-                </div>
-                <div class="detail-item">
-                    <label>From Date</label>
-                    <p>2024-02-15</p>
-                </div>
-                <div class="detail-item">
-                    <label>To Date</label>
-                    <p>2024-02-17</p>
-                </div>
-                <div class="detail-item">
-                    <label>Status</label>
-                    <p><span class="status-badge pending">Pending</span></p>
-                </div>
-                <div class="detail-item full-width">
-                    <label>Reason</label>
-                    <p>Medical appointment and recovery period needed.</p>
-                </div>
-            </div>
-            <div class="time-slots-details">
-                <h3>Temporary Time Slots</h3>
-                <table class="slots-table">
-                    <thead>
-                        <tr>
-                            <th>Date</th>
-                            <th>Class</th>
-                            <th>Time Slot</th>
-                            <th>Replacement Teacher</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>2024-02-15</td>
-                            <td>FE-A</td>
-                            <td>9:00 - 10:00</td>
-                            <td>Prof. Smith</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
 
 {% endblock %}
 
@@ -1033,7 +1191,7 @@
 
 	</section>
 	{% block scripts %}
-	<script>
+    <script>
         // Modal functionality
         const modal = document.getElementById("leaveModal");
         const btn = document.getElementById("createLeaveBtn");
@@ -1100,39 +1258,28 @@
         document.getElementById('leaveRequestForm').onsubmit = function(e) {
             e.preventDefault();
             
-            // Disable submit button to prevent double submission
             const submitBtn = this.querySelector('.submit-btn');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Submitting...';
-
-            // Get form data
+        
             const formData = new FormData(this);
-
-            // Add CSRF token
-            formData.append('csrfmiddlewaretoken', document.querySelector('[name=csrfmiddlewaretoken]').value);
-
-            // Get slots data if any
+        
+            // Collect slots data
             const slots = [];
             document.querySelectorAll('.slot-inputs').forEach(slotRow => {
-                const slotClass = slotRow.querySelector('.class-select').value;
-                const slotDate = slotRow.querySelector('.slot-date').value;
-                const timeSlot = slotRow.querySelector('.time-slot').value;
-                const replacementTeacher = slotRow.querySelector('.replacement-teacher').value;
-
-                if (slotClass && slotDate && timeSlot && replacementTeacher) {
-                    slots.push({
-                        class: slotClass,
-                        date: slotDate,
-                        time_slot: timeSlot,
-                        replacement_teacher: replacementTeacher
-                    });
+                const slotData = {
+                    class: slotRow.querySelector('.class-select').value,
+                    date: slotRow.querySelector('.slot-date').value,
+                    time_slot: slotRow.querySelector('.time-slot').value,
+                    replacement_teacher: slotRow.querySelector('.replacement-teacher').value
+                };
+        
+                // Only add if all fields are filled
+                if (slotData.class && slotData.date && slotData.time_slot && slotData.replacement_teacher) {
+                    formData.append('slots[]', JSON.stringify(slotData));
                 }
             });
-
-            if (slots.length > 0) {
-                formData.append('slots', JSON.stringify(slots));
-            }
-
+        
             // Submit form
             fetch(window.location.href, {
                 method: 'POST',
@@ -1144,7 +1291,6 @@
             .then(response => response.json())
             .then(data => {
                 if (data.status === 'success') {
-                    // Show success message
                     alert(data.message || 'Leave request submitted successfully');
                     modal.classList.remove('show');
                     setTimeout(() => {
@@ -1152,7 +1298,6 @@
                         window.location.reload();
                     }, 300);
                 } else {
-                    // Show error message
                     alert(data.message || 'Error submitting leave request');
                 }
             })
@@ -1161,7 +1306,6 @@
                 alert('An error occurred while submitting the leave request');
             })
             .finally(() => {
-                // Reset button state
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Submit Request';
             });
@@ -1188,22 +1332,44 @@
             }
         }
     
-        // View leave details functions
-        function viewLeaveDetails(id) {
-            const viewModal = document.getElementById('viewLeaveModal');
-            viewModal.style.display = 'block';
-            setTimeout(() => viewModal.classList.add('show'), 10);
+        function viewLeaveDetails(leaveId) {
+            const modalId = `viewLeaveModal_${leaveId}`;
+            const viewModal = document.getElementById(modalId);
+            if (viewModal) {
+                viewModal.style.display = 'block';
+                setTimeout(() => viewModal.classList.add('show'), 10);
+            } else {
+                console.error(`Modal with ID ${modalId} not found`);
+            }
         }
-    
-        function closeViewModal() {
-            const viewModal = document.getElementById('viewLeaveModal');
-            viewModal.classList.remove('show');
-            setTimeout(() => viewModal.style.display = 'none', 300);
+
+        function closeViewModal(leaveId) {
+            const modalId = `viewLeaveModal_${leaveId}`;
+            const viewModal = document.getElementById(modalId);
+            if (viewModal) {
+                viewModal.classList.remove('show');
+                setTimeout(() => viewModal.style.display = 'none', 300);
+            }
         }
-    
-        function acceptLeave() {
-            alert('Leave request accepted!');
-            closeViewModal();
+        leave_history=document.getElementById('leave_history');
+        leave_history.onclick = function() {
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+        leaveModalClose=document.getElementById('leaveModalClose');
+        leaveModalClose.onclick = function() {
+            modal.classList.remove("show");
+            setTimeout(() => modal.style.display = "none", 300);
+        }
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                const modalId = event.target.id;
+                if (modalId) {
+                    const leaveId = modalId.split('_')[1];
+                    closeViewModal(leaveId);
+                }
+            }
         }
     
         // Input animations
@@ -1222,8 +1388,105 @@
         // Initialize navigation on page load
         initNavigation();
     </script>
-    
-	{% endblock %}
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get navigation elements
+        const navTabs = document.querySelectorAll('.nav-tab');
+        const sections = document.querySelectorAll('.leave-section');
+
+        // Function to show specific section
+        function showSection(sectionId) {
+            // Hide all sections first
+            sections.forEach(section => {
+                section.style.display = 'none';
+                section.classList.remove('active');
+            });
+
+            // Remove active class from all tabs
+            navTabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected section and activate corresponding tab
+            const targetSection = document.querySelector(`.leave-section[data-tab="${sectionId}"]`);
+            const targetTab = document.querySelector(`.nav-tab[data-tab="${sectionId}"]`);
+
+            if (targetSection && targetTab) {
+                targetSection.style.display = 'block';
+                setTimeout(() => {
+                    targetSection.classList.add('active');
+                }, 10);
+                targetTab.classList.add('active');
+            }
+        }
+
+        // Add click event listeners to navigation tabs
+        navTabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetTab = this.getAttribute('data-tab');
+                showSection(targetTab);
+            });
+        });
+
+        // Show initial section based on user role
+        const userRole = document.body.getAttribute('data-user-role');
+        if (userRole === 'HOD' || userRole === 'Principal') {
+            showSection('requests');
+        } else {
+            showSection('history');
+        }
+    });
+
+    // ... rest of your existing script code ...
+</script>
+<script>
+    // Get all necessary modal elements
+    const leaveModal = document.getElementById("leaveModal");
+    const createLeaveBtn = document.getElementById("createLeaveBtn");
+    const closeButtons = document.querySelectorAll('.close');
+    const leaveModalClose = document.getElementById('leaveModalClose');
+
+    // Function to close modal with animation
+    function closeModal(modal) {
+        modal.classList.remove("show");
+        setTimeout(() => {
+            modal.style.display = "none";
+        }, 300);
+    }
+
+    // Open leave request modal
+    createLeaveBtn.onclick = function() {
+        leaveModal.style.display = "block";
+        setTimeout(() => leaveModal.classList.add("show"), 10);
+    }
+
+    // Close button functionality for leave request modal
+    leaveModalClose.onclick = function() {
+        closeModal(leaveModal);
+    }
+
+    // Close any modal when clicking outside
+    window.onclick = function(event) {
+        if (event.target.classList.contains('modal')) {
+            const modal = event.target;
+            closeModal(modal);
+        }
+    }
+
+    // Close button functionality for all modals
+    closeButtons.forEach(button => {
+        button.onclick = function() {
+            const modal = button.closest('.modal');
+            if (modal) {
+                closeModal(modal);
+            }
+        }
+    });
+
+    // ... rest of your existing script code ...
+</script>
+{% endblock %}
 </body>
 
 </html>
