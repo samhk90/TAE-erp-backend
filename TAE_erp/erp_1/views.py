@@ -653,7 +653,6 @@ def daily_report(request):
     departments = Department.objects.all()
     if teacher.RoleID.RoleName=='HOD':
         selected_department=teacher.DepartmentID.DepartmentID
-        print(selected_department)
     else:
         selected_department = request.GET.get('department')
     
@@ -664,8 +663,7 @@ def daily_report(request):
         classes = Classes.objects.all()
 
     current_date = timezone.now().date()
-    current_date=current_date-timedelta(1)
-
+    #current_date=current_date-timedelta(1)
 
     attendance_data = []
     students_in_class = []
@@ -675,7 +673,6 @@ def daily_report(request):
         slots = Slots.objects.filter(Slotid__in=slot_ids)
         students_in_class = Student.objects.filter(CurrentClassID_id=selected_class).order_by('RollNumber')
         attendance_records = Attendance.objects.filter(Date=current_date, ClassID_id=selected_class)
-        
         # Create a dictionary to track attendance for each slot
         present_students = {}
         for slot in slots:
@@ -698,7 +695,6 @@ def daily_report(request):
                 if is_present:
                     student_attendance['total_attendance'] += 1
             attendance_data.append(student_attendance)
-
     context = {
         'departments': departments,
         'classes': classes,

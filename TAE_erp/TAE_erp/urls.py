@@ -7,8 +7,8 @@ from django.views.static import serve  # Add this import
 from erp_1.views import handler404
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
     path('academics/', include(('academics.urls', 'academics'), namespace='academics')),
+    path('admin/', include(('adminDashboard.urls', 'adminDashboard'), namespace='adminDashboard')),
     path('', include(('erp_1.urls', 'erp_1'), namespace='erp_1')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 

@@ -1,0 +1,130 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Admin Dashboard - TAE ERP</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background: #2c3e50;
+            color: #fff;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .card-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 40px 20px;
+        }
+
+        .card {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            padding: 30px;
+            transition: transform 0.3s ease-in-out;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+        }
+
+        .card h3 {
+            font-size: 18px;
+            color: #333;
+            margin-top: 15px;
+        }
+
+        .card .icon {
+            font-size: 50px;
+            margin-bottom: 10px;
+        }
+
+        /* Card Colors */
+        .students .icon { color: #3498db; }
+        .teachers .icon { color: #e67e22; }
+        .classes .icon { color: #27ae60; }
+        .subjects .icon { color: #9b59b6; }
+        .timetable .icon { color: #1abc9c; }
+        .attendance .icon { color: #f39c12; }
+        .notices .icon { color: #e74c3c; }
+        .leave .icon { color: #16a085; }
+        .roles .icon { color: #34495e; }
+
+        @media (max-width: 768px) {
+            .card-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="header">
+        Admin Dashboard
+    </div>
+
+    <section class="card-container">
+        <a href="students.html" class="card students">
+            <div class="icon">🎓</div>
+            <h3>Student Management</h3>
+        </a>
+
+        <a href="teachers.html" class="card teachers">
+            <div class="icon">👨‍🏫</div>
+            <h3>Teacher Management</h3>
+        </a>
+
+        <a href="classes.html" class="card classes">
+            <div class="icon">🏫</div>
+            <h3>Class Management</h3>
+        </a>
+
+        <a href="subjects.html" class="card subjects">
+            <div class="icon">📚</div>
+            <h3>Subject Management</h3>
+        </a>
+
+        <a href="timetable.html" class="card timetable">
+            <div class="icon">🗓️</div>
+            <h3>Timetable Management</h3>
+        </a>
+
+        <a href="attendance.html" class="card attendance">
+            <div class="icon">✅</div>
+            <h3>Attendance Management</h3>
+        </a>
+
+        <a href="notices.html" class="card notices">
+            <div class="icon">📢</div>
+            <h3>Notice Management</h3>
+        </a>
+
+        <a href="leave-requests.html" class="card leave">
+            <div class="icon">✉️</div>
+            <h3>Leave Requests</h3>
+        </a>
+
+        <a href="roles.html" class="card roles">
+            <div class="icon">🔐</div>
+            <h3>Role Management</h3>
+        </a>
+    </section>
+</body>
+
+</html>
